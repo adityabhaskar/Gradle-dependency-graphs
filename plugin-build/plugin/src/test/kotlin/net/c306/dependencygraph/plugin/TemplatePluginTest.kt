@@ -13,7 +13,7 @@ class TemplatePluginTest {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("net.c306.dependencygraph.plugin")
 
-        assert(project.tasks.getByName("templateExample") is TemplateExampleTask)
+        assert(project.tasks.getByName("templateExample") is DependencyGraphTask)
     }
 
     @Test
@@ -35,7 +35,7 @@ class TemplatePluginTest {
             outputFile.set(aFile)
         }
 
-        val task = project.tasks.getByName("templateExample") as TemplateExampleTask
+        val task = project.tasks.getByName("templateExample") as DependencyGraphTask
 
         assertEquals("a-sample-tag", task.tag.get())
         assertEquals("just-a-message", task.message.get())

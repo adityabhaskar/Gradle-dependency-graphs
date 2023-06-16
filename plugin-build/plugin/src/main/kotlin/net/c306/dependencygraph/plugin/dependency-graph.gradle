@@ -1,0 +1,318 @@
+package net.c306.dependencygraph.plugin
+
+//class GraphDetails {
+//    LinkedHashSet<Project> projects
+//    LinkedHashMap<Tuple2<Project, Project>, List<String>> dependencies
+//    ArrayList<Project> multiplatformProjects
+//    ArrayList<Project> androidProjects
+//    ArrayList<Project> javaProjects
+//    ArrayList<Project> rootProjects
+//
+//    // Used for excluding module from graph
+//    public static final SystemTestName = "system-test"
+//    // Used for linking module nodes to their graphs
+//    public static final RepoPath = "https://github.com/oorjalabs/todotxt-for-android/blob/main"
+//
+//    public static final GraphFileName = "dependency-graph.md"
+//}
+
+/**
+ * Creates mermaid graphs for all modules in the app and places each graph within the module's folder.
+ * An app-wide graph is also created and added to the project's root directory.
+ *
+ *
+ * Derived from https://github.com/JakeWharton/SdkSearch/blob/master/gradle/projectDependencyGraph.gradle
+ *
+ *
+ * The key differences are:
+ * 1. Output is in mermaidjs format to support auto display on githib
+ * 2. Graphs are also generated for every module and placed in their root directory
+ * 3. Module graphs also show other modules directly dependent on that module (using dashed lines)
+ * 4. API dependencies are displayed with the text "API" on the connector
+ * 5. Direct dependencies are connected using a bold line
+ * 6. Indirect dependencies have thin lines as connectors
+ * 7. Java/Kotlin modules used a hexagon for a shape, except when they are the root module in the graph
+ *    * These nodes are filled with a Pink-ish colour
+ * 8. Android and multiplatform modules used a rounded shape, except when they are the root module in the graph
+ *    * Android nodes are filled with a Green colour
+ *    * MPP nodes are filled with an Orange-ish colour
+ * 9. Provided but unsupported on Github - click navigation
+ *    * Module nodes are clickable, clicking through to the graph of the respective module
+ */
+task projectDependencyGraph {
+    doLast {
+        // Create graph of all dependencies
+        final graph = createGraph()
+
+        // For each module, draw its sub graph of dependencies and dependents
+        graph.projects.forEach { drawDependencies(it, graph, false, rootDir) }
+
+        // Draw the full graph of all modules
+        drawDependencies(rootProject, graph, true, rootDir)
+    }
+}
+
+/**
+ * Create a graph of all project modules, their types, dependencies and root projects.
+ * @return An object of type GraphDetails containing all details
+ */
+private GraphDetails createGraph() {
+
+    def rootProjects = []
+    def queue = [rootProject]
+
+    // Traverse the list of all subfolders starting with root project and add them to
+    // rootProjects
+    while (!queue.isEmpty()) {
+        def project = queue.remove(0)
+        if (project.name != GraphDetails.SystemTestName) {
+            rootProjects.add(project)
+        }
+        queue.addAll(project.childProjects.values())
+    }
+
+    def projects = new LinkedHashSet<Project>()
+    def dependencies = new LinkedHashMap<Tuple2<Project, Project>, List<String>>()
+    ArrayList<Project> multiplatformProjects = []
+    ArrayList<Project> androidProjects = []
+    ArrayList<Project> javaProjects = []
+
+    // Again traverse the list of all subfolders starting with the current project
+    // * Add projects to project-type lists
+    // * Add project dependencies to dependency hashmap with record for api/impl
+    // * Add projects & their dependencies to projects list
+    // * Remove any dependencies from rootProjects list
+    queue = [rootProject]
+    while (!queue.isEmpty()) {
+        def project = queue.remove(0)
+        if (project.name == GraphDetails.SystemTestName) {
+            continue
+        }
+        queue.addAll(project.childProjects.values())
+
+        if (project.plugins.hasPlugin('org.jetbrains.kotlin.multiplatform')) {
+            multiplatformProjects.add(project)
+        }
+        if (project.plugins.hasPlugin('com.android.library') || project.plugins.hasPlugin('com.android.application')) {
+            androidProjects.add(project)
+        }
+        if (project.plugins.hasPlugin('java-library') || project.plugins.hasPlugin('java') || project.plugins.hasPlugin('org.jetbrains.kotlin.jvm')) {
+            javaProjects.add(project)
+        }
+
+        project.configurations.all { config ->
+            config.dependencies
+                .withType(ProjectDependency)
+                .collect { it.dependencyProject }
+                .each { dependency ->
+                    projects.add(project)
+                    projects.add(dependency)
+                    if (project.name != GraphDetails.SystemTestName && project.path != dependency.path) {
+                        rootProjects.remove(dependency)
+                    }
+
+                    def graphKey = new Tuple2<Project, Project>(project, dependency)
+                    def traits = dependencies.computeIfAbsent(graphKey) { new ArrayList<String>() }
+
+                    if (config.name.toLowerCase().endsWith('implementation')) {
+                        traits.add('impl')
+                    } else {
+                        traits.add('api')
+                    }
+                }
+        }
+    }
+
+    // Collect leaf projects which may be denoted with a different shape or rank
+    def leafProjects = []
+    projects.forEach { Project p ->
+        def allDependencies = p.configurations
+            .collectMany { Configuration config ->
+                config.dependencies.withType(ProjectDependency)
+                    .findAll {
+                        it.dependencyProject.path != p.path
+                    }
+            }
+
+        if (allDependencies.size() == 0) {
+            leafProjects.add(p)
+        } else {
+            leafProjects.remove(p)
+        }
+    }
+
+    projects = projects.sort { it.path }
+
+    return new GraphDetails(
+        projects: projects,
+        dependencies: dependencies,
+        multiplatformProjects: multiplatformProjects,
+        androidProjects: androidProjects,
+        javaProjects: javaProjects,
+        rootProjects: rootProjects
+    )
+}
+
+/**
+ * Returns a list of all modules that are direct or indirect dependencies of the provided module
+ * @param currentProjectAndDependencies the module(s) whose dependencies we need
+ * @param dependencies hash map of dependencies generated by [createGraph]
+ * @return List of module and all its direct & indirect dependencies
+ */
+private ArrayList<Project> gatherDependencies(
+    ArrayList<Project> currentProjectAndDependencies,
+    LinkedHashMap<Tuple2<Project, Project>, List<String>> dependencies
+) {
+    def addedNew = false
+    dependencies
+        .collect { key, _ -> key }
+        .each {
+            if (currentProjectAndDependencies.contains(it.v1) && !currentProjectAndDependencies.contains(it.v2)) {
+                currentProjectAndDependencies.add(it.v2)
+                addedNew = true
+            }
+        }
+    if (addedNew) {
+        return gatherDependencies(
+            currentProjectAndDependencies,
+            dependencies
+        )
+    } else {
+        return currentProjectAndDependencies
+    }
+}
+
+/**
+ * Returns a list of all modules that depend on the given module
+ * @param currentProject the module whose dependencies we need
+ * @param dependencies hash map of dependencies generated by [createGraph]
+ * @return List of all modules that depend on the given module
+ */
+private static ArrayList<Project> gatherDependents(
+    Project currentProject,
+    LinkedHashMap<Tuple2<Project, Project>, List<String>> dependencies
+) {
+    return dependencies
+        .findAll { key, traits ->
+            key.v2 == currentProject
+        }
+        .collect { key, _ -> key.v1 }
+}
+
+/**
+ * Creates a graph of dependencies for the given project and writes it to a file in the project's
+ * directory.
+ */
+private def drawDependencies(
+    Project currentProject,
+    GraphDetails graphDetails,
+    boolean isRootGraph,
+    File rootDir
+) {
+    LinkedHashSet<Project> projects = graphDetails.projects
+    LinkedHashMap<Tuple2<Project, Project>, List<String>> dependencies = graphDetails.dependencies
+    ArrayList<Project> multiplatformProjects = graphDetails.multiplatformProjects
+    ArrayList<Project> androidProjects = graphDetails.androidProjects
+    ArrayList<Project> javaProjects = graphDetails.javaProjects
+    ArrayList<Project> rootProjects = graphDetails.rootProjects
+
+    final currentProjectDependencies = gatherDependencies([currentProject], dependencies)
+    final dependents = gatherDependents(currentProject, dependencies)
+
+    def fileText = ""
+    fileText += "```mermaid\n"
+    fileText += "%%{ init: { 'theme': 'base' } }%%\n"
+    fileText += "graph LR;\n\n"
+    fileText += "%% Styling for module nodes by type\n"
+    fileText += "classDef rootNode stroke-width:4px;\n"
+    fileText += "classDef mppNode fill:#ffd2b3;\n"
+    fileText += "classDef andNode fill:#baffc9;\n"
+    fileText += "classDef javaNode fill:#ffb3ba;\n"
+    fileText += "\n"
+    fileText += "%% Modules\n"
+    // This ensures the graph is wrapped in a box with a background, so it's consistently visible
+    // when rendered in dark mode.
+    fileText += "subgraph  \n"
+    fileText += "  direction LR\n"
+
+    final normalNodeStart = "(["
+    final normalNodeEnd = "])"
+    final rootNodeStart = "["
+    final rootNodeEnd = "]"
+    final javaNodeStart = "{{"
+    final javaNodeEnd = "}}"
+
+    def clickText = ""
+
+    for (project in projects) {
+        if (!isRootGraph && !(currentProjectDependencies.contains(project) || dependents.contains(project))) {
+            continue
+        }
+        final isRoot = isRootGraph ? rootProjects.contains(project) || project == currentProject : project == currentProject
+
+        def nodeStart = isRoot ? rootNodeStart : normalNodeStart
+        def nodeEnd = isRoot ? rootNodeEnd : normalNodeEnd
+
+        def nodeClass = ""
+        if (multiplatformProjects.contains(project)) {
+            nodeClass = ":::mppNode"
+        } else if (androidProjects.contains(project)) {
+            nodeClass = ":::andNode"
+        } else if (javaProjects.contains(project)) {
+            nodeClass = ":::javaNode"
+            if (!isRoot) {
+                nodeStart = javaNodeStart
+                nodeEnd = javaNodeEnd
+            }
+        }
+
+        fileText += "  ${project.path}${nodeStart}${project.path}${nodeEnd}${nodeClass};\n"
+
+        final relativePath = rootDir.relativePath(project.projectDir)
+        clickText += "click ${project.path} ${GraphDetails.RepoPath}/${relativePath}\n"
+    }
+    fileText += "end\n"
+    fileText += "\n"
+
+    fileText += "%% Dependencies\n"
+    dependencies
+        .findAll { key, traits ->
+            final origin = key.v1
+            final target = key.v2
+            (isRootGraph || currentProjectDependencies.contains(origin)) && origin.path != target.path
+        }
+        .forEach { key, traits ->
+            final isApi = !traits.isEmpty() && traits[0] == "api"
+            final isDirectDependency = key.v1 == currentProject
+            final arrow = isApi ? isDirectDependency ? "==API===>" : "--API--->" : isDirectDependency ? "===>" : "--->"
+            fileText += "${key.v1.path}${arrow}${key.v2.path}\n"
+        }
+
+    fileText += "\n"
+
+    fileText += "%% Dependents\n"
+    dependencies
+        .findAll { key, traits ->
+            final origin = key.v1
+            final target = key.v2
+            dependents.contains(origin) && target == currentProject && origin.path != target.path
+        }
+        .forEach { key, traits ->
+            // bold dashed arrows aren't supported
+            final isApi = !traits.isEmpty() && traits[0] == "api"
+            final arrow = isApi ? "-.API.->" : "-.->"
+            fileText += "${key.v1.path}${arrow}${key.v2.path}\n"
+        }
+
+    fileText += "\n%% Click interactions\n"
+    fileText += "${clickText}\n"
+    fileText += '```\n'
+
+    def graphFile = new File(currentProject.projectDir, GraphDetails.GraphFileName)
+    graphFile.parentFile.mkdirs()
+    graphFile.delete()
+
+    graphFile << fileText
+
+    println("Project module dependency graph created at ${graphFile.absolutePath}")
+}
