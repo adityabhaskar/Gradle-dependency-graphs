@@ -25,7 +25,7 @@ gradleEnterprise {
     }
 }
 
-rootProject.name = "kotlin-gradle-plugin-template"
+rootProject.name = "gradle-module-dependency-graph-plugin"
 
 include(":example")
 includeBuild("plugin-build")
