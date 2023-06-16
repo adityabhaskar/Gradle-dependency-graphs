@@ -31,6 +31,6 @@ gradleEnterprise {
     }
 }
 
-rootProject.name = ("com.ncorti.kotlin.gradle.template")
+rootProject.name = ("net.c306.dependencygraph")
 
 include(":plugin")

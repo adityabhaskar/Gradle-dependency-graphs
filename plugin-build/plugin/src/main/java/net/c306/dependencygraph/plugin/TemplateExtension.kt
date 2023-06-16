@@ -1,4 +1,4 @@
-package com.ncorti.kotlin.gradle.template.plugin
+package net.c306.dependencygraph.plugin
 
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFileProperty

@@ -1,6 +1,6 @@
 plugins {
     java
-    id("com.ncorti.kotlin.gradle.template.plugin")
+    id("net.c306.dependencygraph.plugin")
 }
 
 templateExampleConfig {
