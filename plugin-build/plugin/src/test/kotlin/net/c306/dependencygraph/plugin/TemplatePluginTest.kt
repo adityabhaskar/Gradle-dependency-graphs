@@ -13,15 +13,15 @@ class TemplatePluginTest {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("net.c306.dependencygraph.plugin")
 
-        assert(project.tasks.getByName("templateExample") is DependencyGraphTask)
+        assert(project.tasks.getByName("projectDependencyGraph") is DependencyGraphTask)
     }
 
     @Test
-    fun `extension templateExampleConfig is created correctly`() {
+    fun `extension projectDependencyGraphConfig is created correctly`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("net.c306.dependencygraph.plugin")
 
-        assertNotNull(project.extensions.getByName("templateExampleConfig"))
+        assertNotNull(project.extensions.getByName("projectDependencyGraphConfig"))
     }
 
     @Test
@@ -29,13 +29,13 @@ class TemplatePluginTest {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("net.c306.dependencygraph.plugin")
         val aFile = File(project.projectDir, ".tmp")
-        (project.extensions.getByName("templateExampleConfig") as DependencyGraphExtension).apply {
+        (project.extensions.getByName("projectDependencyGraphConfig") as DependencyGraphExtension).apply {
             tag.set("a-sample-tag")
             message.set("just-a-message")
 //            outputFile.set(aFile)
         }
 
-        val task = project.tasks.getByName("templateExample") as DependencyGraphTask
+        val task = project.tasks.getByName("projectDependencyGraph") as DependencyGraphTask
 
         assertEquals("a-sample-tag", task.tag.get())
         assertEquals("just-a-message", task.message.get())

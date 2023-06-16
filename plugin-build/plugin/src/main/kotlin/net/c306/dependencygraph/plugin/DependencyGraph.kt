@@ -225,6 +225,7 @@ internal fun drawDependencies(
     classDef javaNode fill:#ffb3ba;
 
     %% Modules
+
     """.trimIndent()
     // This ensures the graph is wrapped in a box with a background, so it's consistently visible
     // when rendered in dark mode.
@@ -292,6 +293,7 @@ internal fun drawDependencies(
     end
 
     %% Dependencies
+
     """.trimIndent()
 
     dependencies
@@ -313,9 +315,11 @@ internal fun drawDependencies(
             fileText += "${key.v1.path}${arrow}${key.v2.path}\n"
         }
 
-    fileText += "\n"
+    fileText += """
+        %% Dependents
 
-    fileText += "%% Dependents\n"
+    """.trimIndent()
+
     dependencies
         .filter { (key, _) ->
             val origin = key.v1
