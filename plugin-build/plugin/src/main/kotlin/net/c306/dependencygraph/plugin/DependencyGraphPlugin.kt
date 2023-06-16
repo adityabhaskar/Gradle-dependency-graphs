@@ -6,9 +6,9 @@ import org.gradle.api.Project
 const val EXTENSION_NAME = "projectDependencyGraphConfig"
 const val TASK_NAME = "projectDependencyGraph"
 
-abstract class TemplatePlugin : Plugin<Project> {
+abstract class DependencyGraphPlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        // Add the 'template' extension object
+        // Add the extension object
         val extension = project.extensions.create(
             EXTENSION_NAME,
             DependencyGraphExtension::class.java,

@@ -6,7 +6,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Test
 import java.io.File
 
-class TemplatePluginTest {
+class DependencyGraphTest {
 
     @Test
     fun `plugin is applied correctly to the project`() {
