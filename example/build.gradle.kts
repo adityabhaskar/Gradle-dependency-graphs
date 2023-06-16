@@ -3,6 +3,6 @@ plugins {
     id("net.c306.dependencygraph.plugin")
 }
 
-templateExampleConfig {
+projectDependencyGraphConfig {
     message.set("Just trying this gradle plugin...")
 }

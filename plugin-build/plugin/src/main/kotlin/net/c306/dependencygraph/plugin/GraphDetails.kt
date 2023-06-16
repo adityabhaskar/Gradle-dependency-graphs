@@ -6,10 +6,10 @@ import org.gradle.api.Project
 data class GraphDetails(
     val projects: LinkedHashSet<Project>,
     val dependencies: LinkedHashMap<Tuple2<Project, Project>, List<String>>,
-    val multiplatformProjects: ArrayList<Project>,
-    val androidProjects: ArrayList<Project>,
-    val javaProjects: ArrayList<Project>,
-    val rootProjects: ArrayList<Project>,
+    val multiplatformProjects: List<Project>,
+    val androidProjects: List<Project>,
+    val javaProjects: List<Project>,
+    val rootProjects: List<Project>,
 ) {
     companion object {
         // TODO: 16/06/2023 Provide via extension
