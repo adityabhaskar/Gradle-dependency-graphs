@@ -1,6 +1,5 @@
 package net.c306.dependencygraph.plugin
 
-import groovy.lang.Tuple2
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
@@ -57,9 +56,14 @@ abstract class DependencyGraphTask : DefaultTask() {
 //    @get:OutputFile
 //    abstract val outputFile: RegularFileProperty
 
+    private data class DependencyPair(
+        val origin: Project,
+        val target: Project,
+    )
+
     private data class GraphDetails(
         val projects: LinkedHashSet<Project>,
-        val dependencies: LinkedHashMap<Tuple2<Project, Project>, List<String>>,
+        val dependencies: LinkedHashMap<DependencyPair, List<String>>,
         val multiplatformProjects: List<Project>,
         val androidProjects: List<Project>,
         val javaProjects: List<Project>,
@@ -122,6 +126,7 @@ abstract class DependencyGraphTask : DefaultTask() {
 //        outputFile.get().asFile.writeText("$prettyTag ${message.get()}")
     }
 
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     /**
      * Create a graph of all project modules, their types, dependencies and root projects.
      * @return An object of type GraphDetails containing all details
@@ -141,7 +146,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         }
 
         val projects = LinkedHashSet<Project>()
-        val dependencies = LinkedHashMap<Tuple2<Project, Project>, List<String>>()
+        val dependencies = LinkedHashMap<DependencyPair, List<String>>()
         val multiplatformProjects = mutableListOf<Project>()
         val androidProjects = mutableListOf<Project>()
         val javaProjects = mutableListOf<Project>()
@@ -162,10 +167,17 @@ abstract class DependencyGraphTask : DefaultTask() {
             if (project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
                 multiplatformProjects.add(project)
             }
-            if (project.plugins.hasPlugin("com.android.library") || project.plugins.hasPlugin("com.android.application")) {
+            if (
+                project.plugins.hasPlugin("com.android.library") ||
+                project.plugins.hasPlugin("com.android.application")
+            ) {
                 androidProjects.add(project)
             }
-            if (project.plugins.hasPlugin("java-library") || project.plugins.hasPlugin("java") || project.plugins.hasPlugin("org.jetbrains.kotlin.jvm")) {
+            if (
+                project.plugins.hasPlugin("java-library") ||
+                project.plugins.hasPlugin("java") ||
+                project.plugins.hasPlugin("org.jetbrains.kotlin.jvm")
+            ) {
                 javaProjects.add(project)
             }
 
@@ -176,11 +188,14 @@ abstract class DependencyGraphTask : DefaultTask() {
                     .forEach { dependency ->
                         projects.add(project)
                         projects.add(dependency)
-                        if (project.name != GraphDetails.SystemTestName && project.path != dependency.path) {
+                        if (
+                            project.name != GraphDetails.SystemTestName &&
+                            project.path != dependency.path
+                        ) {
                             rootProjects.remove(dependency)
                         }
 
-                        val graphKey = Tuple2(project, dependency)
+                        val graphKey = DependencyPair(project, dependency)
                         val traits = dependencies.computeIfAbsent(graphKey) { mutableListOf() }
                             .toMutableList()
 
@@ -222,7 +237,7 @@ abstract class DependencyGraphTask : DefaultTask() {
             multiplatformProjects = multiplatformProjects,
             androidProjects = androidProjects,
             javaProjects = javaProjects,
-            rootProjects = rootProjects
+            rootProjects = rootProjects,
         )
     }
 
@@ -234,21 +249,24 @@ abstract class DependencyGraphTask : DefaultTask() {
      */
     private fun gatherDependencies(
         currentProjectAndDependencies: MutableList<Project>,
-        dependencies: LinkedHashMap<Tuple2<Project, Project>, List<String>>,
+        dependencies: LinkedHashMap<DependencyPair, List<String>>,
     ): MutableList<Project> {
         var addedNew = false
         dependencies
             .map { it.key }
-            .forEach {
-                if (currentProjectAndDependencies.contains(it.v1) && !currentProjectAndDependencies.contains(it.v2)) {
-                    currentProjectAndDependencies.add(it.v2)
+            .forEach { (currProject, dependencyProject) ->
+                if (
+                    currentProjectAndDependencies.contains(currProject) &&
+                    !currentProjectAndDependencies.contains(dependencyProject)
+                ) {
+                    currentProjectAndDependencies.add(dependencyProject)
                     addedNew = true
                 }
             }
         return if (addedNew) {
             gatherDependencies(
                 currentProjectAndDependencies = currentProjectAndDependencies,
-                dependencies = dependencies
+                dependencies = dependencies,
             )
         } else {
             currentProjectAndDependencies
@@ -263,15 +281,16 @@ abstract class DependencyGraphTask : DefaultTask() {
      */
     private fun gatherDependents(
         currentProject: Project,
-        dependencies: LinkedHashMap<Tuple2<Project, Project>, List<String>>,
+        dependencies: LinkedHashMap<DependencyPair, List<String>>,
     ): List<Project> {
         return dependencies
             .filter { (key, _) ->
-                key.v2 == currentProject
+                key.target == currentProject
             }
-            .map { (key, _) -> key.v1 }
+            .map { (key, _) -> key.origin }
     }
 
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     /**
      * Creates a graph of dependencies for the given project and writes it to a file in the project's
      * directory.
@@ -283,14 +302,15 @@ abstract class DependencyGraphTask : DefaultTask() {
         rootDir: File,
     ) {
         val projects: LinkedHashSet<Project> = graphDetails.projects
-        val dependencies: LinkedHashMap<Tuple2<Project, Project>, List<String>> =
+        val dependencies: LinkedHashMap<DependencyPair, List<String>> =
             graphDetails.dependencies
         val multiplatformProjects = graphDetails.multiplatformProjects
         val androidProjects = graphDetails.androidProjects
         val javaProjects = graphDetails.javaProjects
         val rootProjects = graphDetails.rootProjects
 
-        val currentProjectDependencies = gatherDependencies(mutableListOf(currentProject), dependencies)
+        val currentProjectDependencies =
+            gatherDependencies(mutableListOf(currentProject), dependencies)
         val dependents = gatherDependents(currentProject, dependencies)
 
         var fileText = """
@@ -324,11 +344,9 @@ abstract class DependencyGraphTask : DefaultTask() {
         var clickText = ""
 
         for (project in projects) {
-            if (!isRootGraph && !(
-                currentProjectDependencies.contains(project) || dependents.contains(
-                        project
-                    )
-                )
+            if (
+                !isRootGraph &&
+                !(currentProjectDependencies.contains(project) || dependents.contains(project))
             ) {
                 continue
             }
@@ -379,13 +397,13 @@ abstract class DependencyGraphTask : DefaultTask() {
 
         dependencies
             .filter { (key, _) ->
-                val origin = key.v1
-                val target = key.v2
+                val (origin, target) = key
                 (isRootGraph || currentProjectDependencies.contains(origin)) && origin.path != target.path
             }
             .forEach { (key, traits) ->
-                val isApi = !traits.isEmpty() && traits[0] == "api"
-                val isDirectDependency = key.v1 == currentProject
+                val (origin, target) = key
+                val isApi = traits.isNotEmpty() && traits[0] == "api"
+                val isDirectDependency = origin == currentProject
 
                 val arrow = when {
                     isApi && isDirectDependency -> "==API===>"
@@ -393,7 +411,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                     isDirectDependency -> "===>"
                     else -> "--->"
                 }
-                fileText += "${key.v1.path}${arrow}${key.v2.path}\n"
+                fileText += "${origin.path}${arrow}${target.path}\n"
             }
 
         fileText += """
@@ -403,11 +421,11 @@ abstract class DependencyGraphTask : DefaultTask() {
 
         dependencies
             .filter { (key, _) ->
-                val origin = key.v1
-                val target = key.v2
+                val (origin, target) = key
                 dependents.contains(origin) && target == currentProject && origin.path != target.path
             }
             .forEach { (key, traits) ->
+                val (origin, target) = key
                 // bold dashed arrows aren't supported
                 val isApi = traits.isNotEmpty() && traits[0] == "api"
                 val arrow = if (isApi) {
@@ -415,7 +433,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 } else {
                     "-.->"
                 }
-                fileText += "${key.v1.path}${arrow}${key.v2.path}\n"
+                fileText += "${origin.path}${arrow}${target.path}\n"
             }
 
         fileText += """
