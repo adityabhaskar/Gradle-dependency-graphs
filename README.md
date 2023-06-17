@@ -11,8 +11,8 @@ This template is focused on delivering a project with **static analysis** and **
 Just click on [![Use this template](https://img.shields.io/badge/-Use%20this%20template-brightgreen)](https://github.com/cortinico/kotlin-gradle-plugin-template/generate) button to create a new repo starting from this template.
 
 Once created don't forget to update the:
-- [gradle.properties](plugin-build/gradle.properties)
-- Plugin Usages (search for [com.ncorti.kotlin.gradle.template](https://github.com/cortinico/kotlin-gradle-plugin-template/search?q=com.ncorti.kotlin.gradle.template&unscoped_q=com.ncorti.kotlin.gradle.template) in the repo and replace it with your ID).
+- ~~[gradle.properties](plugin-build/gradle.properties)~~
+- ~~Plugin Usages (search for [com.ncorti.kotlin.gradle.template](https://github.com/cortinico/kotlin-gradle-plugin-template/search?q=com.ncorti.kotlin.gradle.template&unscoped_q=com.ncorti.kotlin.gradle.template) in the repo and replace it with your ID).~~
 
 ## Features 🎨
 
