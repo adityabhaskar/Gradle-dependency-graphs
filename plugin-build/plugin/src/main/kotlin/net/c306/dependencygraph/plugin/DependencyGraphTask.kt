@@ -11,7 +11,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import java.io.File
-import java.util.Locale
+import java.util.*
 
 /**
  * Creates mermaid graphs for all modules in the app and places each graph within the module's folder.
@@ -113,7 +113,6 @@ abstract class DependencyGraphTask : DefaultTask() {
         // Draw the full graph of all modules
         drawDependencies(project.rootProject, graph, true, project.rootDir)
 
-
 //        val prettyTag = tag.orNull?.let { "[$it]" } ?: ""
 //
 //        logger.lifecycle("$prettyTag message is: ${message.orNull}")
@@ -127,8 +126,7 @@ abstract class DependencyGraphTask : DefaultTask() {
      * Create a graph of all project modules, their types, dependencies and root projects.
      * @return An object of type GraphDetails containing all details
      */
-    private fun createGraph(rootProject: Project):  GraphDetails {
-
+    private fun createGraph(rootProject: Project): GraphDetails {
         val rootProjects = mutableListOf<Project>()
         var queue = mutableListOf(rootProject)
 
@@ -307,14 +305,14 @@ abstract class DependencyGraphTask : DefaultTask() {
 
     %% Modules
 
-    """.trimIndent()
+        """.trimIndent()
         // This ensures the graph is wrapped in a box with a background, so it's consistently visible
         // when rendered in dark mode.
         fileText += """
     subgraph
       direction LR
 
-    """.trimIndent()
+        """.trimIndent()
 
         val normalNodeStart = "(["
         val normalNodeEnd = "])"
@@ -326,9 +324,11 @@ abstract class DependencyGraphTask : DefaultTask() {
         var clickText = ""
 
         for (project in projects) {
-            if (!isRootGraph && !(currentProjectDependencies.contains(project) || dependents.contains(
-                    project
-                ))
+            if (!isRootGraph && !(
+                currentProjectDependencies.contains(project) || dependents.contains(
+                        project
+                    )
+                )
             ) {
                 continue
             }
@@ -363,7 +363,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 ""
             }
 
-            fileText += "  ${project.path}${nodeStart}${project.path}${nodeEnd}${nodeClass};\n"
+            fileText += "  ${project.path}${nodeStart}${project.path}${nodeEnd}$nodeClass;\n"
 
 //        val relativePath = rootDir.relativePath(project.projectDir)
             val relativePath = project.projectDir.relativeTo(rootDir)
@@ -375,7 +375,7 @@ abstract class DependencyGraphTask : DefaultTask() {
 
     %% Dependencies
 
-    """.trimIndent()
+        """.trimIndent()
 
         dependencies
             .filter { (key, _) ->
@@ -399,7 +399,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         fileText += """
         %% Dependents
 
-    """.trimIndent()
+        """.trimIndent()
 
         dependencies
             .filter { (key, _) ->
@@ -418,13 +418,12 @@ abstract class DependencyGraphTask : DefaultTask() {
                 fileText += "${key.v1.path}${arrow}${key.v2.path}\n"
             }
 
-
         fileText += """
 
     %% Click interactions
     $clickText
     ```
-    """.trimIndent()
+        """.trimIndent()
 
         val graphFile = File(currentProject.projectDir, GraphDetails.GraphFileName)
         graphFile.parentFile.mkdirs()
