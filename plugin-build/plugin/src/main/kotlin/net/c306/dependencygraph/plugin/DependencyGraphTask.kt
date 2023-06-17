@@ -398,7 +398,8 @@ abstract class DependencyGraphTask : DefaultTask() {
         dependencies
             .filter { (key, _) ->
                 val (origin, target) = key
-                (isRootGraph || currentProjectDependencies.contains(origin)) && origin.path != target.path
+                (isRootGraph || currentProjectDependencies.contains(origin)) &&
+                    origin.path != target.path
             }
             .forEach { (key, traits) ->
                 val (origin, target) = key
@@ -422,7 +423,9 @@ abstract class DependencyGraphTask : DefaultTask() {
         dependencies
             .filter { (key, _) ->
                 val (origin, target) = key
-                dependents.contains(origin) && target == currentProject && origin.path != target.path
+                dependents.contains(origin) &&
+                    target == currentProject &&
+                    origin.path != target.path
             }
             .forEach { (key, traits) ->
                 val (origin, target) = key
