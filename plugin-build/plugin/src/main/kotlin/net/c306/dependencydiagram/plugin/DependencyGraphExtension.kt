@@ -1,4 +1,4 @@
-package net.c306.dependencygraph.plugin
+package net.c306.dependencydiagram.plugin
 
 import org.gradle.api.Project
 import org.gradle.api.provider.Property

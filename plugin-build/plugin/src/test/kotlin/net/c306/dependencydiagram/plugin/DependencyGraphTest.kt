@@ -1,4 +1,4 @@
-package net.c306.dependencygraph.plugin
+package net.c306.dependencydiagram.plugin
 
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Assert.assertEquals
@@ -10,7 +10,7 @@ class DependencyGraphTest {
     @Test
     fun `plugin is applied correctly to the project`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("net.c306.dependencygraph.plugin")
+        project.pluginManager.apply("net.c306.dependencydiagram.plugin")
 
         assert(project.tasks.getByName("projectDependencyGraph") is DependencyGraphTask)
     }
@@ -18,7 +18,7 @@ class DependencyGraphTest {
     @Test
     fun `extension projectDependencyGraphConfig is created correctly`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("net.c306.dependencygraph.plugin")
+        project.pluginManager.apply("net.c306.dependencydiagram.plugin")
 
         assertNotNull(project.extensions.getByName("projectDependencyGraphConfig"))
     }
@@ -26,7 +26,7 @@ class DependencyGraphTest {
     @Test
     fun `parameters are passed correctly from extension to task`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("net.c306.dependencygraph.plugin")
+        project.pluginManager.apply("net.c306.dependencydiagram.plugin")
 //        val aFile = File(project.projectDir, ".tmp")
         (project.extensions.getByName("projectDependencyGraphConfig") as DependencyGraphExtension).apply {
             tag.set("a-sample-tag")

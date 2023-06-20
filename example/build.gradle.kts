@@ -1,6 +1,6 @@
 plugins {
     java
-    id("net.c306.dependencygraph.plugin")
+    id("net.c306.dependencydiagram.plugin")
 }
 
 projectDependencyGraphConfig {
