@@ -21,7 +21,7 @@ import java.util.*
  *
  *
  * Key differences are:
- * 1. Output is in mermaidjs format to support auto display on githib
+ * 1. Output is in mermaid-js format to support auto display on github
  * 2. Graphs are also generated for every module and placed in their root directory
  * 3. Module graphs also show other modules directly dependent on that module (using dashed lines)
  * 4. API dependencies are displayed with the text "API" on the connector
@@ -38,10 +38,8 @@ import java.util.*
 abstract class DependencyDiagramTask : DefaultTask() {
 
     init {
-        description = "Generates dependency graph files for all local modules in the project."
-
-        // Don't forget to set the group here.
         group = BasePlugin.BUILD_GROUP
+        description = "Generates dependency graph files for all local modules in the project."
     }
 
     @get:Input
@@ -53,35 +51,12 @@ abstract class DependencyDiagramTask : DefaultTask() {
     @get:Optional
     abstract val tag: Property<String>
 
+    @get:Input
+    @get:Option(option = "graphDetails", description = "The project dependencies graph as [GraphDetails]")
+    internal abstract val graphDetails: Property<GraphDetails>
+
 //    @get:OutputFile
 //    abstract val outputFile: RegularFileProperty
-
-    private data class DependencyPair(
-        val origin: Project,
-        val target: Project,
-    )
-
-    private data class GraphDetails(
-        val projects: LinkedHashSet<Project>,
-        val dependencies: LinkedHashMap<DependencyPair, List<String>>,
-        val multiplatformProjects: List<Project>,
-        val androidProjects: List<Project>,
-        val javaProjects: List<Project>,
-        val rootProjects: List<Project>,
-    ) {
-        companion object {
-            // TODO: 16/06/2023 Provide via extension
-            // Used for excluding module from graph
-            const val SystemTestName = "system-test"
-
-            // TODO: 16/06/2023 Provide via extension
-            // Used for linking module nodes to their graphs
-            const val RepoPath = "https://github.com/oorjalabs/todotxt-for-android/blob/main"
-
-            // TODO: 16/06/2023 Provide via extension
-            const val GraphFileName = "dependency-graph.md"
-        }
-    }
 
     /**
      * Creates mermaid graphs for all modules in the app and places each graph within the module's
@@ -92,7 +67,7 @@ abstract class DependencyDiagramTask : DefaultTask() {
      *
      *
      * Key differences are:
-     * 1. Output is in mermaidjs format to support auto display on githib
+     * 1. Output is in mermaid-js format to support auto display on github
      * 2. Graphs are also generated for every module and placed in their root directory
      * 3. Module graphs also show other modules directly dependent on that module (using dashed lines)
      * 4. API dependencies are displayed with the text "API" on the connector
@@ -108,8 +83,10 @@ abstract class DependencyDiagramTask : DefaultTask() {
      */
     @TaskAction
     fun createDependencyDiagram() {
-        // Create graph of all dependencies
-        val graph = createGraph(project.rootProject)
+
+//        // Create graph of all dependencies
+//        val graph = createGraph(project.rootProject)
+        val graph = graphDetails.get()
 
         // For each module, draw its sub graph of dependencies and dependents
         graph.projects.forEach { drawDependencies(it, graph, false, project.rootDir) }
@@ -124,121 +101,6 @@ abstract class DependencyDiagramTask : DefaultTask() {
 //        logger.lifecycle("$prettyTag outputFile is: ${outputFile.orNull}")
 //
 //        outputFile.get().asFile.writeText("$prettyTag ${message.get()}")
-    }
-
-    @Suppress("LongMethod", "CyclomaticComplexMethod")
-    /**
-     * Create a graph of all project modules, their types, dependencies and root projects.
-     * @return An object of type GraphDetails containing all details
-     */
-    private fun createGraph(rootProject: Project): GraphDetails {
-        val rootProjects = mutableListOf<Project>()
-        var queue = mutableListOf(rootProject)
-
-        // Traverse the list of all subfolders starting with root project and add them to
-        // rootProjects
-        while (queue.isNotEmpty()) {
-            val project = queue.removeAt(0)
-            if (project.name != GraphDetails.SystemTestName) {
-                rootProjects.add(project)
-            }
-            queue.addAll(project.childProjects.values)
-        }
-
-        val projects = LinkedHashSet<Project>()
-        val dependencies = LinkedHashMap<DependencyPair, List<String>>()
-        val multiplatformProjects = mutableListOf<Project>()
-        val androidProjects = mutableListOf<Project>()
-        val javaProjects = mutableListOf<Project>()
-
-        // Again traverse the list of all subfolders starting with the current project
-        // * Add projects to project-type lists
-        // * Add project dependencies to dependency hashmap with record for api/impl
-        // * Add projects & their dependencies to projects list
-        // * Remove any dependencies from rootProjects list
-        queue = mutableListOf(rootProject)
-        while (queue.isNotEmpty()) {
-            val project = queue.removeAt(0)
-            if (project.name == GraphDetails.SystemTestName) {
-                continue
-            }
-            queue.addAll(project.childProjects.values)
-
-            if (project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
-                multiplatformProjects.add(project)
-            }
-            if (
-                project.plugins.hasPlugin("com.android.library") ||
-                project.plugins.hasPlugin("com.android.application")
-            ) {
-                androidProjects.add(project)
-            }
-            if (
-                project.plugins.hasPlugin("java-library") ||
-                project.plugins.hasPlugin("java") ||
-                project.plugins.hasPlugin("org.jetbrains.kotlin.jvm")
-            ) {
-                javaProjects.add(project)
-            }
-
-            project.configurations.all { config ->
-                config.dependencies
-                    .filterIsInstance(ProjectDependency::class.java)
-                    .map { it.dependencyProject }
-                    .forEach { dependency ->
-                        projects.add(project)
-                        projects.add(dependency)
-                        if (
-                            project.name != GraphDetails.SystemTestName &&
-                            project.path != dependency.path
-                        ) {
-                            rootProjects.remove(dependency)
-                        }
-
-                        val graphKey = DependencyPair(project, dependency)
-                        val traits = dependencies.computeIfAbsent(graphKey) { mutableListOf() }
-                            .toMutableList()
-
-                        if (config.name.lowercase(Locale.getDefault()).endsWith("implementation")) {
-                            traits.add("impl")
-                        } else {
-                            traits.add("api")
-                        }
-                    }
-            }
-        }
-
-        // Collect leaf projects which may be denoted with a different shape or rank
-        val leafProjects = mutableListOf<Project>()
-        projects.forEach {
-            val allDependencies = it.configurations
-                .map { config ->
-                    config.dependencies
-                        .filterIsInstance(ProjectDependency::class.java)
-                        .filter { dependency ->
-                            dependency.dependencyProject.path != it.path
-                        }
-                }
-
-            if (allDependencies.isEmpty()) {
-                leafProjects.add(it)
-            } else {
-                leafProjects.remove(it)
-            }
-        }
-
-        // TODO: 16/06/2023
-//    projects = projects
-//        .sortedBy { it.path }
-
-        return GraphDetails(
-            projects = projects,
-            dependencies = dependencies,
-            multiplatformProjects = multiplatformProjects,
-            androidProjects = androidProjects,
-            javaProjects = javaProjects,
-            rootProjects = rootProjects,
-        )
     }
 
     /**
@@ -454,3 +316,150 @@ abstract class DependencyDiagramTask : DefaultTask() {
         println("Project module dependency graph created at ${graphFile.absolutePath}")
     }
 }
+
+@Suppress("LongMethod", "CyclomaticComplexMethod")
+/**
+ * Create a graph of all project modules, their types, dependencies and root projects.
+ * @return An object of type GraphDetails containing all details
+ */
+internal fun createGraph(rootProject: Project): GraphDetails {
+    val rootProjects = mutableListOf<Project>()
+    var queue = mutableListOf(rootProject)
+
+    // Traverse the list of all subfolders starting with root project and add them to
+    // rootProjects
+    while (queue.isNotEmpty()) {
+        val project = queue.removeAt(0)
+        if (project.name != GraphDetails.SystemTestName) {
+            rootProjects.add(project)
+        }
+        queue.addAll(project.childProjects.values)
+    }
+
+    val projects = LinkedHashSet<Project>()
+    val dependencies = LinkedHashMap<DependencyPair, List<String>>()
+    val multiplatformProjects = mutableListOf<Project>()
+    val androidProjects = mutableListOf<Project>()
+    val javaProjects = mutableListOf<Project>()
+
+    // Again traverse the list of all subfolders starting with the current project
+    // * Add projects to project-type lists
+    // * Add project dependencies to dependency hashmap with record for api/impl
+    // * Add projects & their dependencies to projects list
+    // * Remove any dependencies from rootProjects list
+    queue = mutableListOf(rootProject)
+    while (queue.isNotEmpty()) {
+        val project = queue.removeAt(0)
+        if (project.name == GraphDetails.SystemTestName) {
+            continue
+        }
+        queue.addAll(project.childProjects.values)
+
+        if (project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
+            multiplatformProjects.add(project)
+        }
+        if (
+            project.plugins.hasPlugin("com.android.library") ||
+            project.plugins.hasPlugin("com.android.application")
+        ) {
+            androidProjects.add(project)
+        }
+        if (
+            project.plugins.hasPlugin("java-library") ||
+            project.plugins.hasPlugin("java") ||
+            project.plugins.hasPlugin("org.jetbrains.kotlin.jvm")
+        ) {
+            javaProjects.add(project)
+        }
+
+        project.configurations.all { config ->
+            config.dependencies
+                .filterIsInstance(ProjectDependency::class.java)
+                .map { it.dependencyProject }
+                .forEach { dependency ->
+                    projects.add(project)
+                    projects.add(dependency)
+                    if (
+                        project.name != GraphDetails.SystemTestName &&
+                        project.path != dependency.path
+                    ) {
+                        rootProjects.remove(dependency)
+                    }
+
+                    val graphKey = DependencyPair(project, dependency)
+                    val traits = dependencies.computeIfAbsent(graphKey) { mutableListOf() }
+                        .toMutableList()
+
+                    if (config.name.lowercase(Locale.getDefault()).endsWith("implementation")) {
+                        traits.add("impl")
+                    } else {
+                        traits.add("api")
+                    }
+                }
+        }
+    }
+
+    // Collect leaf projects which may be denoted with a different shape or rank
+    val leafProjects = mutableListOf<Project>()
+    projects.forEach {
+        val allDependencies = it.configurations
+            .map { config ->
+                config.dependencies
+                    .filterIsInstance(ProjectDependency::class.java)
+                    .filter { dependency ->
+                        dependency.dependencyProject.path != it.path
+                    }
+            }
+
+        if (allDependencies.isEmpty()) {
+            leafProjects.add(it)
+        } else {
+            leafProjects.remove(it)
+        }
+    }
+
+    // TODO: 16/06/2023
+//    projects = projects
+//        .sortedBy { it.path }
+
+    return GraphDetails(
+        projects = projects,
+        dependencies = dependencies,
+        multiplatformProjects = multiplatformProjects,
+        androidProjects = androidProjects,
+        javaProjects = javaProjects,
+        rootProjects = rootProjects,
+    )
+}
+
+internal data class DependencyPair(
+    val origin: Project,
+    val target: Project,
+)
+
+internal data class GraphDetails(
+    val projects: LinkedHashSet<Project>,
+    val dependencies: LinkedHashMap<DependencyPair, List<String>>,
+    val multiplatformProjects: List<Project>,
+    val androidProjects: List<Project>,
+    val javaProjects: List<Project>,
+    val rootProjects: List<Project>,
+) {
+    companion object {
+        // TODO: 16/06/2023 Provide via extension
+        // Used for excluding module from graph
+        const val SystemTestName = "system-test"
+
+        // TODO: 16/06/2023 Provide via extension
+        // Used for linking module nodes to their graphs
+        const val RepoPath = "https://github.com/oorjalabs/todotxt-for-android/blob/main"
+
+        // TODO: 16/06/2023 Provide via extension
+        const val GraphFileName = "dependency-graph.md"
+    }
+}
+
+internal data class ModuleProject(
+    val name: String,
+
+)

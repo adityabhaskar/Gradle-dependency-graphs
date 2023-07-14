@@ -19,7 +19,10 @@ abstract class DependencyDiagramPlugin : Plugin<Project> {
         project.tasks.register(TASK_NAME, DependencyDiagramTask::class.java) {
             it.tag.set(extension.tag)
             it.message.set(extension.message)
-//            it.outputFile.set(extension.outputFile)
+
+            val graph = createGraph(project.rootProject)
+            println(graph)
+            it.graphDetails.set(graph)
         }
     }
 }
