@@ -19,7 +19,7 @@ end
 
 %% Dependencies
 :example:data--->:example:models
-:example:domain===>:example:models
+:example:domain==API===>:example:models
 :example:domain===>:example:data
 
 %% Dependents

@@ -23,7 +23,7 @@ end
 :example:feature===>:example:ui
 :example:feature===>:example:domain
 :example:ui--->:example:models
-:example:domain--->:example:models
+:example:domain--API--->:example:models
 :example:domain--->:example:data
 
 %% Dependents

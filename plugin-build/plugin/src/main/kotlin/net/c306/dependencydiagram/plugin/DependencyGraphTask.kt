@@ -387,8 +387,8 @@ internal fun createGraph(rootProject: Project): GraphDetails {
                     }
 
                     val graphKey = DependencyPair(project.asModuleProject(), dependency.asModuleProject())
-                    val traits = dependencies.computeIfAbsent(graphKey) { mutableListOf() }
-                        .toMutableList()
+                    val traits = dependencies
+                        .computeIfAbsent(graphKey) { mutableListOf() } as MutableList
 
                     if (config.name.lowercase(Locale.getDefault()).endsWith("implementation")) {
                         traits.add("impl")

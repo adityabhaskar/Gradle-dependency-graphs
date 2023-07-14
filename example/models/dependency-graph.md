@@ -22,7 +22,7 @@ end
 %% Dependents
 :example:data-.->:example:models
 :example:ui-.->:example:models
-:example:domain-.->:example:models
+:example:domain-.API.->:example:models
 
 %% Click interactions
 click :example:data https://github.com/oorjalabs/todotxt-for-android/blob/main/example/data
