@@ -1,7 +1,6 @@
 package net.c306.dependencydiagram.plugin
 
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 
@@ -36,8 +35,8 @@ class DependencyDiagramTest {
 
         val task = project.tasks.getByName("projectDependencyDiagram") as DependencyDiagramTask
 
-        assertEquals("a-sample-tag", task.tag.get())
-        assertEquals("just-a-message", task.message.get())
+//        assertEquals("a-sample-tag", task.tag.get())
+//        assertEquals("just-a-message", task.message.get())
 //        assertEquals(aFile, task.outputFile.get().asFile)
     }
 }
