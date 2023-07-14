@@ -316,7 +316,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         var fileText = """
     ```mermaid
     %%{ init: { 'theme': 'base' } }%%
-    graph LR;\n
+    graph LR;
     %% Styling for module nodes by type
     classDef rootNode stroke-width:4px;
     classDef mppNode fill:#ffd2b3;

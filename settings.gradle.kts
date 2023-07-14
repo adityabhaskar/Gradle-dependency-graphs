@@ -27,9 +27,9 @@ gradleEnterprise {
 
 rootProject.name = "gradle-module-dependency-diagram-plugin"
 
-include(":example")
+include(":example:feature")
+include(":example:ui")
+include(":example:domain")
+include(":example:data")
+include(":example:models")
 includeBuild("plugin-build")
-include(":domain")
-include(":models")
-include(":data")
-include(":ui")
