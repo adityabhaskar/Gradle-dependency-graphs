@@ -52,7 +52,10 @@ abstract class DependencyDiagramTask : DefaultTask() {
     abstract val tag: Property<String>
 
     @get:Input
-    @get:Option(option = "graphDetails", description = "The project dependencies graph as [GraphDetails]")
+    @get:Option(
+        option = "graphDetails",
+        description = "The project dependencies graph as [GraphDetails]",
+    )
     internal abstract val graphDetails: Property<GraphDetails>
 
 //    @get:OutputFile
@@ -92,7 +95,7 @@ abstract class DependencyDiagramTask : DefaultTask() {
         graph.projects.forEach { drawDependencies(it, graph, false, project.rootDir) }
 
         // Draw the full graph of all modules
-        drawDependencies(project.rootProject, graph, true, project.rootDir)
+        drawDependencies(project.rootProject.asModuleProject(), graph, true, project.rootDir)
 
 //        val prettyTag = tag.orNull?.let { "[$it]" } ?: ""
 //
@@ -110,9 +113,9 @@ abstract class DependencyDiagramTask : DefaultTask() {
      * @return List of module and all its direct & indirect dependencies
      */
     private fun gatherDependencies(
-        currentProjectAndDependencies: MutableList<Project>,
+        currentProjectAndDependencies: MutableList<ModuleProject>,
         dependencies: LinkedHashMap<DependencyPair, List<String>>,
-    ): MutableList<Project> {
+    ): MutableList<ModuleProject> {
         var addedNew = false
         dependencies
             .map { it.key }
@@ -142,9 +145,9 @@ abstract class DependencyDiagramTask : DefaultTask() {
      * @return List of all modules that depend on the given module
      */
     private fun gatherDependents(
-        currentProject: Project,
+        currentProject: ModuleProject,
         dependencies: LinkedHashMap<DependencyPair, List<String>>,
-    ): List<Project> {
+    ): List<ModuleProject> {
         return dependencies
             .filter { (key, _) ->
                 key.target == currentProject
@@ -158,12 +161,12 @@ abstract class DependencyDiagramTask : DefaultTask() {
      * directory.
      */
     private fun drawDependencies(
-        currentProject: Project,
+        currentProject: ModuleProject,
         graphDetails: GraphDetails,
         isRootGraph: Boolean,
         rootDir: File,
     ) {
-        val projects: LinkedHashSet<Project> = graphDetails.projects
+        val projects: LinkedHashSet<ModuleProject> = graphDetails.projects
         val dependencies: LinkedHashMap<DependencyPair, List<String>> =
             graphDetails.dependencies
         val multiplatformProjects = graphDetails.multiplatformProjects
@@ -386,7 +389,7 @@ internal fun createGraph(rootProject: Project): GraphDetails {
                         rootProjects.remove(dependency)
                     }
 
-                    val graphKey = DependencyPair(project, dependency)
+                    val graphKey = DependencyPair(project.asModuleProject(), dependency.asModuleProject())
                     val traits = dependencies.computeIfAbsent(graphKey) { mutableListOf() }
                         .toMutableList()
 
@@ -423,27 +426,27 @@ internal fun createGraph(rootProject: Project): GraphDetails {
 //        .sortedBy { it.path }
 
     return GraphDetails(
-        projects = projects,
+        projects = LinkedHashSet(projects.map { it.asModuleProject() }),
         dependencies = dependencies,
-        multiplatformProjects = multiplatformProjects,
-        androidProjects = androidProjects,
-        javaProjects = javaProjects,
-        rootProjects = rootProjects,
+        multiplatformProjects = multiplatformProjects.map { it.asModuleProject() },
+        androidProjects = androidProjects.map { it.asModuleProject() },
+        javaProjects = javaProjects.map { it.asModuleProject() },
+        rootProjects = rootProjects.map { it.asModuleProject() },
     )
 }
 
 internal data class DependencyPair(
-    val origin: Project,
-    val target: Project,
+    val origin: ModuleProject,
+    val target: ModuleProject,
 )
 
 internal data class GraphDetails(
-    val projects: LinkedHashSet<Project>,
+    val projects: LinkedHashSet<ModuleProject>,
     val dependencies: LinkedHashMap<DependencyPair, List<String>>,
-    val multiplatformProjects: List<Project>,
-    val androidProjects: List<Project>,
-    val javaProjects: List<Project>,
-    val rootProjects: List<Project>,
+    val multiplatformProjects: List<ModuleProject>,
+    val androidProjects: List<ModuleProject>,
+    val javaProjects: List<ModuleProject>,
+    val rootProjects: List<ModuleProject>,
 ) {
     companion object {
         // TODO: 16/06/2023 Provide via extension
@@ -460,6 +463,8 @@ internal data class GraphDetails(
 }
 
 internal data class ModuleProject(
-    val name: String,
-
+    val path: String,
+    val projectDir: File,
 )
+
+internal fun Project.asModuleProject() = ModuleProject(this.path, this.projectDir)
