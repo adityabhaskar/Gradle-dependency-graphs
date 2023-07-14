@@ -26,5 +26,4 @@ end
 click :example:data https://github.com/oorjalabs/todotxt-for-android/blob/main/example/data
 click :example:models https://github.com/oorjalabs/todotxt-for-android/blob/main/example/models
 click :example:domain https://github.com/oorjalabs/todotxt-for-android/blob/main/example/domain
-
-    ```
+```

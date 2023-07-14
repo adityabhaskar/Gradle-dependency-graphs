@@ -34,5 +34,4 @@ click :example:models https://github.com/oorjalabs/todotxt-for-android/blob/main
 click :example:feature https://github.com/oorjalabs/todotxt-for-android/blob/main/example/feature
 click :example:ui https://github.com/oorjalabs/todotxt-for-android/blob/main/example/ui
 click :example:domain https://github.com/oorjalabs/todotxt-for-android/blob/main/example/domain
-
-    ```
+```

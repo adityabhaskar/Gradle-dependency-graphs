@@ -305,9 +305,8 @@ abstract class DependencyDiagramTask : DefaultTask() {
         fileText += """
 
 %% Click interactions
-$clickText
-    ```
-        """.trimIndent()
+$clickText```
+""".trimIndent()
 
         val graphFile = File(currentProject.projectDir, GraphDetails.GraphFileName)
         graphFile.parentFile.mkdirs()
