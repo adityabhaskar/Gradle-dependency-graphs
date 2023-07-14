@@ -29,3 +29,7 @@ rootProject.name = "gradle-module-dependency-diagram-plugin"
 
 include(":example")
 includeBuild("plugin-build")
+include(":domain")
+include(":models")
+include(":data")
+include(":ui")
