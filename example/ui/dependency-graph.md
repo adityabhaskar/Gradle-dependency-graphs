@@ -11,8 +11,8 @@ classDef javaNode fill:#ffb3ba;
 %% Modules
 subgraph  
   direction LR;
-  :example:models{{:example:models}}:::javaNode;
   :example:feature{{:example:feature}}:::javaNode;
+  :example:models{{:example:models}}:::javaNode;
   :example:ui[:example:ui]:::javaNode;
 end
 
@@ -23,7 +23,7 @@ end
 :example:feature-.->:example:ui
 
 %% Click interactions
-click :example:models https://github.com/oorjalabs/todotxt-for-android/blob/main/example/models
 click :example:feature https://github.com/oorjalabs/todotxt-for-android/blob/main/example/feature
+click :example:models https://github.com/oorjalabs/todotxt-for-android/blob/main/example/models
 click :example:ui https://github.com/oorjalabs/todotxt-for-android/blob/main/example/ui
 ```

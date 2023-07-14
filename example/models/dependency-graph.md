@@ -12,9 +12,9 @@ classDef javaNode fill:#ffb3ba;
 subgraph  
   direction LR;
   :example:data{{:example:data}}:::javaNode;
+  :example:domain{{:example:domain}}:::javaNode;
   :example:models[:example:models]:::javaNode;
   :example:ui{{:example:ui}}:::javaNode;
-  :example:domain{{:example:domain}}:::javaNode;
 end
 
 %% Dependencies
@@ -26,7 +26,7 @@ end
 
 %% Click interactions
 click :example:data https://github.com/oorjalabs/todotxt-for-android/blob/main/example/data
+click :example:domain https://github.com/oorjalabs/todotxt-for-android/blob/main/example/domain
 click :example:models https://github.com/oorjalabs/todotxt-for-android/blob/main/example/models
 click :example:ui https://github.com/oorjalabs/todotxt-for-android/blob/main/example/ui
-click :example:domain https://github.com/oorjalabs/todotxt-for-android/blob/main/example/domain
 ```

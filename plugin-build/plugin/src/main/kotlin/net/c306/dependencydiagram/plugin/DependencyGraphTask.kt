@@ -87,8 +87,7 @@ abstract class DependencyDiagramTask : DefaultTask() {
     @TaskAction
     fun createDependencyDiagram() {
 
-//        // Create graph of all dependencies
-//        val graph = createGraph(project.rootProject)
+        // Create graph of all dependencies
         val graph = graphDetails.get()
 
         // For each module, draw its sub graph of dependencies and dependents
@@ -97,12 +96,6 @@ abstract class DependencyDiagramTask : DefaultTask() {
         // Draw the full graph of all modules
         drawDependencies(project.rootProject.asModuleProject(), graph, true, project.rootDir)
 
-//        val prettyTag = tag.orNull?.let { "[$it]" } ?: ""
-//
-//        logger.lifecycle("$prettyTag message is: ${message.orNull}")
-//        logger.lifecycle("$prettyTag tag is: ${tag.orNull}")
-//        logger.lifecycle("$prettyTag outputFile is: ${outputFile.orNull}")
-//
 //        outputFile.get().asFile.writeText("$prettyTag ${message.get()}")
     }
 
@@ -245,7 +238,6 @@ abstract class DependencyDiagramTask : DefaultTask() {
 
             fileText += "  ${project.path}${nodeStart}${project.path}${nodeEnd}$nodeClass;\n"
 
-//        val relativePath = rootDir.relativePath(project.projectDir)
             val relativePath = project.projectDir.relativeTo(rootDir)
             clickText += "click ${project.path} ${GraphDetails.RepoPath}/${relativePath}\n"
         }
@@ -418,12 +410,8 @@ internal fun createGraph(rootProject: Project): GraphDetails {
         }
     }
 
-    // TODO: 16/06/2023
-//    projects = projects
-//        .sortedBy { it.path }
-
     return GraphDetails(
-        projects = LinkedHashSet(projects.map { it.asModuleProject() }),
+        projects = LinkedHashSet(projects.map { it.asModuleProject() }.sortedBy { it.path }),
         dependencies = dependencies,
         multiplatformProjects = multiplatformProjects.map { it.asModuleProject() },
         androidProjects = androidProjects.map { it.asModuleProject() },
