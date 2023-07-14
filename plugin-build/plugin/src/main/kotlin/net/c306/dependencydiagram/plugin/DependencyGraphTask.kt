@@ -182,6 +182,7 @@ abstract class DependencyDiagramTask : DefaultTask() {
     ```mermaid
     %%{ init: { 'theme': 'base' } }%%
     graph LR;
+
     %% Styling for module nodes by type
     classDef rootNode stroke-width:4px;
     classDef mppNode fill:#ffd2b3;
@@ -193,11 +194,7 @@ abstract class DependencyDiagramTask : DefaultTask() {
         """.trimIndent()
         // This ensures the graph is wrapped in a box with a background, so it's consistently visible
         // when rendered in dark mode.
-        fileText += """
-    subgraph
-      direction LR
-
-        """.trimIndent()
+        fileText += "subgraph  \n  direction LR;\n"
 
         val normalNodeStart = "(["
         val normalNodeEnd = "])"
@@ -281,6 +278,7 @@ abstract class DependencyDiagramTask : DefaultTask() {
             }
 
         fileText += """
+
         %% Dependents
 
         """.trimIndent()
@@ -306,8 +304,8 @@ abstract class DependencyDiagramTask : DefaultTask() {
 
         fileText += """
 
-    %% Click interactions
-    $clickText
+%% Click interactions
+$clickText
     ```
         """.trimIndent()
 

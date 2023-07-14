@@ -20,9 +20,7 @@ abstract class DependencyDiagramPlugin : Plugin<Project> {
             it.tag.set(extension.tag)
             it.message.set(extension.message)
 
-            val graph = createGraph(project.rootProject)
-            println(graph)
-            it.graphDetails.set(graph)
+            it.graphDetails.set(createGraph(project.rootProject))
         }
     }
 }
