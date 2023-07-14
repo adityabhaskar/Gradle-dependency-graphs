@@ -43,13 +43,27 @@ abstract class DependencyDiagramTask : DefaultTask() {
     }
 
     @get:Input
-    @get:Option(option = "message", description = "A message to be printed in the output file")
-    abstract val message: Property<String>
+    @get:Option(
+        option = "ignoreModules",
+        description = "Full paths, e.g. ':live:test-ui` of the modules you may want to ignore",
+    )
+    @get:Optional
+    abstract val ignoreModules: Property<List<String>>
 
     @get:Input
-    @get:Option(option = "tag", description = "A Tag to be used for debug and in the output file")
+    @get:Option(option = "repoRootUrlInput", description = "Github URL for the repository")
     @get:Optional
-    abstract val tag: Property<String>
+    abstract val repoRootUrlInput: Property<String>
+
+    @get:Input
+    @get:Option(option = "mainBranchName", description = "Name of the main branch. `main` is used if not provided.")
+    @get:Optional
+    abstract val mainBranchName: Property<String>
+
+    @get:Input
+    @get:Option(option = "graphFileName", description = "Name for the file where graph is saved. Default is dependency-graph.md`")
+    @get:Optional
+    abstract val graphFileName: Property<String>
 
     @get:Input
     @get:Option(
@@ -57,9 +71,6 @@ abstract class DependencyDiagramTask : DefaultTask() {
         description = "The project dependencies graph as [GraphDetails]",
     )
     internal abstract val graphDetails: Property<GraphDetails>
-
-//    @get:OutputFile
-//    abstract val outputFile: RegularFileProperty
 
     /**
      * Creates mermaid graphs for all modules in the app and places each graph within the module's
@@ -95,8 +106,6 @@ abstract class DependencyDiagramTask : DefaultTask() {
 
         // Draw the full graph of all modules
         drawDependencies(project.rootProject.asModuleProject(), graph, true, project.rootDir)
-
-//        outputFile.get().asFile.writeText("$prettyTag ${message.get()}")
     }
 
     /**
@@ -378,7 +387,8 @@ internal fun createGraph(rootProject: Project): GraphDetails {
                         rootProjects.remove(dependency)
                     }
 
-                    val graphKey = DependencyPair(project.asModuleProject(), dependency.asModuleProject())
+                    val graphKey =
+                        DependencyPair(project.asModuleProject(), dependency.asModuleProject())
                     val traits = dependencies
                         .computeIfAbsent(graphKey) { mutableListOf() } as MutableList
 

@@ -17,9 +17,10 @@ abstract class DependencyDiagramPlugin : Plugin<Project> {
 
         // Add a task that uses configuration from the extension object
         project.tasks.register(TASK_NAME, DependencyDiagramTask::class.java) {
-            it.tag.set(extension.tag)
-            it.message.set(extension.message)
-
+            it.ignoreModules.set(extension.ignoreModules)
+            it.graphFileName
+            it.mainBranchName
+            it.repoRootUrlInput
             it.graphDetails.set(createGraph(project.rootProject))
         }
     }
