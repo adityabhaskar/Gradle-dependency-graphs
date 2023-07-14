@@ -35,7 +35,7 @@ import java.util.*
  * 9. Provided but unsupported on Github - click navigation
  *    * Module nodes are clickable, clicking through to the graph of the respective module
  */
-abstract class DependencyGraphTask : DefaultTask() {
+abstract class DependencyDiagramTask : DefaultTask() {
 
     init {
         description = "Generates dependency graph files for all local modules in the project."
@@ -107,7 +107,7 @@ abstract class DependencyGraphTask : DefaultTask() {
      *    * Module nodes are clickable, clicking through to the graph of the respective module
      */
     @TaskAction
-    fun createDependencyGraph() {
+    fun createDependencyDiagram() {
         // Create graph of all dependencies
         val graph = createGraph(project.rootProject)
 

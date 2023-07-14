@@ -7,7 +7,7 @@ import javax.inject.Inject
 // const val DEFAULT_OUTPUT_FILE = "template-example.txt"
 
 @Suppress("UnnecessaryAbstractClass")
-abstract class DependencyGraphExtension @Inject constructor(project: Project) {
+abstract class DependencyDiagramExtension @Inject constructor(project: Project) {
 
     private val objects = project.objects
 
