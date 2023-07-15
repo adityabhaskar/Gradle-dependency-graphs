@@ -18,4 +18,7 @@ dependencyGraphConfig {
 
     // Optional
     showLegend.set(net.c306.dependencygraph.plugin.ShowLegend.OnlyInRootGraph)
+
+    // Optional
+    ignoreModules.set(listOf(":example:system-test"))
 }
