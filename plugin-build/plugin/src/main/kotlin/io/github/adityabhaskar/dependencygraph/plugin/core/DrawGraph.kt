@@ -1,9 +1,9 @@
-package net.c306.dependencygraph.plugin.core
+package io.github.adityabhaskar.dependencygraph.plugin.core
 
-import net.c306.dependencygraph.plugin.DependencyPair
-import net.c306.dependencygraph.plugin.ModuleProject
-import net.c306.dependencygraph.plugin.ParsedGraph
-import net.c306.dependencygraph.plugin.ShowLegend
+import io.github.adityabhaskar.dependencygraph.plugin.DependencyPair
+import io.github.adityabhaskar.dependencygraph.plugin.ModuleProject
+import io.github.adityabhaskar.dependencygraph.plugin.ParsedGraph
+import io.github.adityabhaskar.dependencygraph.plugin.ShowLegend
 import java.io.File
 
 internal data class DrawConfig(

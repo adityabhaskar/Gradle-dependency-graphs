@@ -19,7 +19,7 @@ This plugin is a derivation of [Jake Wharton](https://github.com/JakeWharton/)'s
 **Apply the plugin** to your project's root `build.gradle.kts`
 ```kotlin
 plugins {
-    id("net.c306.dependencygraph.plugin")
+    id("io.github.adityabhaskar.dependencygraph")
 }
 ```
 
@@ -37,30 +37,30 @@ Optionally **configure the plugin** in the same `build.gradle.kts` if you want t
 ```kotlin
 dependencyGraphConfig {
     graphDirection.set(Direction.LeftToRight)
-    
+
     showLegend.set(ShowLegend.OnlyInRootGraph)
-    
+
     ignoreModules.set(listOf(":example:system-test", ":example:test-fixtures"))
-    
+
     repoRootUrl.set("https://github.com/adityabhaskar/Project-Dependency-Graph/")
-    
+
     mainBranchName.set("main")
-    
+
     graphFileName.set("dependencyGraph.md")
-}    
+}
 ```
 
 #### Configuration options
 
 All configuration options are optional with sensible defaults.
-    
+
 <details open>
 <summary><strong>graphDirection</strong></summary>
 
 > Type: `Direction`
-> 
+>
 > The direction in which the graph should be laid out. Defaults to left to right (`Direction.LeftToRight`).
-> 
+>
 > Options:
 > * `Direction.LeftToRight`
 > * `Direction.TopToBottom`
@@ -74,7 +74,7 @@ All configuration options are optional with sensible defaults.
 <summary><strong>showLegend</strong></summary>
 
 > Type: `ShowLegend`
-> 
+>
 > Whether to show a legend. When enabled, the graph with contain a legend identifying different types of modules — current/root, java/kotlin, Android and multiplatform — and different type of dependencies - direct, indirect & transitive. Default value is `ShowLegend.OnlyInRootGraph`.
 > * `ShowLegend.Always`
 > * `ShowLegend.OnlyInRootGraph`
@@ -86,10 +86,10 @@ All configuration options are optional with sensible defaults.
 <summary><strong>graphFileName</strong></summary>
 
 > Type: `String`
-> 
+>
 > Name for the file where graph is saved. Default is `dependencyGraph.md`.
-> 
-> **Note**: 
+>
+> **Note**:
 > * If the provided filename doesn't end in `.md`, then the extension will be appended.
 > * Try not to use `-` or any special characters in the file name. This interferes with the mermaid graph format when adding links. If the file name contains anything other than `[a-zA-Z0-9]`, then links will not be added.
 
@@ -99,9 +99,9 @@ All configuration options are optional with sensible defaults.
 <summary><strong>ignoreModules</strong></summary>
 
 > Type: `List<String></String>`
-> 
-> A list of modules to be ignored when generating the graph. This may be used, for instance to remove system test modules to see only the production graph. 
-> 
+>
+> A list of modules to be ignored when generating the graph. This may be used, for instance to remove system test modules to see only the production graph.
+>
 > Provide full path strings of the modules you want to ignore, e.g. `:live-feature:ui` instead of `:test-ui`.
 
 </details>
@@ -110,11 +110,11 @@ All configuration options are optional with sensible defaults.
 <summary><strong>repoRootUrl</strong></summary>
 
 > Type: `String`
-> 
+>
 > Github URL for your repository. E.g. `https://github.com/adityabhaskar/Project-Dependency-Graph`
-> 
+>
 > The URL is used for adding links to modules to allow navigation to a module's subgraph just by clicking on it. If no URL is provided, then links aren't added to the graph.
-> 
+>
 > **Note**: Github doesn't support click navigation from mermaid graphs at the
 moment.
 
@@ -124,11 +124,11 @@ moment.
 <summary><strong>mainBranchName</strong></summary>
 
 > Type: `String`
-> 
+>
 > Name of your main branch, e.g. `master`. Default is `main`.
-> 
+>
 > This is combined with the [repoRootUrl] to create clickable URLs. The URLs are used for adding links to graph to allow navigation to a module's subgraph by clicking on a module. If no [repoRootUrl] is provided, then links aren't added to the graph.
-> 
+>
 > **Note**: Github doesn't support click navigation from mermaid graphs at the
 moment.
 </details>
@@ -139,7 +139,7 @@ moment.
 
 The plugin will generate one graph at the root of the project for all modules in the project (except any ignored).
 
-Sample root project graph with a legend: 
+Sample root project graph with a legend:
 
 ```mermaid
 %%{ init: { 'theme': 'base' } }%%
@@ -173,7 +173,7 @@ subgraph Legend
 end
 
 %% Modules
-subgraph  
+subgraph
   direction LR;
   :example:data{{:example:data}}:::javaNode;
   :example:domain{{:example:domain}}:::javaNode;
@@ -221,7 +221,7 @@ classDef andNode fill:#baffc9;
 classDef javaNode fill:#ffb3ba;
 
 %% Modules
-subgraph  
+subgraph
   direction LR;
   :example:data{{:example:data}}:::javaNode;
   :example:domain[:example:domain]:::javaNode;

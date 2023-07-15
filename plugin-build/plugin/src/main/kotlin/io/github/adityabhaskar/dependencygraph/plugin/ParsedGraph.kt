@@ -1,4 +1,4 @@
-package net.c306.dependencygraph.plugin
+package io.github.adityabhaskar.dependencygraph.plugin
 
 import org.gradle.api.Project
 import java.io.File

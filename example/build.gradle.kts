@@ -1,8 +1,8 @@
-import net.c306.dependencygraph.plugin.Direction
-import net.c306.dependencygraph.plugin.ShowLegend
+import io.github.adityabhaskar.dependencygraph.plugin.Direction
+import io.github.adityabhaskar.dependencygraph.plugin.ShowLegend
 
 plugins {
-    id("net.c306.dependencygraph.plugin")
+    id("io.github.adityabhaskar.dependencygraph")
 }
 
 dependencyGraphConfig {
