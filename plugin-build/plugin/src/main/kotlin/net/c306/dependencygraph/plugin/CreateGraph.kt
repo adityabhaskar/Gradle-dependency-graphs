@@ -179,6 +179,7 @@ internal fun drawDependencies(
     rootDir: File,
     moduleBaseUrl: String?,
     showLegend: ShowLegend,
+    graphDirection: String,
 ) {
     val projects: LinkedHashSet<ModuleProject> = graphDetails.projects
     val dependencies: LinkedHashMap<DependencyPair, List<String>> =
@@ -214,7 +215,7 @@ internal fun drawDependencies(
         """.trimIndent()
     // This ensures the graph is wrapped in a box with a background, so it's consistently visible
     // when rendered in dark mode.
-    fileText += "subgraph  \n  direction LR;\n"
+    fileText += "subgraph  \n  direction $graphDirection;\n"
 
     val normalNodeStart = "(["
     val normalNodeEnd = "])"

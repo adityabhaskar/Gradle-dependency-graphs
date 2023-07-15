@@ -60,8 +60,13 @@ abstract class DependencyGraphExtension @Inject constructor(project: Project) {
      * * [ShowLegend.Always] will add a legend to all graphs
      * * [ShowLegend.OnlyInRootGraph] will only add a legend to the root graph
      * * [ShowLegend.Never] will not add a legend to any graph
+     *
+     * Default value is [ShowLegend.OnlyInRootGraph]
      */
     abstract val showLegend: Property<ShowLegend>
 
+    /**
+     * Optional graph direction. Defaults to top down ([Direction.TopToBottom]).
+     */
     abstract val graphDirection: Property<Direction>
 }

@@ -10,8 +10,11 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 
-enum class Direction {
-    TopToBottom, BottomToTop, LeftToRight, RightToLeft
+enum class Direction(internal val directionString: String) {
+    TopToBottom(directionString = "TB"),
+    BottomToTop(directionString = "BT"),
+    LeftToRight(directionString = "LR"),
+    RightToLeft(directionString = "RL"),
 }
 
 /**
@@ -140,7 +143,8 @@ abstract class DependencyGraphTask : DefaultTask() {
             mainBranchName = mainBranchName.orNull,
         )
 
-        val showLegend = showLegend.getOrElse(ShowLegend.Always)
+        val showLegend = showLegend.getOrElse(OnlyInRootGraph)
+        val directionString = graphDirection.getOrElse(Direction.LeftToRight).directionString
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -151,6 +155,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 rootDir = project.rootDir,
                 moduleBaseUrl = moduleBaseUrl,
                 showLegend = showLegend,
+                graphDirection = directionString,
             )
         }
 
@@ -162,6 +167,7 @@ abstract class DependencyGraphTask : DefaultTask() {
             rootDir = project.rootDir,
             moduleBaseUrl = moduleBaseUrl,
             showLegend = showLegend,
+            graphDirection = directionString,
         )
     }
 
