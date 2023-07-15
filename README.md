@@ -139,6 +139,8 @@ moment.
 
 The plugin will generate one graph at the root of the project for all modules in the project (except any ignored).
 
+Sample root project graph with a legend: 
+
 ```mermaid
 %%{ init: { 'theme': 'base' } }%%
 graph LR;
