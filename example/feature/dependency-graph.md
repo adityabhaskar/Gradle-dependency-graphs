@@ -8,6 +8,15 @@ classDef mppNode fill:#ffd2b3;
 classDef andNode fill:#baffc9;
 classDef javaNode fill:#ffb3ba;
 
+%% Graph types
+subgraph Legend
+  direction TB;
+  rootNode[Root/current module]:::rootNode;
+  andNode([Android]):::andNode;
+  javaNode{{Java}}:::javaNode;
+  mppNode([Multi-platform]):::mppNode;
+end
+
 %% Modules
 subgraph  
   direction LR;
