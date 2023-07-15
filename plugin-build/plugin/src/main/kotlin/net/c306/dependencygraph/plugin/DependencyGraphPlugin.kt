@@ -18,13 +18,18 @@ abstract class DependencyGraphPlugin : Plugin<Project> {
 
         // Add a task that uses configuration from the extension object
         project.tasks.register(TASK_NAME, DependencyGraphTask::class.java) {
-            it.ignoreModules.set(extension.ignoreModules)
             it.graphFileName.set(extension.graphFileName)
             it.mainBranchName.set(extension.mainBranchName)
             it.repoRootUrl.set(extension.repoRootUrl)
             it.graphDirection.set(extension.graphDirection)
             it.showLegend.set(extension.showLegend)
-            it.parsedGraph.set(parseDependencyGraph(project.rootProject))
+
+            it.parsedGraph.set(
+                parseDependencyGraph(
+                    rootProject = project.rootProject,
+                    ignoredModules = extension.ignoreModules.orNull ?: emptyList(),
+                ),
+            )
         }
     }
 }

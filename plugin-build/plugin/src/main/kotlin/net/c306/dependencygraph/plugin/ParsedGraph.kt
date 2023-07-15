@@ -10,13 +10,7 @@ internal data class ParsedGraph(
     val androidProjects: List<ModuleProject>,
     val javaProjects: List<ModuleProject>,
     val rootProjects: List<ModuleProject>,
-) {
-    companion object {
-        // TODO: 16/06/2023 Provide via extension
-        // Used for excluding module from graph
-        const val SystemTestName = "system-test"
-    }
-}
+)
 
 internal data class DependencyPair(
     val origin: ModuleProject,

@@ -12,15 +12,18 @@ import java.util.*
  * Create a graph of all project modules, their types, dependencies and root projects.
  * @return An object of type GraphDetails containing all details
  */
-internal fun parseDependencyGraph(rootProject: Project): ParsedGraph {
+internal fun parseDependencyGraph(
+    rootProject: Project,
+    ignoredModules: List<String>,
+): ParsedGraph {
     val rootProjects = mutableListOf<Project>()
     var queue = mutableListOf(rootProject)
 
-    // Traverse the list of all subfolders starting with root project and add them to
+    // Traverse the list of all sub-folders starting with root project and add them to
     // rootProjects
     while (queue.isNotEmpty()) {
         val project = queue.removeAt(0)
-        if (project.name != ParsedGraph.SystemTestName) {
+        if (project.path !in ignoredModules) {
             rootProjects.add(project)
         }
         queue.addAll(project.childProjects.values)
@@ -32,7 +35,7 @@ internal fun parseDependencyGraph(rootProject: Project): ParsedGraph {
     val androidProjects = mutableListOf<Project>()
     val javaProjects = mutableListOf<Project>()
 
-    // Again traverse the list of all subfolders starting with the current project
+    // Again traverse the list of all sub-folders starting with the current project
     // * Add projects to project-type lists
     // * Add project dependencies to dependency hashmap with record for api/impl
     // * Add projects & their dependencies to projects list
@@ -40,7 +43,7 @@ internal fun parseDependencyGraph(rootProject: Project): ParsedGraph {
     queue = mutableListOf(rootProject)
     while (queue.isNotEmpty()) {
         val project = queue.removeAt(0)
-        if (project.name == ParsedGraph.SystemTestName) {
+        if (project.path in ignoredModules) {
             continue
         }
         queue.addAll(project.childProjects.values)
@@ -66,11 +69,12 @@ internal fun parseDependencyGraph(rootProject: Project): ParsedGraph {
             config.dependencies
                 .filterIsInstance(ProjectDependency::class.java)
                 .map { it.dependencyProject }
+                .filter { it.path !in ignoredModules }
                 .forEach { dependency ->
                     projects.add(project)
                     projects.add(dependency)
                     if (
-                        project.name != ParsedGraph.SystemTestName &&
+                        project.path !in ignoredModules &&
                         project.path != dependency.path
                     ) {
                         rootProjects.remove(dependency)

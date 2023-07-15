@@ -4,7 +4,6 @@ import net.c306.dependencygraph.plugin.ShowLegend.*
 import net.c306.dependencygraph.plugin.core.drawDependencyGraph
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.BasePlugin
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
@@ -57,14 +56,6 @@ abstract class DependencyGraphTask : DefaultTask() {
         group = BasePlugin.BUILD_GROUP
         description = "Generates dependency graph files for all local modules in the project."
     }
-
-    @get:Input
-    @get:Option(
-        option = "ignoreModules",
-        description = "Full paths, e.g. ':live:test-ui` of the modules you may want to ignore",
-    )
-    @get:Optional
-    abstract val ignoreModules: ListProperty<String>
 
     @get:Input
     @get:Option(option = "repoRootUrl", description = "Github URL for the repository")
