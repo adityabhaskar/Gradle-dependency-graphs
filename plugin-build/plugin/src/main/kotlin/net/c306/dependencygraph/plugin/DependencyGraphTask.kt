@@ -52,9 +52,9 @@ abstract class DependencyGraphTask : DefaultTask() {
     abstract val ignoreModules: ListProperty<String>
 
     @get:Input
-    @get:Option(option = "repoRootUrlInput", description = "Github URL for the repository")
+    @get:Option(option = "repoRootUrl", description = "Github URL for the repository")
     @get:Optional
-    abstract val repoRootUrlInput: Property<String>
+    abstract val repoRootUrl: Property<String>
 
     @get:Input
     @get:Option(option = "mainBranchName", description = "Name of the main branch. `main` is used if not provided.")
