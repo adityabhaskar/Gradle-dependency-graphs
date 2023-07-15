@@ -15,6 +15,18 @@ subgraph Legend
   javaNode{{Java/Kotlin}}:::javaNode;
   andNode([Android]):::andNode;
   mppNode([Multi-platform]):::mppNode;
+  subgraph Direct dependency
+    direction LR;
+    :a===>:b
+  end
+  subgraph Indirect dependency
+    direction LR;
+    :c--->:d
+  end
+  subgraph API dependency
+    direction LR;
+    :e--API--->:f
+  end
 end
 
 %% Modules
