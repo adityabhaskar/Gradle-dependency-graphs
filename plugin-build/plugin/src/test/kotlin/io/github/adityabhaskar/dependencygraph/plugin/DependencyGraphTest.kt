@@ -10,7 +10,7 @@ class DependencyGraphTest {
     @Test
     fun `plugin is applied correctly to the project`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("io.github.adityabhaskar.dependencygraph.plugin")
+        project.pluginManager.apply("io.github.adityabhaskar.dependencygraph")
 
         assert(project.tasks.getByName("dependencyGraph") is DependencyGraphTask)
     }
@@ -18,7 +18,7 @@ class DependencyGraphTest {
     @Test
     fun `extension dependencyGraphConfig is created correctly`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("io.github.adityabhaskar.dependencygraph.plugin")
+        project.pluginManager.apply("io.github.adityabhaskar.dependencygraph")
 
         assertNotNull(project.extensions.getByName("dependencyGraphConfig"))
     }
@@ -26,7 +26,7 @@ class DependencyGraphTest {
     @Test
     fun `parameters are passed correctly from extension to task`() {
         val project = ProjectBuilder.builder().build()
-        project.pluginManager.apply("io.github.adityabhaskar.dependencygraph.plugin")
+        project.pluginManager.apply("io.github.adityabhaskar.dependencygraph")
 
         (project.extensions.getByName("dependencyGraphConfig") as DependencyGraphExtension).apply {
             graphDirection.set(Direction.BottomToTop)
