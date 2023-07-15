@@ -61,10 +61,10 @@ abstract class DependencyGraphExtension @Inject constructor(project: Project) {
      *
      * Default value is [ShowLegend.OnlyInRootGraph]
      */
-    abstract val showLegend: Property<ShowLegend>
+    val showLegend: Property<ShowLegend> = objects.property(ShowLegend::class.java)
 
     /**
-     * Optional graph direction. Defaults to top down ([Direction.TopToBottom]).
+     * Optional graph direction. Defaults to top down ([Direction.LeftToRight]).
      */
-    abstract val graphDirection: Property<Direction>
+    val graphDirection: Property<Direction> = objects.property(Direction::class.java)
 }
