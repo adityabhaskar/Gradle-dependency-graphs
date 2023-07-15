@@ -31,6 +31,6 @@ gradleEnterprise {
     }
 }
 
-rootProject.name = ("net.c306.dependencydiagram")
+rootProject.name = ("net.c306.dependencygraph")
 
 include(":plugin")

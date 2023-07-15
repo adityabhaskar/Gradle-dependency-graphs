@@ -1,8 +1,8 @@
 plugins {
-    id("net.c306.dependencydiagram.plugin")
+    id("net.c306.dependencygraph.plugin")
 }
 
-projectDependencyDiagramConfig {
+dependencyGraphConfig {
     message.set("Just trying this gradle plugin...")
 
     tag.set("Something else")

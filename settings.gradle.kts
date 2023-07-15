@@ -25,7 +25,7 @@ gradleEnterprise {
     }
 }
 
-rootProject.name = "gradle-module-dependency-diagram-plugin"
+rootProject.name = "gradle-module-dependency-graph-plugin"
 
 include(":example:feature")
 include(":example:ui")

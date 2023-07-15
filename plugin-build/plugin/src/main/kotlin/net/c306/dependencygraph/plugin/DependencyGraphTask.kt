@@ -1,4 +1,4 @@
-package net.c306.dependencydiagram.plugin
+package net.c306.dependencygraph.plugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -35,7 +35,7 @@ import java.util.*
  * 9. Provided but unsupported on Github - click navigation
  *    * Module nodes are clickable, clicking through to the graph of the respective module
  */
-abstract class DependencyDiagramTask : DefaultTask() {
+abstract class DependencyGraphTask : DefaultTask() {
 
     init {
         group = BasePlugin.BUILD_GROUP
@@ -96,7 +96,7 @@ abstract class DependencyDiagramTask : DefaultTask() {
      *    * Module nodes are clickable, clicking through to the graph of the respective module
      */
     @TaskAction
-    fun createDependencyDiagram() {
+    fun createDependencyGraph() {
 
         // Create graph of all dependencies
         val graph = graphDetails.get()

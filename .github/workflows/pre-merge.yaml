@@ -38,7 +38,7 @@ jobs:
 
         # We do a run of the new task `templateExample` created by the plugin
       - name: Run the plugin
-        run: ./gradlew projectDependencyDiagram --message="Test Run" --tag=CI
+        run: ./gradlew dependencyGraph --message="Test Run" --tag=CI
         if: success()
 
 #        TODO: Confirm that the dependency graph files for example are generated
