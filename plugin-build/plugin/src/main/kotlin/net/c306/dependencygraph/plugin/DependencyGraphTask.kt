@@ -139,13 +139,17 @@ abstract class DependencyGraphTask : DefaultTask() {
         // Create graph of all dependencies
         val graph = parsedGraph.get()
 
-        val moduleBaseUrl = createGraphUrl(
-            repoUrl = repoRootUrl.orNull,
-            mainBranchName = mainBranchName.orNull,
-        )
-
         val showLegend = showLegend.getOrElse(OnlyInRootGraph)
         val directionString = graphDirection.getOrElse(Direction.LeftToRight).directionString
+        val fileName = appendMarkDownIfNeeded(
+            providedFileName = graphFileName.getOrElse(DEFAULT_GRAPH_FILE_NAME),
+        )
+        val moduleBaseUrl = if (doesFileNameSupportLinks(fileName)) {
+            createGraphUrl(
+                repoUrl = repoRootUrl.orNull,
+                mainBranchName = mainBranchName.orNull,
+            )
+        } else null
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -157,6 +161,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 moduleBaseUrl = moduleBaseUrl,
                 showLegend = showLegend,
                 graphDirection = directionString,
+                fileName = fileName,
             )
         }
 
@@ -169,6 +174,7 @@ abstract class DependencyGraphTask : DefaultTask() {
             moduleBaseUrl = moduleBaseUrl,
             showLegend = showLegend,
             graphDirection = directionString,
+            fileName = fileName,
         )
     }
 
@@ -186,7 +192,20 @@ abstract class DependencyGraphTask : DefaultTask() {
         }
     }
 
+    private fun doesFileNameSupportLinks(fileName: String): Boolean {
+        return Regex("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matches(fileName)
+    }
+
+    private fun appendMarkDownIfNeeded(providedFileName: String) = when {
+        providedFileName.isBlank() -> DEFAULT_GRAPH_FILE_NAME
+        !providedFileName.endsWith(".md", ignoreCase = true) -> "$providedFileName.md"
+        else -> providedFileName
+    }
+
     companion object {
         private const val DEFAULT_BRANCH_NAME = "main"
+
+        // TODO: 16/06/2023 Provide via extension
+        private const val DEFAULT_GRAPH_FILE_NAME = "dependencyGraph.md"
     }
 }

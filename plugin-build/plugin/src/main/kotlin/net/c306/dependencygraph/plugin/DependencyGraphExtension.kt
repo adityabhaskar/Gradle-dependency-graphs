@@ -50,7 +50,12 @@ abstract class DependencyGraphExtension @Inject constructor(project: Project) {
     val mainBranchName: Property<String> = objects.property(String::class.java)
 
     /**
-     * Optional name for the file where graph is saved. Default is `dependency-graph.md`
+     * Optional name for the file where graph is saved. Default is `dependencyGraph.md`.
+     * If the provided filename doesn't end in `.md`, then the extension will be appended.
+     *
+     * **NOTE**: Try to not use `-` or any special characters in the file name. This interferes
+     * with graph format when adding links. If the file name contains anything other than
+     * `[a-zA-Z0-9]`, then links will not be added.
      */
     val graphFileName: Property<String> = objects.property(String::class.java)
 

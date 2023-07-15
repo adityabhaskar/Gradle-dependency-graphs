@@ -15,9 +15,6 @@ internal data class ParsedGraph(
         // TODO: 16/06/2023 Provide via extension
         // Used for excluding module from graph
         const val SystemTestName = "system-test"
-
-        // TODO: 16/06/2023 Provide via extension
-        const val GraphFileName = "dependencyGraph.md"
     }
 }
 

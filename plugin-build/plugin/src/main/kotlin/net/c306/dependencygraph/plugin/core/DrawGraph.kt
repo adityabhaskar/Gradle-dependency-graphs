@@ -1,8 +1,8 @@
 package net.c306.dependencygraph.plugin.core
 
 import net.c306.dependencygraph.plugin.DependencyPair
-import net.c306.dependencygraph.plugin.ParsedGraph
 import net.c306.dependencygraph.plugin.ModuleProject
+import net.c306.dependencygraph.plugin.ParsedGraph
 import net.c306.dependencygraph.plugin.ShowLegend
 import java.io.File
 
@@ -19,6 +19,7 @@ internal fun drawDependencyGraph(
     moduleBaseUrl: String?,
     showLegend: ShowLegend,
     graphDirection: String,
+    fileName: String,
 ) {
     val projects: LinkedHashSet<ModuleProject> = parsedGraph.projects
     val dependencies: LinkedHashMap<DependencyPair, List<String>> =
@@ -107,7 +108,7 @@ internal fun drawDependencyGraph(
 
         val relativePath = project.projectDir.relativeTo(rootDir)
         moduleBaseUrl?.let {
-            clickText += "click ${project.path} ${it}/${relativePath}/${ParsedGraph.GraphFileName}\n"
+            clickText += "click ${project.path} ${it}/${relativePath}/${fileName}\n"
         }
     }
 
@@ -173,7 +174,7 @@ $clickText```
 """.trimIndent()
     }
 
-    val graphFile = File(currentProject.projectDir, ParsedGraph.GraphFileName)
+    val graphFile = File(currentProject.projectDir, fileName)
     graphFile.parentFile.mkdirs()
     graphFile.delete()
     graphFile.writeText(fileText)
