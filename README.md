@@ -206,6 +206,8 @@ Further, the plugin will generate a graph for every module's dependencies within
 1. Direct dependents of the module, and
 2. Direct and indirect dependencies of the module
 
+_Dependents are identified with a dashed line._
+
 Sample sub graph for the module `:example:domain` without a legend:
 
 ```mermaid
@@ -241,6 +243,19 @@ click :example:domain https://github.com/adityabhaskar/Project-Dependency-Graph/
 click :example:feature https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/feature/dependencyGraph.md
 click :example:models https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/models/dependencyGraph.md
 ```
+
+## CI integration
+
+> This section is a work in progress
+
+### Github action that creates a new PR if dependency graphs are updated on any push to `main`
+
+**TBD**
+
+
+### Github action that automatically commits new dependency graphs, if they are updated on any push to `main`
+
+**TBD**
 
 
 <!-- ## Publishing
