@@ -31,18 +31,17 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
+
       - name: Cache Gradle Caches
         uses: gradle/gradle-build-action@v2
+
       - name: Run Gradle tasks
         run: ./gradlew preMerge --continue
 
-        # We do a run of the new task `templateExample` created by the plugin
-      - name: Run the plugin
-        run: ./gradlew dependencyGraph
+      - name: Generate graphs
+        run: ./gradlew :example:dependencyGraph
         if: success()
 
-#        TODO: Confirm that the dependency graph files are generated
-#        # And we verify that the output of the file is correct.
-#      - name: Verify the plugin output
-#        run: grep -Fxq "[CI] Test Run" ./example/build/template-example.txt
-#        if: success()
+      - name: Verify the root graph file exists but system-test graph doesn't
+        run: [ -f "./dependencyGraph.md" ] && [ ! -f "./example/system-test/dependencyGraph.md" ]
+        if: success()
