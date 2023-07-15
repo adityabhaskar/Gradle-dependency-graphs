@@ -6,4 +6,6 @@ dependencyGraphConfig {
     message.set("Just trying this gradle plugin...")
 
     tag.set("Something else")
+
+    repoRootUrl.set("https://github.com/adityabhaskar/Project-Dependency-Graph/")
 }

@@ -38,9 +38,9 @@ end
 %% Dependents
 
 %% Click interactions
-click :example:data https://github.com/oorjalabs/todotxt-for-android/blob/main/example/data
-click :example:domain https://github.com/oorjalabs/todotxt-for-android/blob/main/example/domain
-click :example:feature https://github.com/oorjalabs/todotxt-for-android/blob/main/example/feature
-click :example:models https://github.com/oorjalabs/todotxt-for-android/blob/main/example/models
-click :example:ui https://github.com/oorjalabs/todotxt-for-android/blob/main/example/ui
+click :example:data https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/data/dependency-graph.md
+click :example:domain https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/domain/dependency-graph.md
+click :example:feature https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/feature/dependency-graph.md
+click :example:models https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/models/dependency-graph.md
+click :example:ui https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/ui/dependency-graph.md
 ```
