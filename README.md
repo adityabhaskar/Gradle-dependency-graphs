@@ -81,7 +81,7 @@ All configuration options are optional with sensible defaults.
 > 
 > Name for the file where graph is saved. Default is `dependencyGraph.md`.
 > 
-> **Notes**: 
+> **Note**: 
 > * If the provided filename doesn't end in `.md`, then the extension will be appended.
 > * Try not to use `-` or any special characters in the file name. This interferes with the mermaid graph format when adding links. If the file name contains anything other than `[a-zA-Z0-9]`, then links will not be added.
 
