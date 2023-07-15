@@ -12,8 +12,8 @@ classDef javaNode fill:#ffb3ba;
 subgraph Legend
   direction TB;
   rootNode[Root/current module]:::rootNode;
+  javaNode{{Java/Kotlin}}:::javaNode;
   andNode([Android]):::andNode;
-  javaNode{{Java}}:::javaNode;
   mppNode([Multi-platform]):::mppNode;
 end
 
