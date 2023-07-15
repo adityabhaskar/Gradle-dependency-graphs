@@ -45,54 +45,85 @@ dependencyGraphConfig {
 
 All configuration options are optional with sensible defaults.
 
-* **graphDirection** — `Direction`
-
-    The direction in which the graph should be laid out. Defaults to left to right (`Direction.LeftToRight`).
     
-    Options:
-    * `Direction.LeftToRight`
-    * `Direction.TopToBottom`
-    * `Direction.BottomToTop`
-    * `Direction.RightToLeft`
+<details open>
+<summary><strong>graphDirection</strong></summary>
 
-* **showLegend** — `ShowLegend`
+> Type: `Direction`
+> 
+> The direction in which the graph should be laid out. Defaults to left to right (`Direction.LeftToRight`).
+> 
+> Options:
+> * `Direction.LeftToRight`
+> * `Direction.TopToBottom`
+> * `Direction.BottomToTop`
+> * `Direction.RightToLeft`
+</details>
 
-    Whether to show a legend. When enabled, the graph with contain a legend identifying different types of modules — current/root, java/kotlin, Android and multiplatform — and different type of dependencies - direct, indirect & transitive. Default value is `ShowLegend.OnlyInRootGraph`.
-    * `ShowLegend.Always` will add a legend to all graphs
-    * `ShowLegend.OnlyInRootGraph` will only add a legend to the root graph
-    * `ShowLegend.Never` will not add a legend to any graph
+</details>
 
-* **graphFileName** — `String`
+<details open>
+<summary><strong>showLegend</strong></summary>
 
-    Name for the file where graph is saved. Default is `dependencyGraph.md`.
+> Type: `ShowLegend`
+> 
+> Whether to show a legend. When enabled, the graph with contain a legend identifying different types of modules — current/root, java/kotlin, Android and multiplatform — and different type of dependencies - direct, indirect & transitive. Default value is `ShowLegend.OnlyInRootGraph`.
+> * `ShowLegend.Always`
+> * `ShowLegend.OnlyInRootGraph`
+> * `ShowLegend.Never`
 
-    **Notes**: 
-    1. If the provided filename doesn't end in `.md`, then the extension will be appended.
-    2. Try to not use `-` or any special characters in the file name. This interferes with the mermaid graph format when adding links. If the file name contains anything other than `[a-zA-Z0-9]`, then links will not be added.
+</details>
 
-* **ignoreModules** — `String`
+<details open>
+<summary><strong>graphFileName</strong></summary>
 
-    A list of modules to be ignored when generating the graph. This may be used, for instance to remove system test modules to see only the production graph. 
+> Type: `String`
+> 
+> Name for the file where graph is saved. Default is `dependencyGraph.md`.
+> 
+> **Notes**: 
+> * If the provided filename doesn't end in `.md`, then the extension will be appended.
+> * Try not to use `-` or any special characters in the file name. This interferes with the mermaid graph format when adding links. If the file name contains anything other than `[a-zA-Z0-9]`, then links will not be added.
 
-    Provide full path strings of the modules you want to ignore, e.g. `:live-feature:ui` instead of `:test-ui`.
+</details>
 
-* **repoRootUrl** — `String`
+<details open>
+<summary><strong>ignoreModules</strong></summary>
 
-    Github URL for your repository. E.g. `https://github.com/adityabhaskar/Project-Dependency-Graph`
-    
-    The URL is used for adding links to modules to allow navigation to a module's subgraph just by clicking on it. If no URL is provided, then links aren't added to the graph.
+> Type: `List<String></String>`
+> 
+> A list of modules to be ignored when generating the graph. This may be used, for instance to remove system test modules to see only the production graph. 
+> 
+> Provide full path strings of the modules you want to ignore, e.g. `:live-feature:ui` instead of `:test-ui`.
 
-    **Note**: Github doesn't support click navigation from mermaid graphs at the
-    moment.
+</details>
 
-* **mainBranchName** — `String`
+<details open>
+<summary><strong>repoRootUrl</strong></summary>
 
-    Name of your main branch, e.g. `master`. Default is `main`.
+> Type: `String`
+> 
+> Github URL for your repository. E.g. `https://github.com/adityabhaskar/Project-Dependency-Graph`
+> 
+> The URL is used for adding links to modules to allow navigation to a module's subgraph just by clicking on it. If no URL is provided, then links aren't added to the graph.
+> 
+> **Note**: Github doesn't support click navigation from mermaid graphs at the
+moment.
 
-    This is combined with the [repoRootUrl] to create clickable URLs. The URLs are used for adding links to graph to allow navigation to a module's subgraph by clicking on a module. If no [repoRootUrl] is provided, then links aren't added to the graph.
+</details>
 
-    **Note**: Github doesn't support click navigation from mermaid graphs at the
-    moment.
+<details open>
+<summary><strong>mainBranchName</strong></summary>
+
+> Type: `String`
+> 
+> Name of your main branch, e.g. `master`. Default is `main`.
+> 
+> This is combined with the [repoRootUrl] to create clickable URLs. The URLs are used for adding links to graph to allow navigation to a module's subgraph by clicking on a module. If no [repoRootUrl] is provided, then links aren't added to the graph.
+> 
+> **Note**: Github doesn't support click navigation from mermaid graphs at the
+moment.
+</details>
 
 ### Using the plugin
 
