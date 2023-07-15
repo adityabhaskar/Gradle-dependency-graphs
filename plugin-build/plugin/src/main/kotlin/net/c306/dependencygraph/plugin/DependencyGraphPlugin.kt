@@ -1,5 +1,6 @@
 package net.c306.dependencygraph.plugin
 
+import net.c306.dependencygraph.plugin.core.parseDependencyGraph
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

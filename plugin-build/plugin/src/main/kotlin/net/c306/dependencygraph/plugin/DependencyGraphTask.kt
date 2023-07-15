@@ -1,6 +1,7 @@
 package net.c306.dependencygraph.plugin
 
 import net.c306.dependencygraph.plugin.ShowLegend.*
+import net.c306.dependencygraph.plugin.core.drawDependencyGraph
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.provider.ListProperty
@@ -148,7 +149,7 @@ abstract class DependencyGraphTask : DefaultTask() {
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
-            drawDependencies(
+            drawDependencyGraph(
                 currentProject = it,
                 graphDetails = graph,
                 isRootGraph = false,
@@ -160,7 +161,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         }
 
         // Draw the full graph of all modules
-        drawDependencies(
+        drawDependencyGraph(
             currentProject = project.rootProject.asModuleProject(),
             graphDetails = graph,
             isRootGraph = true,
