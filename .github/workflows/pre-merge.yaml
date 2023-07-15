@@ -43,5 +43,5 @@ jobs:
         if: success()
 
       - name: Verify the root graph file exists but system-test graph doesn't
-        run: [ -f "./dependencyGraph.md" ] && [ ! -f "./example/system-test/dependencyGraph.md" ]
+        run: test -f "./dependencyGraph.md" && test ! -f "./example/system-test/dependencyGraph.md"
         if: success()
