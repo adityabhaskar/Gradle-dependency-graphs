@@ -248,12 +248,16 @@ click :example:models https://github.com/adityabhaskar/Project-Dependency-Graph/
 
 > This section is a work in progress
 
-### Github action that creates a new PR if dependency graphs are updated on any push to `main`
+### Creates a PR with changed graphs
+
+Github action that creates a new PR if dependency graphs are updated on any push to `main`
 
 **TBD**
 
 
-### Github action that automatically commits new dependency graphs, if they are updated on any push to `main`
+### Commit changed graphs automatically
+
+Github action that automatically commits new dependency graphs, if they are updated on any push to `main`
 
 **TBD**
 
