@@ -1,3 +1,6 @@
+import net.c306.dependencygraph.plugin.Direction
+import net.c306.dependencygraph.plugin.ShowLegend
+
 plugins {
     id("net.c306.dependencygraph.plugin")
 }
@@ -7,13 +10,16 @@ dependencyGraphConfig {
     repoRootUrl.set("https://github.com/adityabhaskar/Project-Dependency-Graph/")
 
     // Optional
+    mainBranchName.set("main")
+
+    // Optional
     graphFileName.set("dependencyGraph.md")
 
     // Optional
-    graphDirection.set(net.c306.dependencygraph.plugin.Direction.LeftToRight)
+    graphDirection.set(Direction.LeftToRight)
 
     // Optional
-    showLegend.set(net.c306.dependencygraph.plugin.ShowLegend.OnlyInRootGraph)
+    showLegend.set(ShowLegend.OnlyInRootGraph)
 
     // Optional
     ignoreModules.set(listOf(":example:system-test"))
