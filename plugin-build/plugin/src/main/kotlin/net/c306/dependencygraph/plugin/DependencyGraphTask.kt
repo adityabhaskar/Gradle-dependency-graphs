@@ -17,38 +17,6 @@ enum class Direction {
     TopToBottom, BottomToTop, LeftToRight, RightToLeft
 }
 
-internal data class DependencyPair(
-    val origin: ModuleProject,
-    val target: ModuleProject,
-)
-
-internal data class GraphDetails(
-    val projects: LinkedHashSet<ModuleProject>,
-    val dependencies: LinkedHashMap<DependencyPair, List<String>>,
-    val multiplatformProjects: List<ModuleProject>,
-    val androidProjects: List<ModuleProject>,
-    val javaProjects: List<ModuleProject>,
-    val rootProjects: List<ModuleProject>,
-) {
-    companion object {
-        // TODO: 16/06/2023 Provide via extension
-        // Used for excluding module from graph
-        const val SystemTestName = "system-test"
-
-        // TODO: 16/06/2023 Provide via extension
-        // Used for linking module nodes to their graphs
-        const val RepoPath = "https://github.com/oorjalabs/todotxt-for-android/blob/main"
-
-        // TODO: 16/06/2023 Provide via extension
-        const val GraphFileName = "dependency-graph.md"
-    }
-}
-
-internal data class ModuleProject(
-    val path: String,
-    val projectDir: File,
-)
-
 /**
  * Creates mermaid graphs for all modules in the app and places each graph within the module's folder.
  * An app-wide graph is also created and added to the project's root directory.
