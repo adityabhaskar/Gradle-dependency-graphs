@@ -17,7 +17,7 @@ internal data class GraphDetails(
         const val SystemTestName = "system-test"
 
         // TODO: 16/06/2023 Provide via extension
-        const val GraphFileName = "dependency-graph.md"
+        const val GraphFileName = "dependencyGraph.md"
     }
 }
 
