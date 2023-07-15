@@ -1,6 +1,7 @@
 package net.c306.dependencygraph.plugin
 
 import net.c306.dependencygraph.plugin.ShowLegend.*
+import net.c306.dependencygraph.plugin.core.DrawConfig
 import net.c306.dependencygraph.plugin.core.drawDependencyGraph
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.BasePlugin
@@ -10,6 +11,11 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 
+/**
+ * Enum to provide the direction in which the graph should flow.
+ *
+ * @property directionString mermaid specific string representing each direction.
+ */
 enum class Direction(internal val directionString: String) {
     TopToBottom(directionString = "TB"),
     BottomToTop(directionString = "BT"),
@@ -19,9 +25,9 @@ enum class Direction(internal val directionString: String) {
 
 /**
  * Enum that provides options for when and where to add a legend to the generated graphs.
- * @property Always will add a legend to all graphs
- * @property OnlyInRootGraph will only add a legend to the root graph
- * @property Never will not add a legend to any graph
+ * * [Always] will add a legend to all graphs
+ * * [OnlyInRootGraph] will only add a legend to the root graph
+ * * [Never] will not add a legend to any graph
  */
 enum class ShowLegend {
     Always, OnlyInRootGraph, Never
@@ -57,11 +63,13 @@ abstract class DependencyGraphTask : DefaultTask() {
         description = "Generates dependency graph files for all local modules in the project."
     }
 
+    /** Github URL for the repository. */
     @get:Input
     @get:Option(option = "repoRootUrl", description = "Github URL for the repository")
     @get:Optional
     abstract val repoRootUrl: Property<String>
 
+    /** Name of the main branch. `main` is used if not provided. */
     @get:Input
     @get:Option(
         option = "mainBranchName",
@@ -70,6 +78,7 @@ abstract class DependencyGraphTask : DefaultTask() {
     @get:Optional
     abstract val mainBranchName: Property<String>
 
+    /** Name for the file where graph is saved. Default is dependency-graph.md`. */
     @get:Input
     @get:Option(
         option = "graphFileName",
@@ -78,6 +87,10 @@ abstract class DependencyGraphTask : DefaultTask() {
     @get:Optional
     abstract val graphFileName: Property<String>
 
+    /**
+     * The direction in which dependency graph should be laid out. Default is
+     * [Direction.LeftToRight].
+     **/
     @get:Input
     @get:Option(
         option = "graphDirection",
@@ -86,6 +99,7 @@ abstract class DependencyGraphTask : DefaultTask() {
     @get:Optional
     abstract val graphDirection: Property<Direction>
 
+    /** Whether and where a legend should be displayed. */
     @get:Input
     @get:Option(
         option = "showLegend",
@@ -94,10 +108,11 @@ abstract class DependencyGraphTask : DefaultTask() {
     @get:Optional
     abstract val showLegend: Property<ShowLegend>
 
+    /** The project dependencies graph as [ParsedGraph]`. */
     @get:Input
     @get:Option(
         option = "graphDetails",
-        description = "The project dependencies graph as [GraphDetails]",
+        description = "The project dependencies graph as [ParsedGraph]",
     )
     internal abstract val parsedGraph: Property<ParsedGraph>
 
@@ -126,7 +141,6 @@ abstract class DependencyGraphTask : DefaultTask() {
      */
     @TaskAction
     fun createDependencyGraph() {
-
         // Create graph of all dependencies
         val graph = parsedGraph.get()
 
@@ -140,7 +154,9 @@ abstract class DependencyGraphTask : DefaultTask() {
                 repoUrl = repoRootUrl.orNull,
                 mainBranchName = mainBranchName.orNull,
             )
-        } else null
+        } else {
+            null
+        }
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -148,11 +164,13 @@ abstract class DependencyGraphTask : DefaultTask() {
                 currentProject = it,
                 parsedGraph = graph,
                 isRootGraph = false,
-                rootDir = project.rootDir,
-                moduleBaseUrl = moduleBaseUrl,
-                showLegend = showLegend,
-                graphDirection = directionString,
-                fileName = fileName,
+                config = DrawConfig(
+                    rootDir = project.rootDir,
+                    moduleBaseUrl = moduleBaseUrl,
+                    showLegend = showLegend,
+                    graphDirection = directionString,
+                    fileName = fileName,
+                ),
             )
         }
 
@@ -161,11 +179,13 @@ abstract class DependencyGraphTask : DefaultTask() {
             currentProject = project.rootProject.asModuleProject(),
             parsedGraph = graph,
             isRootGraph = true,
-            rootDir = project.rootDir,
-            moduleBaseUrl = moduleBaseUrl,
-            showLegend = showLegend,
-            graphDirection = directionString,
-            fileName = fileName,
+            config = DrawConfig(
+                rootDir = project.rootDir,
+                moduleBaseUrl = moduleBaseUrl,
+                showLegend = showLegend,
+                graphDirection = directionString,
+                fileName = fileName,
+            ),
         )
     }
 
@@ -179,13 +199,12 @@ abstract class DependencyGraphTask : DefaultTask() {
         return if (repoUrl.endsWith('/')) {
             "${repoUrl}blob/$branchName"
         } else {
-            "${repoUrl}/blob/$branchName"
+            "$repoUrl/blob/$branchName"
         }
     }
 
-    private fun doesFileNameSupportLinks(fileName: String): Boolean {
-        return Regex("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matches(fileName)
-    }
+    private fun doesFileNameSupportLinks(fileName: String) =
+        Regex("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matches(fileName)
 
     private fun appendMarkDownIfNeeded(providedFileName: String) = when {
         providedFileName.isBlank() -> DEFAULT_GRAPH_FILE_NAME

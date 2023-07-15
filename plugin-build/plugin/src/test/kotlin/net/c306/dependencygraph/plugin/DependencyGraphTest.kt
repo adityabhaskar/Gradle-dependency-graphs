@@ -28,12 +28,12 @@ class DependencyGraphTest {
         project.pluginManager.apply("net.c306.dependencygraph.plugin")
 //        val aFile = File(project.projectDir, ".tmp")
         (project.extensions.getByName("dependencyGraphConfig") as DependencyGraphExtension).apply {
-            tag.set("a-sample-tag")
-            message.set("just-a-message")
+//            tag.set("a-sample-tag")
+//            message.set("just-a-message")
 //            outputFile.set(aFile)
         }
 
-        val task = project.tasks.getByName("dependencyGraph") as DependencyGraphTask
+//        val task = project.tasks.getByName("dependencyGraph") as DependencyGraphTask
 
 //        assertEquals("a-sample-tag", task.tag.get())
 //        assertEquals("just-a-message", task.message.get())

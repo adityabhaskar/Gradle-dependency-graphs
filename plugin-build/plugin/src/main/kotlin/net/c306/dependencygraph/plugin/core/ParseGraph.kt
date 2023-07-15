@@ -7,7 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 import java.util.*
 
-@Suppress("LongMethod", "CyclomaticComplexMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod", "CognitiveComplexMethod")
 /**
  * Create a graph of all project modules, their types, dependencies and root projects.
  * @return An object of type GraphDetails containing all details

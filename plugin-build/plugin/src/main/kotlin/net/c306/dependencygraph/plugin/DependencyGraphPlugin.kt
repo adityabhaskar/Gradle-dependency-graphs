@@ -4,9 +4,7 @@ import net.c306.dependencygraph.plugin.core.parseDependencyGraph
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
-const val EXTENSION_NAME = "dependencyGraphConfig"
-const val TASK_NAME = "dependencyGraph"
-
+@Suppress("UndocumentedPublicClass")
 abstract class DependencyGraphPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         // Add the extension object
@@ -31,5 +29,10 @@ abstract class DependencyGraphPlugin : Plugin<Project> {
                 ),
             )
         }
+    }
+
+    companion object {
+        private const val EXTENSION_NAME = "dependencyGraphConfig"
+        private const val TASK_NAME = "dependencyGraph"
     }
 }

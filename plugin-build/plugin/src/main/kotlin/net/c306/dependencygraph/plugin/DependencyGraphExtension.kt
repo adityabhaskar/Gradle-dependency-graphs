@@ -5,7 +5,7 @@ import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import javax.inject.Inject
 
-@Suppress("UnnecessaryAbstractClass")
+@Suppress("UnnecessaryAbstractClass", "UndocumentedPublicClass")
 abstract class DependencyGraphExtension @Inject constructor(project: Project) {
 
     private val objects = project.objects
