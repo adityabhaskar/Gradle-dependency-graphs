@@ -14,7 +14,7 @@ This plugin is a derivation of [Jake Wharton](https://github.com/JakeWharton/)'s
 
 ## How to use
 
-### Apply and configure
+### Apply the plugin
 
 **Apply the plugin** to your project's root `build.gradle.kts`
 ```kotlin
@@ -23,6 +23,15 @@ plugins {
 }
 ```
 
+### Using the plugin
+
+The plugin adds a new Gradle task - `dependencyGraph`. Running the task will generate the dependency graphs for all modules in the project.
+
+```bash
+./gradlew dependencyGraph
+```
+
+### Configuring the plugin
 
 Optionally **configure the plugin** in the same `build.gradle.kts` if you want to change the defaults
 ```kotlin
@@ -44,7 +53,6 @@ dependencyGraphConfig {
 #### Configuration options
 
 All configuration options are optional with sensible defaults.
-
     
 <details open>
 <summary><strong>graphDirection</strong></summary>
@@ -124,16 +132,6 @@ moment.
 > **Note**: Github doesn't support click navigation from mermaid graphs at the
 moment.
 </details>
-
-### Using the plugin
-
-The plugin adds a new gradle task - `dependencyGraph`. Running the task will generate the dependency graphs for all modules in the project.
-
-Sample project wide graph with a legend:
-
-```bash
-./gradlew dependencyGraph
-```
 
 ## Dependency graphs
 
