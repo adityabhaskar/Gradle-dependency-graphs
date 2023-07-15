@@ -1,8 +1,21 @@
 {
-    "labels": [
-        "dependencies"
-    ],
-    "extends": [
-        "config:base"
-    ]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "addLabels" : ["dependencies"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "addLabels": ["MAJOR"]
+    }
+  ],
+  "assignees": ["adityabhaskar"],
+  "baseBranches": ["main"],
+  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "osvVulnerabilityAlerts": true,
+  "enabledManagers": ["github-actions", "gradle", "gradle-wrapper"],
+  "prBodyNotes": ["{{#if isMajor}}:warning: MAJOR MAJOR MAJOR :warning:{{/if}}"],
+  "prConcurrentLimit": 4
 }

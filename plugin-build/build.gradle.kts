@@ -1,5 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
 
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.pluginPublish) apply false
@@ -23,7 +24,6 @@ allprojects {
         android.set(false)
         outputToConsole.set(true)
         ignoreFailures.set(false)
-        enableExperimentalRules.set(true)
         filter {
             exclude("**/generated/**")
             include("**/kotlin/**")

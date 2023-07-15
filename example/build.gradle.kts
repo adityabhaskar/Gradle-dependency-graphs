@@ -1,8 +1,20 @@
 plugins {
-    java
-    id("com.ncorti.kotlin.gradle.template.plugin")
+    id("net.c306.dependencygraph.plugin")
 }
 
-templateExampleConfig {
-    message.set("Just trying this gradle plugin...")
+dependencyGraphConfig {
+    // Optional
+    repoRootUrl.set("https://github.com/adityabhaskar/Project-Dependency-Graph/")
+
+    // Optional
+    graphFileName.set("dependencyGraph.md")
+
+    // Optional
+    graphDirection.set(net.c306.dependencygraph.plugin.Direction.LeftToRight)
+
+    // Optional
+    showLegend.set(net.c306.dependencygraph.plugin.ShowLegend.OnlyInRootGraph)
+
+    // Optional
+    ignoreModules.set(listOf(":example:system-test"))
 }

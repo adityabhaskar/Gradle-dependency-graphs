@@ -8,12 +8,22 @@ on:
     branches:
       - '*'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  validation:
+    name: Gradle wrapper validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout latest code
+        uses: actions/checkout@v3
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
   gradle:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     env:
       GRADLE_PUBLISH_KEY: ${{ secrets.GRADLE_PUBLISH_KEY }}
       GRADLE_PUBLISH_SECRET: ${{ secrets.GRADLE_PUBLISH_SECRET }}
@@ -21,16 +31,17 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
+
       - name: Cache Gradle Caches
         uses: gradle/gradle-build-action@v2
+
       - name: Run Gradle tasks
         run: ./gradlew preMerge --continue
 
-        # We do a run of the new task `templateExample` created by the plugin
-      - name: Run the plugin
-        run: ./gradlew templateExample --message="Test Run" --tag=CI
+      - name: Generate graphs
+        run: ./gradlew :example:dependencyGraph
         if: success()
-        # And we verify that the output of the file is correct.
-      - name: Verify the plugin output
-        run: grep -Fxq "[CI] Test Run" ./example/build/template-example.txt
+
+      - name: Verify the root graph file exists but system-test graph doesn't
+        run: test -f "./dependencyGraph.md" && test ! -f "./example/system-test/dependencyGraph.md"
         if: success()
