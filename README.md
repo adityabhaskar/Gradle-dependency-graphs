@@ -173,7 +173,7 @@ subgraph Legend
 end
 
 %% Modules
-subgraph
+subgraph  
   direction LR;
   :example:data{{:example:data}}:::javaNode;
   :example:domain{{:example:domain}}:::javaNode;
@@ -221,7 +221,7 @@ classDef andNode fill:#baffc9;
 classDef javaNode fill:#ffb3ba;
 
 %% Modules
-subgraph
+subgraph  
   direction LR;
   :example:data{{:example:data}}:::javaNode;
   :example:domain[:example:domain]:::javaNode;
