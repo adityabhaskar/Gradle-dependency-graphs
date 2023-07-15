@@ -1,6 +1,7 @@
 package net.c306.dependencygraph.plugin
 
 import org.gradle.testfixtures.ProjectBuilder
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 
@@ -26,17 +27,21 @@ class DependencyGraphTest {
     fun `parameters are passed correctly from extension to task`() {
         val project = ProjectBuilder.builder().build()
         project.pluginManager.apply("net.c306.dependencygraph.plugin")
-//        val aFile = File(project.projectDir, ".tmp")
+
         (project.extensions.getByName("dependencyGraphConfig") as DependencyGraphExtension).apply {
-//            tag.set("a-sample-tag")
-//            message.set("just-a-message")
-//            outputFile.set(aFile)
+            graphDirection.set(Direction.BottomToTop)
+            graphFileName.set("A_GRAPH.MD")
+            mainBranchName.set("master")
+            repoRootUrl.set("https://c306.net/")
+            showLegend.set(ShowLegend.Never)
         }
 
-//        val task = project.tasks.getByName("dependencyGraph") as DependencyGraphTask
+        val task = project.tasks.getByName("dependencyGraph") as DependencyGraphTask
 
-//        assertEquals("a-sample-tag", task.tag.get())
-//        assertEquals("just-a-message", task.message.get())
-//        assertEquals(aFile, task.outputFile.get().asFile)
+        assertEquals(Direction.BottomToTop, task.graphDirection.get())
+        assertEquals("A_GRAPH.MD", task.graphFileName.get())
+        assertEquals("master", task.mainBranchName.get())
+        assertEquals("https://c306.net/", task.repoRootUrl.get())
+        assertEquals(ShowLegend.Never, task.showLegend.get())
     }
 }
