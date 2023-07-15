@@ -1,8 +1,8 @@
-package net.c306.dependencygraph.plugin
+package io.github.adityabhaskar.dependencygraph.plugin
 
-import net.c306.dependencygraph.plugin.ShowLegend.*
-import net.c306.dependencygraph.plugin.core.DrawConfig
-import net.c306.dependencygraph.plugin.core.drawDependencyGraph
+import io.github.adityabhaskar.dependencygraph.plugin.ShowLegend.*
+import io.github.adityabhaskar.dependencygraph.plugin.core.DrawConfig
+import io.github.adityabhaskar.dependencygraph.plugin.core.drawDependencyGraph
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.provider.Property

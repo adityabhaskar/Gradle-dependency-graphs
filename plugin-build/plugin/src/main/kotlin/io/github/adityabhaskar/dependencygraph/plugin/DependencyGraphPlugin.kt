@@ -1,6 +1,6 @@
-package net.c306.dependencygraph.plugin
+package io.github.adityabhaskar.dependencygraph.plugin
 
-import net.c306.dependencygraph.plugin.core.parseDependencyGraph
+import io.github.adityabhaskar.dependencygraph.plugin.core.parseDependencyGraph
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

@@ -1,8 +1,8 @@
-package net.c306.dependencygraph.plugin.core
+package io.github.adityabhaskar.dependencygraph.plugin.core
 
-import net.c306.dependencygraph.plugin.DependencyPair
-import net.c306.dependencygraph.plugin.ParsedGraph
-import net.c306.dependencygraph.plugin.asModuleProject
+import io.github.adityabhaskar.dependencygraph.plugin.DependencyPair
+import io.github.adityabhaskar.dependencygraph.plugin.ParsedGraph
+import io.github.adityabhaskar.dependencygraph.plugin.asModuleProject
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
 import java.util.*
