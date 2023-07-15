@@ -24,7 +24,7 @@ abstract class DependencyGraphPlugin : Plugin<Project> {
             it.repoRootUrl.set(extension.repoRootUrl)
             it.graphDirection.set(extension.graphDirection)
             it.showLegend.set(extension.showLegend)
-            it.graphDetails.set(parseDependencyGraph(project.rootProject))
+            it.parsedGraph.set(parseDependencyGraph(project.rootProject))
         }
     }
 }

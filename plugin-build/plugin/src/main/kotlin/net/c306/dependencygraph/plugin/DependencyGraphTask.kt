@@ -108,7 +108,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         option = "graphDetails",
         description = "The project dependencies graph as [GraphDetails]",
     )
-    internal abstract val graphDetails: Property<GraphDetails>
+    internal abstract val parsedGraph: Property<ParsedGraph>
 
     /**
      * Creates mermaid graphs for all modules in the app and places each graph within the module's
@@ -137,7 +137,7 @@ abstract class DependencyGraphTask : DefaultTask() {
     fun createDependencyGraph() {
 
         // Create graph of all dependencies
-        val graph = graphDetails.get()
+        val graph = parsedGraph.get()
 
         val moduleBaseUrl = createGraphUrl(
             repoUrl = repoRootUrl.orNull,
@@ -151,7 +151,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         graph.projects.forEach {
             drawDependencyGraph(
                 currentProject = it,
-                graphDetails = graph,
+                parsedGraph = graph,
                 isRootGraph = false,
                 rootDir = project.rootDir,
                 moduleBaseUrl = moduleBaseUrl,
@@ -163,7 +163,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         // Draw the full graph of all modules
         drawDependencyGraph(
             currentProject = project.rootProject.asModuleProject(),
-            graphDetails = graph,
+            parsedGraph = graph,
             isRootGraph = true,
             rootDir = project.rootDir,
             moduleBaseUrl = moduleBaseUrl,

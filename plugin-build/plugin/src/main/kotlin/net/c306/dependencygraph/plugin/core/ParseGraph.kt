@@ -1,7 +1,7 @@
 package net.c306.dependencygraph.plugin.core
 
 import net.c306.dependencygraph.plugin.DependencyPair
-import net.c306.dependencygraph.plugin.GraphDetails
+import net.c306.dependencygraph.plugin.ParsedGraph
 import net.c306.dependencygraph.plugin.asModuleProject
 import org.gradle.api.Project
 import org.gradle.api.artifacts.ProjectDependency
@@ -12,7 +12,7 @@ import java.util.*
  * Create a graph of all project modules, their types, dependencies and root projects.
  * @return An object of type GraphDetails containing all details
  */
-internal fun parseDependencyGraph(rootProject: Project): GraphDetails {
+internal fun parseDependencyGraph(rootProject: Project): ParsedGraph {
     val rootProjects = mutableListOf<Project>()
     var queue = mutableListOf(rootProject)
 
@@ -20,7 +20,7 @@ internal fun parseDependencyGraph(rootProject: Project): GraphDetails {
     // rootProjects
     while (queue.isNotEmpty()) {
         val project = queue.removeAt(0)
-        if (project.name != GraphDetails.SystemTestName) {
+        if (project.name != ParsedGraph.SystemTestName) {
             rootProjects.add(project)
         }
         queue.addAll(project.childProjects.values)
@@ -40,7 +40,7 @@ internal fun parseDependencyGraph(rootProject: Project): GraphDetails {
     queue = mutableListOf(rootProject)
     while (queue.isNotEmpty()) {
         val project = queue.removeAt(0)
-        if (project.name == GraphDetails.SystemTestName) {
+        if (project.name == ParsedGraph.SystemTestName) {
             continue
         }
         queue.addAll(project.childProjects.values)
@@ -70,7 +70,7 @@ internal fun parseDependencyGraph(rootProject: Project): GraphDetails {
                     projects.add(project)
                     projects.add(dependency)
                     if (
-                        project.name != GraphDetails.SystemTestName &&
+                        project.name != ParsedGraph.SystemTestName &&
                         project.path != dependency.path
                     ) {
                         rootProjects.remove(dependency)
@@ -109,7 +109,7 @@ internal fun parseDependencyGraph(rootProject: Project): GraphDetails {
         }
     }
 
-    return GraphDetails(
+    return ParsedGraph(
         projects = LinkedHashSet(projects.map { it.asModuleProject() }.sortedBy { it.path }),
         dependencies = dependencies,
         multiplatformProjects = multiplatformProjects.map { it.asModuleProject() },

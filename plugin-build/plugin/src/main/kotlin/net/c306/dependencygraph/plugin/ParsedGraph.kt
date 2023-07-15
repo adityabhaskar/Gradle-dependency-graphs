@@ -3,7 +3,7 @@ package net.c306.dependencygraph.plugin
 import org.gradle.api.Project
 import java.io.File
 
-internal data class GraphDetails(
+internal data class ParsedGraph(
     val projects: LinkedHashSet<ModuleProject>,
     val dependencies: LinkedHashMap<DependencyPair, List<String>>,
     val multiplatformProjects: List<ModuleProject>,

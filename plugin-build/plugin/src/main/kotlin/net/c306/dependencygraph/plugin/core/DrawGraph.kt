@@ -1,7 +1,7 @@
 package net.c306.dependencygraph.plugin.core
 
 import net.c306.dependencygraph.plugin.DependencyPair
-import net.c306.dependencygraph.plugin.GraphDetails
+import net.c306.dependencygraph.plugin.ParsedGraph
 import net.c306.dependencygraph.plugin.ModuleProject
 import net.c306.dependencygraph.plugin.ShowLegend
 import java.io.File
@@ -13,20 +13,20 @@ import java.io.File
  */
 internal fun drawDependencyGraph(
     currentProject: ModuleProject,
-    graphDetails: GraphDetails,
+    parsedGraph: ParsedGraph,
     isRootGraph: Boolean,
     rootDir: File,
     moduleBaseUrl: String?,
     showLegend: ShowLegend,
     graphDirection: String,
 ) {
-    val projects: LinkedHashSet<ModuleProject> = graphDetails.projects
+    val projects: LinkedHashSet<ModuleProject> = parsedGraph.projects
     val dependencies: LinkedHashMap<DependencyPair, List<String>> =
-        graphDetails.dependencies
-    val multiplatformProjects = graphDetails.multiplatformProjects
-    val androidProjects = graphDetails.androidProjects
-    val javaProjects = graphDetails.javaProjects
-    val rootProjects = graphDetails.rootProjects
+        parsedGraph.dependencies
+    val multiplatformProjects = parsedGraph.multiplatformProjects
+    val androidProjects = parsedGraph.androidProjects
+    val javaProjects = parsedGraph.javaProjects
+    val rootProjects = parsedGraph.rootProjects
 
     val currentProjectDependencies =
         gatherDependencies(mutableListOf(currentProject), dependencies)
@@ -107,7 +107,7 @@ internal fun drawDependencyGraph(
 
         val relativePath = project.projectDir.relativeTo(rootDir)
         moduleBaseUrl?.let {
-            clickText += "click ${project.path} ${it}/${relativePath}/${GraphDetails.GraphFileName}\n"
+            clickText += "click ${project.path} ${it}/${relativePath}/${ParsedGraph.GraphFileName}\n"
         }
     }
 
@@ -173,7 +173,7 @@ $clickText```
 """.trimIndent()
     }
 
-    val graphFile = File(currentProject.projectDir, GraphDetails.GraphFileName)
+    val graphFile = File(currentProject.projectDir, ParsedGraph.GraphFileName)
     graphFile.parentFile.mkdirs()
     graphFile.delete()
     graphFile.writeText(fileText)
