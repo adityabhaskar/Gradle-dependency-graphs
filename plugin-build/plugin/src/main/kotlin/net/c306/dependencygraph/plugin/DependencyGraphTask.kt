@@ -196,7 +196,6 @@ abstract class DependencyGraphTask : DefaultTask() {
     companion object {
         private const val DEFAULT_BRANCH_NAME = "main"
 
-        // TODO: 16/06/2023 Provide via extension
         private const val DEFAULT_GRAPH_FILE_NAME = "dependencyGraph.md"
     }
 }
