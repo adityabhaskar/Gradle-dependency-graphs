@@ -22,7 +22,7 @@ abstract class DependencyGraphPlugin : Plugin<Project> {
             it.mainBranchName.set(extension.mainBranchName)
             it.repoRootUrl.set(extension.repoRootUrl)
             it.graphDirection.set(extension.graphDirection)
-            it.graphDetails.set(createGraph(project.rootProject))
+            it.graphDetails.set(parseDependencyGraph(project.rootProject))
         }
     }
 }
