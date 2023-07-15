@@ -178,6 +178,7 @@ internal fun drawDependencies(
     isRootGraph: Boolean,
     rootDir: File,
     moduleBaseUrl: String?,
+    showLegend: ShowLegend,
 ) {
     val projects: LinkedHashSet<ModuleProject> = graphDetails.projects
     val dependencies: LinkedHashMap<DependencyPair, List<String>> =
@@ -191,6 +192,12 @@ internal fun drawDependencies(
         gatherDependencies(mutableListOf(currentProject), dependencies)
     val dependents = gatherDependents(currentProject, dependencies)
 
+    val legendText = when(showLegend) {
+        ShowLegend.Always -> LegendText
+        ShowLegend.OnlyInRootGraph -> if (isRootGraph) LegendText else ""
+        ShowLegend.Never -> ""
+    }
+
     var fileText = """
     ```mermaid
     %%{ init: { 'theme': 'base' } }%%
@@ -201,16 +208,7 @@ internal fun drawDependencies(
     classDef mppNode fill:#ffd2b3;
     classDef andNode fill:#baffc9;
     classDef javaNode fill:#ffb3ba;
-
-    %% Graph types
-    subgraph Legend
-      direction TB;
-      rootNode[Root/current module]:::rootNode;
-      andNode([Android]):::andNode;
-      javaNode{{Java}}:::javaNode;
-      mppNode([Multi-platform]):::mppNode;
-    end
-
+    $legendText
     %% Modules
 
         """.trimIndent()
@@ -342,3 +340,15 @@ $clickText```
 
     println("Project module dependency graph created at ${graphFile.absolutePath}")
 }
+
+
+private const val LegendText = """
+    %% Graph types
+    subgraph Legend
+      direction TB;
+      rootNode[Root/current module]:::rootNode;
+      andNode([Android]):::andNode;
+      javaNode{{Java}}:::javaNode;
+      mppNode([Multi-platform]):::mppNode;
+    end
+    """

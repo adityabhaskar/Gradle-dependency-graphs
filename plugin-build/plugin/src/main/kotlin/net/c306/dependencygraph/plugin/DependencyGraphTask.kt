@@ -1,5 +1,6 @@
 package net.c306.dependencygraph.plugin
 
+import net.c306.dependencygraph.plugin.ShowLegend.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.provider.ListProperty
@@ -11,6 +12,16 @@ import org.gradle.api.tasks.options.Option
 
 enum class Direction {
     TopToBottom, BottomToTop, LeftToRight, RightToLeft
+}
+
+/**
+ * Enum that provides options for when and where to add a legend to the generated graphs.
+ * @property Always will add a legend to all graphs
+ * @property OnlyInRootGraph will only add a legend to the root graph
+ * @property Never will not add a legend to any graph
+ */
+enum class ShowLegend {
+    Always, OnlyInRootGraph, Never
 }
 
 /**
@@ -82,6 +93,14 @@ abstract class DependencyGraphTask : DefaultTask() {
 
     @get:Input
     @get:Option(
+        option = "showLegend",
+        description = "Whether and where a legend should be displayed",
+    )
+    @get:Optional
+    abstract val showLegend: Property<ShowLegend>
+
+    @get:Input
+    @get:Option(
         option = "graphDetails",
         description = "The project dependencies graph as [GraphDetails]",
     )
@@ -121,6 +140,8 @@ abstract class DependencyGraphTask : DefaultTask() {
             mainBranchName = mainBranchName.orNull,
         )
 
+        val showLegend = showLegend.getOrElse(ShowLegend.Always)
+
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
             drawDependencies(
@@ -129,6 +150,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 isRootGraph = false,
                 rootDir = project.rootDir,
                 moduleBaseUrl = moduleBaseUrl,
+                showLegend = showLegend,
             )
         }
 
@@ -139,6 +161,7 @@ abstract class DependencyGraphTask : DefaultTask() {
             isRootGraph = true,
             rootDir = project.rootDir,
             moduleBaseUrl = moduleBaseUrl,
+            showLegend = showLegend,
         )
     }
 
