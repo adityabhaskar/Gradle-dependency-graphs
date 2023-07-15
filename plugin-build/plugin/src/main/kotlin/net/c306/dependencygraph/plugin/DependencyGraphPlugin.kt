@@ -21,6 +21,7 @@ abstract class DependencyGraphPlugin : Plugin<Project> {
             it.graphFileName.set(extension.graphFileName)
             it.mainBranchName.set(extension.mainBranchName)
             it.repoRootUrl.set(extension.repoRootUrl)
+            it.graphDirection.set(extension.graphDirection)
             it.graphDetails.set(createGraph(project.rootProject))
         }
     }

@@ -3,6 +3,9 @@ package net.c306.dependencygraph.plugin
 import org.gradle.api.Project
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.options.Option
 import javax.inject.Inject
 
 @Suppress("UnnecessaryAbstractClass")
@@ -53,4 +56,9 @@ abstract class DependencyGraphExtension @Inject constructor(project: Project) {
      * Optional name for the file where graph is saved. Default is `dependency-graph.md`
      */
     val graphFileName: Property<String> = objects.property(String::class.java)
+
+    @get:Input
+    @get:Option(option = "graphDirection2", description = "The direction in which dependency graph should be laid out. Default is LR.")
+    @get:Optional
+    abstract val graphDirection: Property<Direction>
 }
