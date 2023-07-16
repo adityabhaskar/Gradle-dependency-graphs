@@ -31,6 +31,7 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
+        permissions: write-all
         with:
           add-paths: |
             **/dependencyGraph.md
