@@ -20,14 +20,13 @@ jobs:
         run: ./gradlew :example:dependencyGraph
         if: success()
 
-#      - id: get-pr-body
-#        run: |
+      - id: get-pr-body
+        run: |
+          ./.github/ci-scripts/changed_files.sh
 #          body=$(cat pr-body.txt)
 #          body="${body//'%'/'%25'}"
 #          body="${body//$'\n'/'%0A'}"
 #          body="${body//$'\r'/'%0D'}"
-#      untracked files (new): git ls-files --other --exclude-standard
-#      staged and unstaged tracked changed files: { git diff --name-only ; git diff --name-only --staged ; } | sort | uniq
 #          echo ::set-output name=body::$body
 
       - name: Create Pull Request
@@ -39,6 +38,9 @@ jobs:
           branch: updated-dependency-graphs
           delete-branch: true
           title: Updated dependency graphs
-          body: Dependency graphs have been updated // Maybe add content of updated files to show graphs in description
-#          body-path:
+          body: |
+            ## Description
+            Dependency graphs have been updated.
 
+            List of changed files:
+            ${{steps.get-pr-body.outputs.changed}}
