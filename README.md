@@ -42,7 +42,7 @@ dependencyGraphConfig {
 
     ignoreModules.set(listOf(":example:system-test", ":example:test-fixtures"))
 
-    repoRootUrl.set("https://github.com/adityabhaskar/Project-Dependency-Graph/")
+    repoRootUrl.set("https://github.com/adityabhaskar/Gradle-dependency-graphs")
 
     mainBranchName.set("main")
 
