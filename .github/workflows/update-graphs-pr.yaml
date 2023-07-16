@@ -1,0 +1,44 @@
+name: Create PR when dependency graphs change
+
+on:
+  push:
+    branches:
+      - main
+      - ab/test-graphs-pr
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Cache Gradle Caches
+        uses: gradle/gradle-build-action@v2
+
+      - name: Generate graphs
+        run: ./gradlew :example:dependencyGraph
+        if: success()
+
+#      - id: get-pr-body
+#        run: |
+#          body=$(cat pr-body.txt)
+#          body="${body//'%'/'%25'}"
+#          body="${body//$'\n'/'%0A'}"
+#          body="${body//$'\r'/'%0D'}"
+#      untracked files (new): git ls-files --other --exclude-standard
+#      staged and unstaged tracked changed files: { git diff --name-only ; git diff --name-only --staged ; } | sort | uniq
+#          echo ::set-output name=body::$body
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          add-paths: |
+            **/dependencyGraph.md
+          commit-message: Updated dependency graphs
+          branch: updated-dependency-graphs
+          delete-branch: true
+          title: Updated dependency graphs
+          body: Dependency graphs have been updated // Maybe add content of updated files to show graphs in description
+#          body-path:
+
