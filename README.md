@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE)
 ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
 
-A simple **Gradle Plugin** that generates dependency graphs showing the relationship between modules in your project.
+A **Gradle Plugin** that generates dependency graphs showing the relationship between modules in your project.
 
 The plugin generates a graph visualising the dependencies across the whole project. It also generates sub-graphs for each module within the project. For projects with a large number of modules, I find the sub-graphs tend to be a lot more useful.
 
@@ -178,18 +178,17 @@ click :example:models https://github.com/adityabhaskar/Gradle-dependency-graphs/
 
 > This section is a work in progress
 
-### Creates a PR with changed graphs
+### Create a PR with changed graphs
 
-Github action that creates a new PR if dependency graphs are updated on any push to `main`
+The [`update-graphs-pr.yaml`](/.github/workflows//update-graphs-pr.yaml) action creates a new PR with changed dependency graphs when module dependencies change on `main`. 
 
-**TBD**
-
+1. The action runs the plugin task `./gradlew :example:dependencyGraph` to generate fresh dependency graphs.
+2. A simple script - [`.github/ci-scripts/changed_files.sh`](/.github/ci-scripts/changed_files.sh) - collects all the changed graph files so they can be listed in the PR body.
+3. We use the [`peter-evans/create-pull-request`](https://github.com/peter-evans/create-pull-request) action to create a PR _only if_ there are any changed graphs.
 
 ### Commit changed graphs automatically
 
-Github action that automatically commits new dependency graphs, if they are updated on any push to `main`
-
-**TBD**
+**TBD**: Github action that will automatically commit any new dependency graphs to `main`.
 
 
 <!-- ## Publishing
