@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - ab/test-graphs-pr
+#      - ab/test-graphs-pr
 
 jobs:
   create-pr:
