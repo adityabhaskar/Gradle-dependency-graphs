@@ -25,7 +25,6 @@ end
 :example:ui--->:example:models
 :example:domain--API--->:example:models
 :example:domain--->:example:data
-:example:domain--->:example:ui
 
 %% Dependents
 

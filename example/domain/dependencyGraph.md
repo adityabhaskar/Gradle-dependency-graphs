@@ -15,15 +15,12 @@ subgraph
   :example:domain[:example:domain]:::javaNode;
   :example:feature{{:example:feature}}:::javaNode;
   :example:models{{:example:models}}:::javaNode;
-  :example:ui{{:example:ui}}:::javaNode;
 end
 
 %% Dependencies
 :example:data--->:example:models
-:example:ui--->:example:models
 :example:domain==API===>:example:models
 :example:domain===>:example:data
-:example:domain===>:example:ui
 
 %% Dependents
 :example:feature-.->:example:domain
@@ -33,5 +30,4 @@ click :example:data https://github.com/adityabhaskar/Project-Dependency-Graph/bl
 click :example:domain https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/domain/dependencyGraph.md
 click :example:feature https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/feature/dependencyGraph.md
 click :example:models https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/models/dependencyGraph.md
-click :example:ui https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/ui/dependencyGraph.md
 ```
