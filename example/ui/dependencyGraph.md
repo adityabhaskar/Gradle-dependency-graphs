@@ -11,6 +11,7 @@ classDef javaNode fill:#ffb3ba;
 %% Modules
 subgraph  
   direction LR;
+  :example:domain{{:example:domain}}:::javaNode;
   :example:feature{{:example:feature}}:::javaNode;
   :example:models{{:example:models}}:::javaNode;
   :example:ui[:example:ui]:::javaNode;
@@ -21,8 +22,10 @@ end
 
 %% Dependents
 :example:feature-.->:example:ui
+:example:domain-.->:example:ui
 
 %% Click interactions
+click :example:domain https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/domain/dependencyGraph.md
 click :example:feature https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/feature/dependencyGraph.md
 click :example:models https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/models/dependencyGraph.md
 click :example:ui https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/ui/dependencyGraph.md
