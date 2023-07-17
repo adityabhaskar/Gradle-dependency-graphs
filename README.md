@@ -186,18 +186,11 @@ The [`update-graphs-pr.yaml`](/.github/workflows//update-graphs-pr.yaml) action 
 2. A simple script - [`.github/ci-scripts/changed_files.sh`](/.github/ci-scripts/changed_files.sh) - collects all the changed graph files so they can be listed in the PR body.
 3. We use the [`peter-evans/create-pull-request`](https://github.com/peter-evans/create-pull-request) action to create a PR _only if_ there are any changed graphs.
 
+Sample PR with changed graphs: https://github.com/adityabhaskar/Gradle-dependency-graphs/pull/16
+
 ### Commit changed graphs automatically
 
 **TBD**: Github action that will automatically commit any new dependency graphs to `main`.
-
-
-<!-- ## Publishing
-
-This template is ready to let you publish to [Gradle Portal](https://plugins.gradle.org/).
-
-The [![Publish Plugin to Portal](https://github.com/adityabhaskar/Gradle-dependency-graphs/workflows/Publish%20Plugin%20to%20Portal/badge.svg?branch=1.0.0)](https://github.com/adityabhaskar/Gradle-dependency-graphs/actions?query=workflow%3A%22Publish+Plugin+to+Portal%22) Github Action will take care of the publishing whenever you **push a tag**.
-
-Please note that you need to configure two secrets: `GRADLE_PUBLISH_KEY` and `GRADLE_PUBLISH_SECRET` with the credetials you can get from your profile on the Gradle Portal. -->
 
 ## Contributing 🤝
 
