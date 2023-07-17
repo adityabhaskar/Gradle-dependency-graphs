@@ -9,7 +9,7 @@ classDef andNode fill:#baffc9;
 classDef javaNode fill:#ffb3ba;
 
 %% Modules
-subgraph
+subgraph  
   direction LR;
   :example:feature{{:example:feature}}:::javaNode;
   :example:models{{:example:models}}:::javaNode;
