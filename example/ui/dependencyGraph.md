@@ -9,7 +9,7 @@ classDef andNode fill:#baffc9;
 classDef javaNode fill:#ffb3ba;
 
 %% Modules
-subgraph  
+subgraph
   direction LR;
   :example:feature{{:example:feature}}:::javaNode;
   :example:models{{:example:models}}:::javaNode;
@@ -23,7 +23,7 @@ end
 :example:feature-.->:example:ui
 
 %% Click interactions
-click :example:feature https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/feature/dependencyGraph.md
-click :example:models https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/models/dependencyGraph.md
-click :example:ui https://github.com/adityabhaskar/Project-Dependency-Graph/blob/main/example/ui/dependencyGraph.md
+click :example:feature https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md
+click :example:models https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md
+click :example:ui https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md
 ```
