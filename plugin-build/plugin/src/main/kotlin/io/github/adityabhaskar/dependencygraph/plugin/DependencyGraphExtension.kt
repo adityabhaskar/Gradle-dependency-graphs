@@ -20,7 +20,7 @@ abstract class DependencyGraphExtension @Inject constructor(project: Project) {
     val ignoreModules: ListProperty<String> = objects.listProperty(String::class.java)
 
     /**
-     * Optional Github URL for your repository. E.g. `https://github.com/adityabhaskar/Project-Dependency-Graph`
+     * Optional Github URL for your repository. E.g. `https://github.com/adityabhaskar/Gradle-dependency-graphs`
      *
      * The URL is used for adding links to modules to allow navigation to a module's subgraph just
      * by clicking on it. If no URL is provided, then links aren't added to the graph.

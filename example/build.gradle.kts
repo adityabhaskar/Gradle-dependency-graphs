@@ -7,7 +7,7 @@ plugins {
 
 dependencyGraphConfig {
     // Optional
-    repoRootUrl.set("https://github.com/adityabhaskar/Project-Dependency-Graph/")
+    repoRootUrl.set("https://github.com/adityabhaskar/Gradle-dependency-graphs/")
 
     // Optional
     mainBranchName.set("main")
