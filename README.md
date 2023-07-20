@@ -1,8 +1,9 @@
 # Gradle 🐘 dependency graph visualisation plugin
-[![Publish Plugin to Portal](https://github.com/adityabhaskar/Gradle-dependency-graphs/workflows/Publish%20Plugin%20to%20Portal/badge.svg?branch=1.0.0)](https://github.com/adityabhaskar/Gradle-dependency-graphs/actions?query=workflow%3A%22Publish+Plugin+to+Portal%22)
-[![Pre Merge Checks](https://github.com/adityabhaskar/Gradle-dependency-graphs/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/adityabhaskar/Gradle-dependency-graphs/actions?query=workflow%3A%22Pre+Merge+Checks%22)
+[![Maven metadata URL](https://img.shields.io/maven-metadata/v?label=Gradle%20Plugin&metadataUrl=https%3A%2F%2Fplugins.gradle.org%2Fm2%2Fio%2Fgithub%2Fadityabhaskar%2Fdependencygraph%2Fio.github.adityabhaskar.dependencygraph.gradle.plugin%2Fmaven-metadata.xml)](https://plugins.gradle.org/plugin/io.github.adityabhaskar.dependencygraph)
 [![License](https://img.shields.io/github/license/cortinico/kotlin-android-template.svg)](LICENSE)
 ![Language](https://img.shields.io/github/languages/top/cortinico/kotlin-android-template?color=blue&logo=kotlin)
+[![Publish Plugin to Portal](https://github.com/adityabhaskar/Gradle-dependency-graphs/workflows/Publish%20Plugin%20to%20Portal/badge.svg)](https://github.com/adityabhaskar/Gradle-dependency-graphs/actions?query=workflow%3A%22Publish+Plugin+to+Portal%22)
+[![Pre Merge Checks](https://github.com/adityabhaskar/Gradle-dependency-graphs/workflows/Pre%20Merge%20Checks/badge.svg)](https://github.com/adityabhaskar/Gradle-dependency-graphs/actions?query=workflow%3A%22Pre+Merge+Checks%22)
 
 A **Gradle Plugin** that generates dependency graphs showing the relationship between modules in your project.
 
@@ -12,16 +13,29 @@ The graphs are generated in the [`mermaid.js`](https://mermaid.js.org/syntax/flo
 
 This plugin is a derivation of [Jake Wharton](https://github.com/JakeWharton/)'s project dependency graph script [available here](https://github.com/JakeWharton/SdkSearch/blob/master/gradle/projectDependencyGraph.gradle).
 
+The plugin is available in the [Gradle plugins repository](https://plugins.gradle.org/plugin/io.github.adityabhaskar.dependencygraph).
+
 ## How to use
 
 ### Apply the plugin
 
 **Apply the plugin** to your project's root `build.gradle.kts`
+
+Kotlin:
 ```kotlin
 plugins {
-    id("io.github.adityabhaskar.dependencygraph")
+  id("io.github.adityabhaskar.dependencygraph") version "0.1.0"
 }
 ```
+
+Groovy:
+```groovy
+plugins {
+  id "io.github.adityabhaskar.dependencygraph" version "0.1.0"
+}
+```
+
+[See here](https://plugins.gradle.org/plugin/io.github.adityabhaskar.dependencygraph) for applying without the plugins DSL block.
 
 ### Using the plugin
 
