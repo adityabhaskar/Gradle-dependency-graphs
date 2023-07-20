@@ -33,15 +33,17 @@ gradlePlugin {
             version = property("VERSION").toString()
             description = property("DESCRIPTION").toString()
             displayName = property("DISPLAY_NAME").toString()
-            tags.set(listOf(
-                "visualisation",
-                "graph",
-                "dependency",
-                "android",
-                "module",
-                "mermaid",
-                "github",
-            ))
+            tags.set(
+                listOf(
+                    "visualisation",
+                    "graph",
+                    "dependency",
+                    "android",
+                    "module",
+                    "mermaid",
+                    "github",
+                ),
+            )
         }
     }
 }
