@@ -21,6 +21,4 @@ end
 
 %% Dependents
 :example:domain-.->:example:data
-
-%% Click interactions
 ```

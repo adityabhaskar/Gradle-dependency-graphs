@@ -24,6 +24,4 @@ end
 
 %% Dependents
 :example:feature-.->:example:domain
-
-%% Click interactions
 ```

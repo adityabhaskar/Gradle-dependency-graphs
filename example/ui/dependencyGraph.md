@@ -21,6 +21,4 @@ end
 
 %% Dependents
 :example:feature-.->:example:ui
-
-%% Click interactions
 ```

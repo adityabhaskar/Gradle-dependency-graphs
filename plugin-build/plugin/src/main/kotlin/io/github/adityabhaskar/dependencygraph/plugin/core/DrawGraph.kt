@@ -68,8 +68,6 @@ internal fun drawDependencyGraph(
     val javaNodeStart = "{{"
     val javaNodeEnd = "}}"
 
-    var clickText = ""
-
     for (project in projects) {
         if (
             !isRootGraph &&
@@ -109,13 +107,12 @@ internal fun drawDependencyGraph(
         }
 
         val relativePath = project.projectDir.relativeTo(config.rootDir)
-        val text = config.moduleBaseUrl?.let {
-//            clickText += "click ${project.path} $it/$relativePath/${config.fileName}\n"
+        val nodeText = config.moduleBaseUrl?.let {
             val link = "$it/$relativePath/${config.fileName}"
             "<a href='$link'>${project.path}</a>"
         } ?: project.path
 
-        fileText += "  ${project.path}${nodeStart}${text}${nodeEnd}$nodeClass;\n"
+        fileText += "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;\n"
     }
 
     fileText += """
@@ -170,15 +167,7 @@ internal fun drawDependencyGraph(
             fileText += "${origin.path}${arrow}${target.path}\n"
         }
 
-    fileText += if (config.moduleBaseUrl == null) {
-        "```"
-    } else {
-        """
-
-%% Click interactions
-$clickText```
-""".trimIndent()
-    }
+    fileText += "```"
 
     val graphFile = File(currentProject.projectDir, config.fileName)
     graphFile.parentFile.mkdirs()

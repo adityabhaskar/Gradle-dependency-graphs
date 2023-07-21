@@ -23,6 +23,4 @@ end
 :example:data-.->:example:models
 :example:ui-.->:example:models
 :example:domain-.API.->:example:models
-
-%% Click interactions
 ```

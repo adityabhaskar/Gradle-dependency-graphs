@@ -48,6 +48,4 @@ end
 :example:domain--->:example:data
 
 %% Dependents
-
-%% Click interactions
 ```
