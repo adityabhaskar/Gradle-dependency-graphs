@@ -99,6 +99,20 @@ abstract class DependencyGraphTask : DefaultTask() {
     @get:Optional
     abstract val graphDirection: Property<Direction>
 
+    /**
+     * Whether module name text should link to graphs for that module.
+     *
+     * Github doesn't support click navigation from mermaid graphs at the moment. Linking the text
+     * instead provides a work around for allowing navigating between subgraphs.
+     */
+    @get:Input
+    @get:Option(
+        option = "shouldLinkNodeText",
+        description = "Whether module name text should link to graphs for that module",
+    )
+    @get:Optional
+    abstract val shouldLinkNodeText: Property<Boolean>
+
     /** Whether and where a legend should be displayed. */
     @get:Input
     @get:Option(
