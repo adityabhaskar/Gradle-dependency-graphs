@@ -11,9 +11,9 @@ classDef javaNode fill:#ffb3ba;
 %% Modules
 subgraph  
   direction LR;
-  :example:feature{{:example:feature}}:::javaNode;
-  :example:models{{:example:models}}:::javaNode;
-  :example:ui[:example:ui]:::javaNode;
+  :example:feature{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:feature</a>}}:::javaNode;
+  :example:models{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:models</a>}}:::javaNode;
+  :example:ui[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:ui</a>]:::javaNode;
 end
 
 %% Dependencies
@@ -21,9 +21,4 @@ end
 
 %% Dependents
 :example:feature-.->:example:ui
-
-%% Click interactions
-click :example:feature https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md
-click :example:models https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md
-click :example:ui https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md
 ```

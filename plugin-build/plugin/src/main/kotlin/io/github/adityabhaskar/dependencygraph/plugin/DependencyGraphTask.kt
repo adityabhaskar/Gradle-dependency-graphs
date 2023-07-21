@@ -99,6 +99,20 @@ abstract class DependencyGraphTask : DefaultTask() {
     @get:Optional
     abstract val graphDirection: Property<Direction>
 
+    /**
+     * Whether module name text should link to graphs for that module.
+     *
+     * Github doesn't support click navigation from mermaid graphs at the moment. Linking the text
+     * instead provides a work around for allowing navigating between subgraphs.
+     */
+    @get:Input
+    @get:Option(
+        option = "shouldLinkModuleText",
+        description = "Whether module name text should link to graphs for that module",
+    )
+    @get:Optional
+    abstract val shouldLinkModuleText: Property<Boolean>
+
     /** Whether and where a legend should be displayed. */
     @get:Input
     @get:Option(
@@ -149,14 +163,11 @@ abstract class DependencyGraphTask : DefaultTask() {
         val fileName = appendMarkDownIfNeeded(
             providedFileName = graphFileName.getOrElse(DEFAULT_GRAPH_FILE_NAME),
         )
-        val moduleBaseUrl = if (doesFileNameSupportLinks(fileName)) {
-            createGraphUrl(
-                repoUrl = repoRootUrl.orNull,
-                mainBranchName = mainBranchName.orNull,
-            )
-        } else {
-            null
-        }
+        val moduleBaseUrl = createGraphUrl(
+            repoUrl = repoRootUrl.orNull,
+            mainBranchName = mainBranchName.orNull,
+        )
+        val shouldLinkModuleText = shouldLinkModuleText.getOrElse(true)
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -170,6 +181,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                     showLegend = showLegend,
                     graphDirection = directionString,
                     fileName = fileName,
+                    shouldLinkModuleText = shouldLinkModuleText,
                 ),
             )
         }
@@ -185,6 +197,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 showLegend = showLegend,
                 graphDirection = directionString,
                 fileName = fileName,
+                shouldLinkModuleText = shouldLinkModuleText,
             ),
         )
     }
@@ -202,9 +215,6 @@ abstract class DependencyGraphTask : DefaultTask() {
             "$repoUrl/blob/$branchName"
         }
     }
-
-    private fun doesFileNameSupportLinks(fileName: String) =
-        Regex("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matches(fileName)
 
     private fun appendMarkDownIfNeeded(providedFileName: String) = when {
         providedFileName.isBlank() -> DEFAULT_GRAPH_FILE_NAME

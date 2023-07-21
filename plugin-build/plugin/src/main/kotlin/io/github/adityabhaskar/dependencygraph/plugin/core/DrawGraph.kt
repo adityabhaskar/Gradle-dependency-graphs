@@ -12,6 +12,7 @@ internal data class DrawConfig(
     val showLegend: ShowLegend,
     val graphDirection: String,
     val fileName: String,
+    val shouldLinkModuleText: Boolean,
 )
 
 @Suppress("LongMethod", "CyclomaticComplexMethod", "CognitiveComplexMethod", "ktlint:indent")
@@ -68,8 +69,6 @@ internal fun drawDependencyGraph(
     val javaNodeStart = "{{"
     val javaNodeEnd = "}}"
 
-    var clickText = ""
-
     for (project in projects) {
         if (
             !isRootGraph &&
@@ -108,12 +107,15 @@ internal fun drawDependencyGraph(
             ""
         }
 
-        fileText += "  ${project.path}${nodeStart}${project.path}${nodeEnd}$nodeClass;\n"
-
         val relativePath = project.projectDir.relativeTo(config.rootDir)
-        config.moduleBaseUrl?.let {
-            clickText += "click ${project.path} $it/$relativePath/${config.fileName}\n"
+        val nodeText = if (config.shouldLinkModuleText && config.moduleBaseUrl != null) {
+            val link = "${config.moduleBaseUrl}/$relativePath/${config.fileName}"
+            "<a href='$link' style='color:#333;text-decoration:auto;'>${project.path}</a>"
+        } else {
+            project.path
         }
+
+        fileText += "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;\n"
     }
 
     fileText += """
@@ -168,15 +170,7 @@ internal fun drawDependencyGraph(
             fileText += "${origin.path}${arrow}${target.path}\n"
         }
 
-    fileText += if (config.moduleBaseUrl == null) {
-        "```"
-    } else {
-        """
-
-%% Click interactions
-$clickText```
-""".trimIndent()
-    }
+    fileText += "```"
 
     val graphFile = File(currentProject.projectDir, config.fileName)
     graphFile.parentFile.mkdirs()
