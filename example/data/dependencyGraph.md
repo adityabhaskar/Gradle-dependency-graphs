@@ -11,9 +11,9 @@ classDef javaNode fill:#ffb3ba;
 %% Modules
 subgraph  
   direction LR;
-  :example:data[:example:data]:::javaNode;
-  :example:domain{{:example:domain}}:::javaNode;
-  :example:models{{:example:models}}:::javaNode;
+  :example:data[<a href="https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md">:example:data</a>]:::javaNode;
+  :example:domain{{<a href="https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md">:example:domain</a>}}:::javaNode;
+  :example:models{{<a href="https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md">:example:models</a>}}:::javaNode;
 end
 
 %% Dependencies
@@ -23,7 +23,4 @@ end
 :example:domain-.->:example:data
 
 %% Click interactions
-click :example:data https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md
-click :example:domain https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md
-click :example:models https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md
 ```
