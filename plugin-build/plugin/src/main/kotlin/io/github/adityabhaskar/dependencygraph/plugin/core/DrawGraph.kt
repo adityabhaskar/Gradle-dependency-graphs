@@ -51,9 +51,9 @@ internal fun drawDependencyGraph(
 
     %% Styling for module nodes by type
     classDef rootNode stroke-width:4px;
-    classDef mppNode fill:#ffd2b3;
-    classDef andNode fill:#baffc9;
-    classDef javaNode fill:#ffb3ba;
+    classDef mppNode fill:#ffd2b3;color:#333!important;
+    classDef andNode fill:#baffc9;color:#333!important;
+    classDef javaNode fill:#ffb3ba;color:#333!important;
     $legendText
     %% Modules
 
@@ -108,9 +108,9 @@ internal fun drawDependencyGraph(
         }
 
         val relativePath = project.projectDir.relativeTo(config.rootDir)
-        val nodeText = if (config.shouldLinkModuleText) {
-            val link = "./$relativePath/${config.fileName}"
-            "<a href='$link' style='color:#333,text-decoration:auto'>${project.path}</a>"
+        val nodeText = if (config.shouldLinkModuleText && config.moduleBaseUrl != null) {
+            val link = "${config.moduleBaseUrl}/$relativePath/${config.fileName}"
+            "<a href='$link' style='text-decoration:auto'>${project.path}</a>"
         } else {
             project.path
         }
