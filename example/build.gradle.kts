@@ -13,7 +13,7 @@ dependencyGraphConfig {
     mainBranchName.set("main")
 
     // Optional
-    graphFileName.set("dependency-graph.md")
+    graphFileName.set("dependencyGraph.md")
 
     // Optional
     graphDirection.set(Direction.LeftToRight)
