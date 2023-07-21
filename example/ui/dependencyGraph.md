@@ -11,9 +11,9 @@ classDef javaNode fill:#ffb3ba;
 %% Modules
 subgraph  
   direction LR;
-  :example:feature{{<a href='example/feature/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:feature</a>}}:::javaNode;
-  :example:models{{<a href='example/models/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:models</a>}}:::javaNode;
-  :example:ui[<a href='example/ui/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:ui</a>]:::javaNode;
+  :example:feature{{<a href='./example/feature/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:feature</a>}}:::javaNode;
+  :example:models{{<a href='./example/models/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:models</a>}}:::javaNode;
+  :example:ui[<a href='./example/ui/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:ui</a>]:::javaNode;
 end
 
 %% Dependencies

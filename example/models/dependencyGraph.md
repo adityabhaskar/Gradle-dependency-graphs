@@ -11,10 +11,10 @@ classDef javaNode fill:#ffb3ba;
 %% Modules
 subgraph  
   direction LR;
-  :example:data{{<a href='example/data/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:data</a>}}:::javaNode;
-  :example:domain{{<a href='example/domain/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:domain</a>}}:::javaNode;
-  :example:models[<a href='example/models/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:models</a>]:::javaNode;
-  :example:ui{{<a href='example/ui/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:ui</a>}}:::javaNode;
+  :example:data{{<a href='./example/data/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:data</a>}}:::javaNode;
+  :example:domain{{<a href='./example/domain/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:domain</a>}}:::javaNode;
+  :example:models[<a href='./example/models/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:models</a>]:::javaNode;
+  :example:ui{{<a href='./example/ui/dependencyGraph.md' style='color:#333,text-decoration:auto'>:example:ui</a>}}:::javaNode;
 end
 
 %% Dependencies
