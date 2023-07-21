@@ -24,14 +24,14 @@ The plugin is available in the [Gradle plugins repository](https://plugins.gradl
 Kotlin:
 ```kotlin
 plugins {
-  id("io.github.adityabhaskar.dependencygraph") version "0.1.3"
+  id("io.github.adityabhaskar.dependencygraph") version "0.1.4"
 }
 ```
 
 Groovy:
 ```groovy
 plugins {
-  id "io.github.adityabhaskar.dependencygraph" version "0.1.3"
+  id "io.github.adityabhaskar.dependencygraph" version "0.1.4"
 }
 ```
 
