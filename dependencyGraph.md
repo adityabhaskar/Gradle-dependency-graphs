@@ -4,9 +4,9 @@ graph LR;
 
 %% Styling for module nodes by type
 classDef rootNode stroke-width:4px;
-classDef mppNode fill:#ffd2b3;
-classDef andNode fill:#baffc9;
-classDef javaNode fill:#ffb3ba;
+classDef mppNode fill:#ffd2b3,color:#333333;
+classDef andNode fill:#baffc9,color:#333333;
+classDef javaNode fill:#ffb3ba,color:#333333;
 
 %% Graph types
 subgraph Legend
@@ -32,11 +32,11 @@ end
 %% Modules
 subgraph  
   direction LR;
-  :example:data{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:data</a>}}:::javaNode;
-  :example:domain{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:domain</a>}}:::javaNode;
-  :example:feature[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:feature</a>]:::javaNode;
-  :example:models{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:models</a>}}:::javaNode;
-  :example:ui{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:ui</a>}}:::javaNode;
+  :example:data{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md' style='text-decoration:auto'>:example:data</a>}}:::javaNode;
+  :example:domain{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md' style='text-decoration:auto'>:example:domain</a>}}:::javaNode;
+  :example:feature[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md' style='text-decoration:auto'>:example:feature</a>]:::javaNode;
+  :example:models{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md' style='text-decoration:auto'>:example:models</a>}}:::javaNode;
+  :example:ui{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md' style='text-decoration:auto'>:example:ui</a>}}:::javaNode;
 end
 
 %% Dependencies
