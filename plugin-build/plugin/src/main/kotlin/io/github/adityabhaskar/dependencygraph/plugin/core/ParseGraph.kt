@@ -85,10 +85,10 @@ internal fun parseDependencyGraph(
                     val traits = dependencies
                         .computeIfAbsent(graphKey) { mutableListOf() } as MutableList
 
-                    if (config.name.lowercase(Locale.getDefault()).endsWith("implementation")) {
-                        traits.add("impl")
-                    } else {
+                    if (config.name.lowercase(Locale.getDefault()).endsWith("api")) {
                         traits.add("api")
+                    } else {
+                        traits.add("impl")
                     }
                 }
         }

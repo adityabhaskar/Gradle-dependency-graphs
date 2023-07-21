@@ -24,14 +24,14 @@ The plugin is available in the [Gradle plugins repository](https://plugins.gradl
 Kotlin:
 ```kotlin
 plugins {
-  id("io.github.adityabhaskar.dependencygraph") version "0.1.0"
+  id("io.github.adityabhaskar.dependencygraph") version "0.1.2"
 }
 ```
 
 Groovy:
 ```groovy
 plugins {
-  id "io.github.adityabhaskar.dependencygraph" version "0.1.0"
+  id "io.github.adityabhaskar.dependencygraph" version "0.1.2"
 }
 ```
 
@@ -117,7 +117,7 @@ subgraph Legend
 end
 
 %% Modules
-subgraph  
+subgraph
   direction LR;
   :example:data{{:example:data}}:::javaNode;
   :example:domain{{:example:domain}}:::javaNode;
@@ -165,7 +165,7 @@ classDef andNode fill:#baffc9;
 classDef javaNode fill:#ffb3ba;
 
 %% Modules
-subgraph  
+subgraph
   direction LR;
   :example:data{{:example:data}}:::javaNode;
   :example:domain[:example:domain]:::javaNode;
@@ -194,7 +194,7 @@ click :example:models https://github.com/adityabhaskar/Gradle-dependency-graphs/
 
 ### Create a PR with changed graphs
 
-The [`update-graphs-pr.yaml`](/.github/workflows//update-graphs-pr.yaml) action creates a new PR with changed dependency graphs when module dependencies change on `main`. 
+The [`update-graphs-pr.yaml`](/.github/workflows//update-graphs-pr.yaml) action creates a new PR with changed dependency graphs when module dependencies change on `main`.
 
 1. The action runs the plugin task `./gradlew :example:dependencyGraph` to generate fresh dependency graphs.
 2. A simple script - [`.github/ci-scripts/changed_files.sh`](/.github/ci-scripts/changed_files.sh) - collects all the changed graph files so they can be listed in the PR body.
