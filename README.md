@@ -24,14 +24,14 @@ The plugin is available in the [Gradle plugins repository](https://plugins.gradl
 Kotlin:
 ```kotlin
 plugins {
-  id("io.github.adityabhaskar.dependencygraph") version "0.1.2"
+  id("io.github.adityabhaskar.dependencygraph") version "0.1.3"
 }
 ```
 
 Groovy:
 ```groovy
 plugins {
-  id "io.github.adityabhaskar.dependencygraph" version "0.1.2"
+  id "io.github.adityabhaskar.dependencygraph" version "0.1.3"
 }
 ```
 
@@ -68,14 +68,15 @@ dependencyGraphConfig {
 
 All configuration options are optional with sensible defaults.
 
-| Config option | Type | Description | Default value |
+| Config option | Type | Default value | Description |
 | --- | --- | --- | --- |
-|`graphDirection`| `Direction` | The direction in which the graph should be laid out.<br>Options: <ul> <li><code>Direction.LeftToRight</code></li> <li><code>Direction.TopToBottom</code></li> <li><code>Direction.BottomToTop</code></li> <li><code>Direction.RightToLeft</code></li> </ul>  | `Direction.LeftToRight` |
-| `showLegend` | `ShowLegend` | Whether to show a legend. When enabled, the graph with contain a legend identifying different types of modules — current/root, java/kotlin, Android and multiplatform — and different type of dependencies - direct, indirect & transitive.<br> Options: <ul> <li><code>ShowLegend.Always</code></li> <li><code>ShowLegend.OnlyInRootGraph</code></li> <li><code>ShowLegend.Never</code></li> </ul>| `ShowLegend.OnlyInRootGraph`
-| `graphFileName` | `String` | Name of the file in which the graph is saved. <br> **Note**: <ul> <li>If the provided filename doesn't end in `.md`, then the extension will be appended.</li> <li>Try not to use `-` or any special characters in the file name. This interferes with the mermaid graph format when adding links. If the file name contains anything other than `[a-zA-Z0-9]`, then links will not be added.</li> </ul>|  `dependencyGraph.md` |
-|`ignoreModules`|`List<String>`| A list of modules to be ignored when generating the graph. This may be used, for instance to remove system test modules to see only the production graph.<br>Provide the full path of the modules you want to ignore, e.g. `:live-feature:ui` instead of `:test-ui`. | `emptyList()` |
-| `repoRootUrl` | `String` | Github URL for your repository. E.g. `https://github.com/adityabhaskar/Gradle-dependency-graphs`<br>The URL is used for adding links to modules to allow navigation to a module's subgraph just by clicking on it. If no URL is provided, then links aren't added to the graph.<br>**Note**: Github doesn't support click navigation from mermaid graphs at the moment.| `""` |
-| `mainBranchName`| `String` | Name of your main branch, e.g. `master`.<br>This is combined with the `repoRootUrl` to create clickable URLs. The URLs are used for adding links to graph to allow navigation to a module's subgraph by clicking on a module. If no `repoRootUrl` is provided, then links aren't added to the graph.<br>**Note**: Github doesn't support click navigation from mermaid graphs at the moment.|`main`|
+|`graphDirection`| `Direction` | `Direction.LeftToRight` | The direction in which the graph should be laid out.<br>Options: <ul> <li><code>Direction.LeftToRight</code></li> <li><code>Direction.TopToBottom</code></li> <li><code>Direction.BottomToTop</code></li> <li><code>Direction.RightToLeft</code></li> </ul> |
+| `showLegend` | `ShowLegend` | `ShowLegend.OnlyInRootGraph` | Whether to show a legend. When enabled, the graph with contain a legend identifying different types of modules — current/root, java/kotlin, Android and multiplatform — and different type of dependencies - direct, indirect & transitive.<br> Options: <ul> <li><code>ShowLegend.Always</code></li> <li><code>ShowLegend.OnlyInRootGraph</code></li> <li><code>ShowLegend.Never</code></li> </ul>|
+| `graphFileName` | `String` |  `dependencyGraph.md` | Name of the file in which the graph is saved. <br> **Note**: <!--<ul> <li>-->If the provided filename does not end in `.md`, then the extension will be appended. <!--</li><li>Try not to use `-` or any special characters in the file name. This interferes with the mermaid graph format when adding links. If the file name contains anything other than `[a-zA-Z0-9]`, then links will not be added.</li> </ul>-->|
+|`ignoreModules`|`List<String>`| `emptyList()` | A list of modules to be ignored when generating the graph. This may be used, for instance to remove system test modules to see only the production graph.<br>Provide the full path of the modules you want to ignore, e.g. `:live-feature:ui` instead of `:test-ui`. |
+| `shouldLinkModuleText` | `Boolean` |  `true` | Whether to add sub-graph links to module names in graphs. The links are useful for quickly navigating between graphs and sub-graphs.<br>**Note**: For links to work `repoRootUrl` and `mainBranchName` need to be provided |
+| `repoRootUrl` | `String` | `""` | Github URL for your repository. E.g. `https://github.com/adityabhaskar/Gradle-dependency-graphs`<br>The URL is used for adding links to modules to allow navigation to a module's subgraph just by clicking on it. If no URL is provided, then links are not added to the graph.<!--<br>**Note**: Github does not support click navigation from mermaid graphs at the moment.-->|
+| `mainBranchName`| `String` |`main`| Name of your main branch, e.g. `master`.<br>This is combined with the `repoRootUrl` to create clickable URLs. The URLs are used for adding links to graph to allow navigation to a module's subgraph by clicking on a module. If no `repoRootUrl` is provided, then links are not added to the graph.<!--<br>**Note**: Github does not support click navigation from mermaid graphs at the moment.-->|
 
 ## Dependency graphs
 
