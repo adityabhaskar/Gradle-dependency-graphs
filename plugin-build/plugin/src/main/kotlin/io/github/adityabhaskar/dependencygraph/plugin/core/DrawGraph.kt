@@ -12,6 +12,7 @@ internal data class DrawConfig(
     val showLegend: ShowLegend,
     val graphDirection: String,
     val fileName: String,
+    val shouldLinkNodeText: Boolean,
 )
 
 @Suppress("LongMethod", "CyclomaticComplexMethod", "CognitiveComplexMethod", "ktlint:indent")
@@ -107,10 +108,12 @@ internal fun drawDependencyGraph(
         }
 
         val relativePath = project.projectDir.relativeTo(config.rootDir)
-        val nodeText = config.moduleBaseUrl?.let {
-            val link = "$it/$relativePath/${config.fileName}"
+        val nodeText = if (config.shouldLinkNodeText && config.moduleBaseUrl != null) {
+            val link = "${config.moduleBaseUrl}/$relativePath/${config.fileName}"
             "<a href='$link' style='color:#333;text-decoration:auto;'>${project.path}</a>"
-        } ?: project.path
+        } else {
+            project.path
+        }
 
         fileText += "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;\n"
     }

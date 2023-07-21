@@ -167,6 +167,7 @@ abstract class DependencyGraphTask : DefaultTask() {
             repoUrl = repoRootUrl.orNull,
             mainBranchName = mainBranchName.orNull,
         )
+        val shouldLinkNodeText = shouldLinkNodeText.getOrElse(true)
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -180,6 +181,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                     showLegend = showLegend,
                     graphDirection = directionString,
                     fileName = fileName,
+                    shouldLinkNodeText = shouldLinkNodeText,
                 ),
             )
         }
@@ -195,6 +197,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 showLegend = showLegend,
                 graphDirection = directionString,
                 fileName = fileName,
+                shouldLinkNodeText = shouldLinkNodeText,
             ),
         )
     }
