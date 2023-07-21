@@ -149,14 +149,10 @@ abstract class DependencyGraphTask : DefaultTask() {
         val fileName = appendMarkDownIfNeeded(
             providedFileName = graphFileName.getOrElse(DEFAULT_GRAPH_FILE_NAME),
         )
-        val moduleBaseUrl = if (doesFileNameSupportLinks(fileName)) {
-            createGraphUrl(
-                repoUrl = repoRootUrl.orNull,
-                mainBranchName = mainBranchName.orNull,
-            )
-        } else {
-            null
-        }
+        val moduleBaseUrl = createGraphUrl(
+            repoUrl = repoRootUrl.orNull,
+            mainBranchName = mainBranchName.orNull,
+        )
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -202,9 +198,6 @@ abstract class DependencyGraphTask : DefaultTask() {
             "$repoUrl/blob/$branchName"
         }
     }
-
-    private fun doesFileNameSupportLinks(fileName: String) =
-        Regex("[a-zA-Z0-9]+\\.[a-zA-Z0-9]+").matches(fileName)
 
     private fun appendMarkDownIfNeeded(providedFileName: String) = when {
         providedFileName.isBlank() -> DEFAULT_GRAPH_FILE_NAME
