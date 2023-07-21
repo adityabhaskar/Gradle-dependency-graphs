@@ -109,7 +109,7 @@ internal fun drawDependencyGraph(
         val relativePath = project.projectDir.relativeTo(config.rootDir)
         val nodeText = config.moduleBaseUrl?.let {
             val link = "$it/$relativePath/${config.fileName}"
-            "<a href='$link'>${project.path}</a>"
+            "<a href='$link' style='color:#333;text-decoration:auto;'>${project.path}</a>"
         } ?: project.path
 
         fileText += "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;\n"
