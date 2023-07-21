@@ -9,7 +9,7 @@ classDef andNode fill:#baffc9;
 classDef javaNode fill:#ffb3ba;
 
 %% Modules
-subgraph
+subgraph  
   direction LR;
   :example:data{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:data</a>}}:::javaNode;
   :example:domain[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md' style='color:#333;text-decoration:auto;'>:example:domain</a>]:::javaNode;
