@@ -84,7 +84,7 @@ All configuration options are optional with sensible defaults.
 
 The plugin will generate one graph at the root of the project for all modules in the project (except any ignored).
 
-Sample root project graph with a legend:
+[Sample root project graph](dependencyGraph.md) with a legend:
 
 ```mermaid
 %%{ init: { 'theme': 'base' } }%%
@@ -92,57 +92,23 @@ graph LR;
 
 %% Styling for module nodes by type
 classDef rootNode stroke-width:4px;
-classDef mppNode fill:#ffd2b3;
-classDef andNode fill:#baffc9;
-classDef javaNode fill:#ffb3ba;
-
-%% Graph types
-subgraph Legend
-  direction TB;
-  rootNode[Root/current module]:::rootNode;
-  javaNode{{Java/Kotlin}}:::javaNode;
-  andNode([Android]):::andNode;
-  mppNode([Multi-platform]):::mppNode;
-  subgraph Direct dependency
-    direction LR;
-    :a===>:b
-  end
-  subgraph Indirect dependency
-    direction LR;
-    :c--->:d
-  end
-  subgraph API dependency
-    direction LR;
-    :e--API--->:f
-  end
-end
+classDef mppNode fill:#ffd2b3,color:#333333;
+classDef andNode fill:#baffc9,color:#333333;
+classDef javaNode fill:#ffb3ba,color:#333333;
 
 %% Modules
 subgraph  
   direction LR;
-  :example:data{{:example:data}}:::javaNode;
-  :example:domain{{:example:domain}}:::javaNode;
-  :example:feature[:example:feature]:::javaNode;
-  :example:models{{:example:models}}:::javaNode;
-  :example:ui{{:example:ui}}:::javaNode;
+  :example:feature{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md' style='text-decoration:auto'>:example:feature</a>}}:::javaNode;
+  :example:models{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md' style='text-decoration:auto'>:example:models</a>}}:::javaNode;
+  :example:ui[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md' style='text-decoration:auto'>:example:ui</a>]:::javaNode;
 end
 
 %% Dependencies
-:example:data--->:example:models
-:example:feature--->:example:ui
-:example:feature--->:example:domain
-:example:ui--->:example:models
-:example:domain--API--->:example:models
-:example:domain--->:example:data
+:example:ui===>:example:models
 
 %% Dependents
-
-%% Click interactions
-click :example:data https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md
-click :example:domain https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md
-click :example:feature https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md
-click :example:models https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md
-click :example:ui https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md
+:example:feature-.->:example:ui
 ```
 
 ### Submodule dependency graph
@@ -153,7 +119,7 @@ Further, the plugin will generate a graph for every module's dependencies within
 
 _Dependents are identified with a dashed line._
 
-Sample sub graph for the module `:example:domain` without a legend:
+Sample [sub graph for the module](https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md) `:example:domain` without a legend:
 
 ```mermaid
 %%{ init: { 'theme': 'base' } }%%
@@ -161,17 +127,17 @@ graph LR;
 
 %% Styling for module nodes by type
 classDef rootNode stroke-width:4px;
-classDef mppNode fill:#ffd2b3;
-classDef andNode fill:#baffc9;
-classDef javaNode fill:#ffb3ba;
+classDef mppNode fill:#ffd2b3,color:#333333;
+classDef andNode fill:#baffc9,color:#333333;
+classDef javaNode fill:#ffb3ba,color:#333333;
 
 %% Modules
 subgraph  
   direction LR;
-  :example:data{{:example:data}}:::javaNode;
-  :example:domain[:example:domain]:::javaNode;
-  :example:feature{{:example:feature}}:::javaNode;
-  :example:models{{:example:models}}:::javaNode;
+  :example:data{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md' style='text-decoration:auto'>:example:data</a>}}:::javaNode;
+  :example:domain[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md' style='text-decoration:auto'>:example:domain</a>]:::javaNode;
+  :example:feature{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md' style='text-decoration:auto'>:example:feature</a>}}:::javaNode;
+  :example:models{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md' style='text-decoration:auto'>:example:models</a>}}:::javaNode;
 end
 
 %% Dependencies
@@ -181,12 +147,6 @@ end
 
 %% Dependents
 :example:feature-.->:example:domain
-
-%% Click interactions
-click :example:data https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md
-click :example:domain https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md
-click :example:feature https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/feature/dependencyGraph.md
-click :example:models https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md
 ```
 
 ## CI integration
