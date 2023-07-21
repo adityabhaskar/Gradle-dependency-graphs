@@ -25,5 +25,5 @@ dependencyGraphConfig {
     ignoreModules.set(listOf(":example:system-test"))
 
     // Optional
-    shouldLinkNodeText.set(true)
+    shouldLinkModuleText.set(true)
 }

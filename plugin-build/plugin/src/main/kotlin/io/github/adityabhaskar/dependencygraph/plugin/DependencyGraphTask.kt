@@ -107,11 +107,11 @@ abstract class DependencyGraphTask : DefaultTask() {
      */
     @get:Input
     @get:Option(
-        option = "shouldLinkNodeText",
+        option = "shouldLinkModuleText",
         description = "Whether module name text should link to graphs for that module",
     )
     @get:Optional
-    abstract val shouldLinkNodeText: Property<Boolean>
+    abstract val shouldLinkModuleText: Property<Boolean>
 
     /** Whether and where a legend should be displayed. */
     @get:Input
@@ -167,7 +167,7 @@ abstract class DependencyGraphTask : DefaultTask() {
             repoUrl = repoRootUrl.orNull,
             mainBranchName = mainBranchName.orNull,
         )
-        val shouldLinkNodeText = shouldLinkNodeText.getOrElse(true)
+        val shouldLinkModuleText = shouldLinkModuleText.getOrElse(true)
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -181,7 +181,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                     showLegend = showLegend,
                     graphDirection = directionString,
                     fileName = fileName,
-                    shouldLinkNodeText = shouldLinkNodeText,
+                    shouldLinkModuleText = shouldLinkModuleText,
                 ),
             )
         }
@@ -197,7 +197,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 showLegend = showLegend,
                 graphDirection = directionString,
                 fileName = fileName,
-                shouldLinkNodeText = shouldLinkNodeText,
+                shouldLinkModuleText = shouldLinkModuleText,
             ),
         )
     }

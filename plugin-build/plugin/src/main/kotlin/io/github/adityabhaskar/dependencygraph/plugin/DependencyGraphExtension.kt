@@ -54,7 +54,7 @@ abstract class DependencyGraphExtension @Inject constructor(project: Project) {
      * Github doesn't support click navigation from mermaid graphs at the moment. Linking the text
      * instead provides a work around for allowing navigating between subgraphs.
      */
-    val shouldLinkNodeText: Property<Boolean> = objects.property(Boolean::class.java)
+    val shouldLinkModuleText: Property<Boolean> = objects.property(Boolean::class.java)
 
     /**
      * Optional setting to define whether to show a legend identifying different types of modules.
