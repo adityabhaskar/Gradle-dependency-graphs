@@ -30,6 +30,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           add-paths: |
+            dependencyGraph.md
             **/dependencyGraph.md
           commit-message: Updated dependency graphs
           branch: updated-dependency-graphs
