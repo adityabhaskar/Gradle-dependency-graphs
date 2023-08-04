@@ -335,6 +335,13 @@ private fun groupSubModules(
     }
 }
 
+fun mapProjectListToGroups() {
+    // TODO: 04/08/2023 When encountering a sub project, add it to a list but only record parent
+    //  folder name Then when drawing dependencies, check the list and draw it to parent folder
+    //  when sub project falls under it
+}
+
+
 /**
  * Returns a list of all modules that are direct or indirect dependencies of the provided module.
  * @param currentProjectAndDependencies the module(s) whose dependencies we need
