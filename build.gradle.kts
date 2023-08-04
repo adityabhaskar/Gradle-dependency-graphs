@@ -29,7 +29,7 @@ subprojects {
     }
 
     detekt {
-        config = rootProject.files("config/detekt/detekt.yml")
+        config.from.addAll(rootProject.files("config/detekt/detekt.yml"))
     }
 }
 
