@@ -122,6 +122,15 @@ abstract class DependencyGraphTask : DefaultTask() {
     @get:Optional
     abstract val showLegend: Property<ShowLegend>
 
+    /** Whether and where a legend should be displayed. */
+    @get:Input
+    @get:Option(
+        option = "shouldGroupModules",
+        description = "Whether submodules should be grouped together",
+    )
+    @get:Optional
+    abstract val shouldGroupModules: Property<Boolean>
+
     /** The project dependencies graph as [ParsedGraph]`. */
     @get:Input
     @get:Option(
@@ -168,6 +177,7 @@ abstract class DependencyGraphTask : DefaultTask() {
             mainBranchName = mainBranchName.orNull,
         )
         val shouldLinkModuleText = shouldLinkModuleText.getOrElse(true)
+        val shouldGroupModules = shouldGroupModules.getOrElse(false)
 
         // Draw sub graph of dependencies and dependents for each module
         graph.projects.forEach {
@@ -182,6 +192,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                     graphDirection = directionString,
                     fileName = fileName,
                     shouldLinkModuleText = shouldLinkModuleText,
+                    shouldGroupModules = shouldGroupModules,
                 ),
             )
         }
@@ -198,6 +209,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 graphDirection = directionString,
                 fileName = fileName,
                 shouldLinkModuleText = shouldLinkModuleText,
+                shouldGroupModules = shouldGroupModules,
             ),
         )
     }
