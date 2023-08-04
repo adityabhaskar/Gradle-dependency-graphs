@@ -22,6 +22,7 @@ abstract class DependencyGraphPlugin : Plugin<Project> {
             it.graphDirection.set(extension.graphDirection)
             it.showLegend.set(extension.showLegend)
             it.shouldLinkModuleText.set(extension.shouldLinkModuleText)
+            it.shouldGroupModules.set(extension.shouldGroupModules)
 
             it.parsedGraph.set(
                 parseDependencyGraph(

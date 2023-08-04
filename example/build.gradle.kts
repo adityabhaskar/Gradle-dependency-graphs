@@ -26,4 +26,7 @@ dependencyGraphConfig {
 
     // Optional
     shouldLinkModuleText.set(true)
+
+    // Optional (default false)
+    shouldGroupModules.set(true)
 }

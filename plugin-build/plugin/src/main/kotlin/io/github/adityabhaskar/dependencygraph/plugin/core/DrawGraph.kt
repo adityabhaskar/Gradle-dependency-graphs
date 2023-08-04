@@ -13,6 +13,7 @@ internal data class DrawConfig(
     val graphDirection: String,
     val fileName: String,
     val shouldLinkModuleText: Boolean,
+    val shouldGroupModules: Boolean,
 )
 
 @Suppress("LongMethod", "CyclomaticComplexMethod", "CognitiveComplexMethod", "ktlint:indent")
@@ -29,10 +30,6 @@ internal fun drawDependencyGraph(
     val projects: LinkedHashSet<ModuleProject> = parsedGraph.projects
     val dependencies: LinkedHashMap<DependencyPair, List<String>> =
         parsedGraph.dependencies
-    val multiplatformProjects = parsedGraph.multiplatformProjects
-    val androidProjects = parsedGraph.androidProjects
-    val javaProjects = parsedGraph.javaProjects
-    val rootProjects = parsedGraph.rootProjects
 
     val currentProjectDependencies =
         gatherDependencies(mutableListOf(currentProject), dependencies)
@@ -62,63 +59,45 @@ internal fun drawDependencyGraph(
     // when rendered in dark mode.
     fileText += "subgraph  \n  direction ${config.graphDirection};\n"
 
-    val normalNodeStart = "(["
-    val normalNodeEnd = "])"
-    val rootNodeStart = "["
-    val rootNodeEnd = "]"
-    val javaNodeStart = "{{"
-    val javaNodeEnd = "}}"
-
-    for (project in projects) {
-        if (
-            !isRootGraph &&
-            !(currentProjectDependencies.contains(project) || dependents.contains(project))
-        ) {
-            continue
+    val relevantProjects = if (isRootGraph) {
+        projects.toList()
+    } else {
+        projects.filter {
+            currentProjectDependencies.contains(it) ||
+                dependents.contains(it) ||
+                it == currentProject
         }
-        val isRoot = if (isRootGraph) {
-            rootProjects.contains(project) || project == currentProject
-        } else {
-            project == currentProject
-        }
-
-        var nodeStart = if (isRoot) {
-            rootNodeStart
-        } else {
-            normalNodeStart
-        }
-        var nodeEnd = if (isRoot) {
-            rootNodeEnd
-        } else {
-            normalNodeEnd
-        }
-
-        val nodeClass = if (multiplatformProjects.contains(project)) {
-            ":::mppNode"
-        } else if (androidProjects.contains(project)) {
-            ":::andNode"
-        } else if (javaProjects.contains(project)) {
-            if (!isRoot) {
-                nodeStart = javaNodeStart
-                nodeEnd = javaNodeEnd
-            }
-            ":::javaNode"
-        } else {
-            ""
-        }
-
-        val relativePath = project.projectDir.relativeTo(config.rootDir)
-        val nodeText = if (config.shouldLinkModuleText && config.moduleBaseUrl != null) {
-            val link = "${config.moduleBaseUrl}/$relativePath/${config.fileName}"
-            "<a href='$link' style='text-decoration:auto'>${project.path}</a>"
-        } else {
-            project.path
-        }
-
-        fileText += "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;\n"
     }
 
-    fileText += """
+    val modulesText = if (config.shouldGroupModules) {
+        var rootMap = mutableMapOf<String, ProjectOrSubMap>()
+
+        for (project in relevantProjects) {
+            rootMap = mapProjectListToGroups(
+                project = project,
+                remainingPath = project.path,
+                map = rootMap,
+            )
+        }
+
+        printProjectsGrouped(
+            projectMap = rootMap,
+            isRootGraph = isRootGraph,
+            config = config,
+            currentProject = currentProject,
+            parsedGraph = parsedGraph,
+        )
+    } else {
+        printProjects(
+            projects = relevantProjects,
+            isRootGraph = isRootGraph,
+            config = config,
+            currentProject = currentProject,
+            parsedGraph = parsedGraph,
+        )
+    }
+
+    fileText += modulesText + """
     end
 
     %% Dependencies
@@ -137,10 +116,10 @@ internal fun drawDependencyGraph(
             val isDirectDependency = origin == currentProject
 
             val arrow = when {
-                isApi && isDirectDependency -> "==API===>"
-                isApi -> "--API--->"
-                isDirectDependency -> "===>"
-                else -> "--->"
+                isApi && isDirectDependency -> ConnecterType.DirectApi
+                isApi -> ConnecterType.IndirectApi
+                isDirectDependency -> ConnecterType.Direct
+                else -> ConnecterType.Indirect
             }
             fileText += "${origin.path}${arrow}${target.path}\n"
         }
@@ -178,6 +157,158 @@ internal fun drawDependencyGraph(
     graphFile.writeText(fileText)
 
     println("Project module dependency graph created at ${graphFile.absolutePath}")
+}
+
+@Suppress("LongParameterList", "CognitiveComplexMethod")
+private fun printProjects(
+    projects: List<ModuleProject>,
+    currentProject: ModuleProject,
+    parsedGraph: ParsedGraph,
+    isRootGraph: Boolean,
+    config: DrawConfig,
+    level: Int = 0,
+): String {
+    val multiplatformProjects = parsedGraph.multiplatformProjects
+    val androidProjects = parsedGraph.androidProjects
+    val javaProjects = parsedGraph.javaProjects
+    val rootProjects = parsedGraph.rootProjects
+
+    return projects.joinToString(separator = "\n", postfix = "\n") { project ->
+        val isRoot = if (isRootGraph) {
+            rootProjects.contains(project) || project == currentProject
+        } else {
+            project == currentProject
+        }
+
+        var nodeStart = if (isRoot) {
+            NodeEnds.RootStart
+        } else {
+            NodeEnds.NormalStart
+        }
+        var nodeEnd = if (isRoot) {
+            NodeEnds.RootEnd
+        } else {
+            NodeEnds.NormalEnd
+        }
+
+        val nodeClass = if (multiplatformProjects.contains(project)) {
+            NodeClass.Mpp
+        } else if (androidProjects.contains(project)) {
+            NodeClass.Android
+        } else if (javaProjects.contains(project)) {
+            if (!isRoot) {
+                nodeStart = NodeEnds.JavaStart
+                nodeEnd = NodeEnds.JavaEnd
+            }
+            NodeClass.Java
+        } else {
+            ""
+        }
+
+        val relativePath = project.projectDir.relativeTo(config.rootDir)
+        val nodeText = if (config.shouldLinkModuleText && config.moduleBaseUrl != null) {
+            val link = "${config.moduleBaseUrl}/$relativePath/${config.fileName}"
+            "<a href='$link' style='text-decoration:auto'>${project.path}</a>"
+        } else {
+            project.path
+        }
+
+        val indent = "  ".repeat(level) + "  "
+        "$indent${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;"
+    }
+}
+
+@Suppress("LongParameterList")
+private fun printProjectsGrouped(
+    projectMap: MutableMap<String, ProjectOrSubMap>,
+    currentProject: ModuleProject,
+    parsedGraph: ParsedGraph,
+    isRootGraph: Boolean,
+    config: DrawConfig,
+    groupName: String = currentProject.path,
+    level: Int = 0,
+): String {
+    val currentLevelProjects = projectMap.mapNotNull { (_, value) ->
+        value.project
+    }
+
+    val indent = "  ".repeat(level)
+    var subModuleString = if (currentLevelProjects.isEmpty()) {
+        ""
+    } else {
+        "${indent}subgraph $groupName\n$indent  direction LR;\n"
+    }
+
+    subModuleString += printProjects(
+        currentLevelProjects,
+        currentProject,
+        parsedGraph,
+        isRootGraph,
+        config,
+        level,
+    )
+
+    subModuleString += projectMap
+        .mapNotNull { (name, value) ->
+            value.subMap?.let { Pair(name, it) }
+        }
+        .joinToString("\n") {
+            printProjectsGrouped(
+                projectMap = it.second,
+                currentProject = currentProject,
+                parsedGraph = parsedGraph,
+                isRootGraph = isRootGraph,
+                config = config,
+                groupName = it.first,
+                level = level + 1,
+            )
+        }
+
+    val end = if (currentLevelProjects.isEmpty()) {
+        ""
+    } else {
+        "${indent}end\n"
+    }
+    return subModuleString + end
+}
+
+private data class ProjectOrSubMap(
+    val project: ModuleProject? = null,
+    val subMap: MutableMap<String, ProjectOrSubMap>? = null,
+) {
+    override fun toString() = when {
+        project != null && subMap != null -> "ProjectAndSubMap(project=$project, submap=$subMap)"
+        project != null -> project.path
+        subMap != null -> "$subMap"
+        else -> ""
+    }
+}
+
+private fun mapProjectListToGroups(
+    project: ModuleProject,
+    remainingPath: String,
+    map: MutableMap<String, ProjectOrSubMap>,
+): MutableMap<String, ProjectOrSubMap> {
+    val segments = remainingPath.removePrefix(":").split(":")
+    val nextPath = segments.take(1)
+    val remaining = segments.drop(1)
+    val nowRemainingPath = remaining.joinToString(separator = ":", prefix = ":")
+    return if (nextPath.isEmpty()) {
+        map
+    } else if (remaining.isEmpty()) {
+        map.apply {
+            putIfAbsent(nextPath[0].ifBlank { ":" }, ProjectOrSubMap(project = project))
+        }
+    } else {
+        map.apply {
+            val subMap = mapProjectListToGroups(
+                project = project,
+                remainingPath = nowRemainingPath,
+                map = get(nextPath[0])?.subMap ?: mutableMapOf(),
+            )
+            put(nextPath[0], ProjectOrSubMap(subMap = subMap))
+        }
+    }
 }
 
 /**
@@ -246,3 +377,25 @@ private const val LegendText = """
       end
     end
     """
+
+private object NodeClass {
+    const val Mpp = ":::mppNode"
+    const val Android = ":::andNode"
+    const val Java = ":::javaNode"
+}
+
+private object ConnecterType {
+    const val DirectApi = "==API===>"
+    const val IndirectApi = "--API--->"
+    const val Direct = "===>"
+    const val Indirect = "--->"
+}
+
+private object NodeEnds {
+    const val NormalStart = "(["
+    const val NormalEnd = "])"
+    const val RootStart = "["
+    const val RootEnd = "]"
+    const val JavaStart = "{{"
+    const val JavaEnd = "}}"
+}
