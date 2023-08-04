@@ -43,14 +43,24 @@ internal fun drawDependencyGraph(
 
     var fileText = """
     ```mermaid
-    %%{ init: { 'theme': 'base' } }%%
+    %%{
+      init: {
+        "theme": "base",
+        "themeVariables": {
+          "nodeTextColor": "#333333",
+          "clusterBorder": "#a0a0a0",
+          "nodeBorder": "#767676"
+        }
+      }
+    }%%
+
     graph LR;
 
     %% Styling for module nodes by type
     classDef rootNode stroke-width:4px;
-    classDef mppNode fill:#ffd2b3,color:#333333;
-    classDef andNode fill:#baffc9,color:#333333;
-    classDef javaNode fill:#ffb3ba,color:#333333;
+    classDef mppNode fill:#ffd2b3;
+    classDef andNode fill:#baffc9;
+    classDef javaNode fill:#ffb3ba;
     $legendText
     %% Modules
 
