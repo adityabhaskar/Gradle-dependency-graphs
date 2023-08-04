@@ -62,13 +62,6 @@ internal fun drawDependencyGraph(
     // when rendered in dark mode.
     fileText += "subgraph  \n  direction ${config.graphDirection};\n"
 
-    val normalNodeStart = "(["
-    val normalNodeEnd = "])"
-    val rootNodeStart = "["
-    val rootNodeEnd = "]"
-    val javaNodeStart = "{{"
-    val javaNodeEnd = "}}"
-
     for (project in projects) {
         if (
             !isRootGraph &&
@@ -83,26 +76,26 @@ internal fun drawDependencyGraph(
         }
 
         var nodeStart = if (isRoot) {
-            rootNodeStart
+            NodeEnds.RootStart
         } else {
-            normalNodeStart
+            NodeEnds.NormalStart
         }
         var nodeEnd = if (isRoot) {
-            rootNodeEnd
+            NodeEnds.RootEnd
         } else {
-            normalNodeEnd
+            NodeEnds.NormalEnd
         }
 
         val nodeClass = if (multiplatformProjects.contains(project)) {
-            NodeType.Mpp
+            NodeClass.Mpp
         } else if (androidProjects.contains(project)) {
-            NodeType.Android
+            NodeClass.Android
         } else if (javaProjects.contains(project)) {
             if (!isRoot) {
-                nodeStart = javaNodeStart
-                nodeEnd = javaNodeEnd
+                nodeStart = NodeEnds.JavaStart
+                nodeEnd = NodeEnds.JavaEnd
             }
-            NodeType.Java
+            NodeClass.Java
         } else {
             ""
         }
@@ -247,7 +240,7 @@ private const val LegendText = """
     end
     """
 
-private object NodeType {
+private object NodeClass {
     const val Mpp = ":::mppNode"
     const val Android = ":::andNode"
     const val Java = ":::javaNode"
@@ -260,4 +253,11 @@ private object ConnecterType {
     const val Indirect = "--->"
 }
 
-//private const val
+private object NodeEnds {
+    const val NormalStart = "(["
+    const val NormalEnd = "])"
+    const val RootStart = "["
+    const val RootEnd = "]"
+    const val JavaStart = "{{"
+    const val JavaEnd = "}}"
+}
