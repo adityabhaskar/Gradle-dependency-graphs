@@ -309,7 +309,7 @@ private fun mapProjectListToGroups(
         }
     } else {
         map.apply {
-            val key = if(currentPath.isBlank()) {
+            val key = if (currentPath.isBlank()) {
                 nextPath[0]
             } else {
                 "$currentPath:${nextPath[0]}"
