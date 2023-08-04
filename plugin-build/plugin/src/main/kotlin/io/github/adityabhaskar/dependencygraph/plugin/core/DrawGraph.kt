@@ -83,7 +83,7 @@ internal fun drawDependencyGraph(
         var rootMap = mutableMapOf<String, ProjectOrSubMap>()
 
         for (project in relevantProjects) {
-            rootMap = mapProjectListToGroups(
+            rootMap = groupSubModules(
                 currentPath = "",
                 project = project,
                 remainingPath = project.path,
@@ -127,10 +127,10 @@ internal fun drawDependencyGraph(
             val isDirectDependency = origin == currentProject
 
             val arrow = when {
-                isApi && isDirectDependency -> ConnecterType.DirectApi
-                isApi -> ConnecterType.IndirectApi
-                isDirectDependency -> ConnecterType.Direct
-                else -> ConnecterType.Indirect
+                isApi && isDirectDependency -> ConnectorType.DirectApi
+                isApi -> ConnectorType.IndirectApi
+                isDirectDependency -> ConnectorType.Direct
+                else -> ConnectorType.Indirect
             }
             fileText += "${origin.path}${arrow}${target.path}\n"
         }
@@ -295,7 +295,7 @@ private data class ProjectOrSubMap(
     }
 }
 
-private fun mapProjectListToGroups(
+private fun groupSubModules(
     currentPath: String,
     project: ModuleProject,
     remainingPath: String,
@@ -324,7 +324,7 @@ private fun mapProjectListToGroups(
             } else {
                 "$currentPath:${nextPath[0]}"
             }
-            val subMap = mapProjectListToGroups(
+            val subMap = groupSubModules(
                 currentPath = key,
                 project = project,
                 remainingPath = nowRemainingPath,
@@ -408,7 +408,7 @@ private object NodeClass {
     const val Java = ":::javaNode"
 }
 
-private object ConnecterType {
+private object ConnectorType {
     const val DirectApi = "==API===>"
     const val IndirectApi = "--API--->"
     const val Direct = "===>"
