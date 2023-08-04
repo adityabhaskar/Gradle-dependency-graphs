@@ -94,15 +94,15 @@ internal fun drawDependencyGraph(
         }
 
         val nodeClass = if (multiplatformProjects.contains(project)) {
-            ":::mppNode"
+            NodeType.Mpp
         } else if (androidProjects.contains(project)) {
-            ":::andNode"
+            NodeType.Android
         } else if (javaProjects.contains(project)) {
             if (!isRoot) {
                 nodeStart = javaNodeStart
                 nodeEnd = javaNodeEnd
             }
-            ":::javaNode"
+            NodeType.Java
         } else {
             ""
         }
@@ -137,10 +137,10 @@ internal fun drawDependencyGraph(
             val isDirectDependency = origin == currentProject
 
             val arrow = when {
-                isApi && isDirectDependency -> "==API===>"
-                isApi -> "--API--->"
-                isDirectDependency -> "===>"
-                else -> "--->"
+                isApi && isDirectDependency -> ConnecterType.DirectApi
+                isApi -> ConnecterType.IndirectApi
+                isDirectDependency -> ConnecterType.Direct
+                else -> ConnecterType.Indirect
             }
             fileText += "${origin.path}${arrow}${target.path}\n"
         }
@@ -246,3 +246,18 @@ private const val LegendText = """
       end
     end
     """
+
+private object NodeType {
+    const val Mpp = ":::mppNode"
+    const val Android = ":::andNode"
+    const val Java = ":::javaNode"
+}
+
+private object ConnecterType {
+    const val DirectApi = "==API===>"
+    const val IndirectApi = "--API--->"
+    const val Direct = "===>"
+    const val Indirect = "--->"
+}
+
+//private const val
