@@ -83,7 +83,7 @@ internal fun parseDependencyGraph(
                     val graphKey =
                         DependencyPair(project.asModuleProject(), dependency.asModuleProject())
                     val traits = dependencies
-                        .computeIfAbsent(graphKey) { mutableListOf() } as MutableList
+                        .getOrPut(graphKey) { mutableListOf() } as MutableList
 
                     if (config.name.lowercase(Locale.getDefault()).endsWith("api")) {
                         traits.add("api")
