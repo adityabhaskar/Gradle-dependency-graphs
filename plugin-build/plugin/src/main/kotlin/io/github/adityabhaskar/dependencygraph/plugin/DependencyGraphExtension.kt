@@ -68,6 +68,11 @@ abstract class DependencyGraphExtension @Inject constructor(project: Project) {
     val showLegend: Property<ShowLegend> = objects.property(ShowLegend::class.java)
 
     /**
+     * Optionally group submodules under same folder together in graph. Default is `false`.
+     */
+    val shouldGroupModules: Property<Boolean> = objects.property(Boolean::class.java)
+
+    /**
      * Optional graph direction. Defaults to top down ([Direction.LeftToRight]).
      */
     val graphDirection: Property<Direction> = objects.property(Direction::class.java)

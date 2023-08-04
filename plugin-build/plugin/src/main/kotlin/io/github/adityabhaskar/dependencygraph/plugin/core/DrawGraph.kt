@@ -13,6 +13,7 @@ internal data class DrawConfig(
     val graphDirection: String,
     val fileName: String,
     val shouldLinkModuleText: Boolean,
+    val shouldGroupModules: Boolean,
 )
 
 @Suppress("LongMethod", "CyclomaticComplexMethod", "CognitiveComplexMethod", "ktlint:indent")
@@ -68,9 +69,7 @@ internal fun drawDependencyGraph(
         }
     }
 
-    val grouped = false
-
-    val modulesText = if (grouped) {
+    val modulesText = if (config.shouldGroupModules) {
         var rootMap = mutableMapOf<String, ProjectOrSubMap>()
 
         for (project in relevantProjects) {
