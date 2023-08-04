@@ -68,13 +68,35 @@ internal fun drawDependencyGraph(
         }
     }
 
-    val modulesText = printProjects(
-        projects = relevantProjects,
-        isRootGraph = isRootGraph,
-        config = config,
-        currentProject = currentProject,
-        parsedGraph = parsedGraph,
-    )
+    val grouped = false
+
+    val modulesText = if (grouped) {
+        var rootMap = mutableMapOf<String, ProjectOrSubMap>()
+
+        for (project in relevantProjects) {
+            rootMap = mapProjectListToGroups(
+                project = project,
+                remainingPath = project.path,
+                map = rootMap,
+            )
+        }
+
+        printProjectsGrouped(
+            projectMap = rootMap,
+            isRootGraph = isRootGraph,
+            config = config,
+            currentProject = currentProject,
+            parsedGraph = parsedGraph,
+        )
+    } else {
+        printProjects(
+            projects = relevantProjects,
+            isRootGraph = isRootGraph,
+            config = config,
+            currentProject = currentProject,
+            parsedGraph = parsedGraph,
+        )
+    }
 
     fileText += modulesText + """
     end
@@ -263,7 +285,7 @@ private data class ProjectOrSubMap(
     }
 }
 
-private fun splitProject(
+private fun mapProjectListToGroups(
     project: ModuleProject,
     remainingPath: String,
     map: MutableMap<String, ProjectOrSubMap>,
@@ -280,7 +302,7 @@ private fun splitProject(
         }
     } else {
         map.apply {
-            val subMap = splitProject(
+            val subMap = mapProjectListToGroups(
                 project = project,
                 remainingPath = nowRemainingPath,
                 map = get(nextPath[0])?.subMap ?: mutableMapOf(),
