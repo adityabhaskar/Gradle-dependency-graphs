@@ -35,13 +35,13 @@ gradlePlugin {
             displayName = property("DISPLAY_NAME").toString()
             tags.set(
                 listOf(
-                    "visualisation",
-                    "graph",
-                    "dependency",
-                    "android",
                     "module",
+                    "dependency",
+                    "graph",
                     "mermaid",
+                    "android",
                     "github",
+                    "visualisation",
                 ),
             )
         }
