@@ -159,6 +159,7 @@ internal fun drawDependencyGraph(
     println("Project module dependency graph created at ${graphFile.absolutePath}")
 }
 
+@Suppress("LongParameterList", "CognitiveComplexMethod")
 private fun printProjects(
     projects: List<ModuleProject>,
     currentProject: ModuleProject,
@@ -217,6 +218,7 @@ private fun printProjects(
     }
 }
 
+@Suppress("LongParameterList")
 private fun printProjectsGrouped(
     projectMap: MutableMap<String, ProjectOrSubMap>,
     currentProject: ModuleProject,
@@ -231,13 +233,13 @@ private fun printProjectsGrouped(
     }
 
     val indent = "  ".repeat(level)
-    var p = if (currentLevelProjects.isEmpty()) {
+    var subModuleString = if (currentLevelProjects.isEmpty()) {
         ""
     } else {
-        "${indent}subgraph $groupName\n${indent}  direction LR;\n"
+        "${indent}subgraph $groupName\n$indent  direction LR;\n"
     }
 
-    p += printProjects(
+    subModuleString += printProjects(
         currentLevelProjects,
         currentProject,
         parsedGraph,
@@ -246,7 +248,7 @@ private fun printProjectsGrouped(
         level,
     )
 
-    p += projectMap
+    subModuleString += projectMap
         .mapNotNull { (name, value) ->
             value.subMap?.let { Pair(name, it) }
         }
@@ -267,20 +269,18 @@ private fun printProjectsGrouped(
     } else {
         "${indent}end\n"
     }
-    return p + end
+    return subModuleString + end
 }
 
 private data class ProjectOrSubMap(
     val project: ModuleProject? = null,
     val subMap: MutableMap<String, ProjectOrSubMap>? = null,
 ) {
-    override fun toString(): String {
-        return when {
-            project != null && subMap != null -> "ProjectAndSubMap(project=$project, submap=$subMap)"
-            project != null -> project.path
-            subMap != null -> "$subMap"
-            else -> ""
-        }
+    override fun toString() = when {
+        project != null && subMap != null -> "ProjectAndSubMap(project=$project, submap=$subMap)"
+        project != null -> project.path
+        subMap != null -> "$subMap"
+        else -> ""
     }
 }
 
@@ -293,7 +293,7 @@ private fun mapProjectListToGroups(
     val nextPath = segments.take(1)
     val remaining = segments.drop(1)
     val nowRemainingPath = remaining.joinToString(separator = ":", prefix = ":")
-    return if (nextPath.isEmpty()) {// || nowRemainingPath in knownPathsList) {
+    return if (nextPath.isEmpty()) {
         map
     } else if (remaining.isEmpty()) {
         map.apply {
