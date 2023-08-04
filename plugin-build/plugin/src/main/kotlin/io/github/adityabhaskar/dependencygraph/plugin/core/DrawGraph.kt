@@ -62,56 +62,25 @@ internal fun drawDependencyGraph(
     // when rendered in dark mode.
     fileText += "subgraph  \n  direction ${config.graphDirection};\n"
 
-    for (project in projects) {
-        if (
-            !isRootGraph &&
-            !(currentProjectDependencies.contains(project) || dependents.contains(project))
-        ) {
-            continue
+    val relevantProjects = if (isRootGraph) {
+        projects.toList()
+    } else {
+        projects.filter {
+            currentProjectDependencies.contains(it) ||
+                dependents.contains(it) ||
+                it == currentProject
         }
-        val isRoot = if (isRootGraph) {
-            rootProjects.contains(project) || project == currentProject
-        } else {
-            project == currentProject
-        }
-
-        var nodeStart = if (isRoot) {
-            NodeEnds.RootStart
-        } else {
-            NodeEnds.NormalStart
-        }
-        var nodeEnd = if (isRoot) {
-            NodeEnds.RootEnd
-        } else {
-            NodeEnds.NormalEnd
-        }
-
-        val nodeClass = if (multiplatformProjects.contains(project)) {
-            NodeClass.Mpp
-        } else if (androidProjects.contains(project)) {
-            NodeClass.Android
-        } else if (javaProjects.contains(project)) {
-            if (!isRoot) {
-                nodeStart = NodeEnds.JavaStart
-                nodeEnd = NodeEnds.JavaEnd
-            }
-            NodeClass.Java
-        } else {
-            ""
-        }
-
-        val relativePath = project.projectDir.relativeTo(config.rootDir)
-        val nodeText = if (config.shouldLinkModuleText && config.moduleBaseUrl != null) {
-            val link = "${config.moduleBaseUrl}/$relativePath/${config.fileName}"
-            "<a href='$link' style='text-decoration:auto'>${project.path}</a>"
-        } else {
-            project.path
-        }
-
-        fileText += "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;\n"
     }
 
-    fileText += """
+    val modulesText = printProjects(
+        projects = relevantProjects,
+        isRootGraph = isRootGraph,
+        config = config,
+        currentProject = currentProject,
+        parsedGraph = parsedGraph,
+    )
+
+    fileText += modulesText + """
     end
 
     %% Dependencies
