@@ -176,14 +176,16 @@ internal fun drawDependencyGraph(
 
 private fun printProjects(
     projects: List<ModuleProject>,
+    currentProject: ModuleProject,
+    parsedGraph: ParsedGraph,
     isRootGraph: Boolean,
     config: DrawConfig,
-    rootProjects: List<ModuleProject>,
-    currentProject: ModuleProject,
-    multiplatformProjects: List<ModuleProject>,
-    androidProjects: List<ModuleProject>,
-    javaProjects: List<ModuleProject>,
 ): String {
+    val multiplatformProjects = parsedGraph.multiplatformProjects
+    val androidProjects = parsedGraph.androidProjects
+    val javaProjects = parsedGraph.javaProjects
+    val rootProjects = parsedGraph.rootProjects
+
     return projects.joinToString(separator = "\n", postfix = "\n") { project ->
         val isRoot = if (isRootGraph) {
             rootProjects.contains(project) || project == currentProject
