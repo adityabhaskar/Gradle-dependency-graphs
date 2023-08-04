@@ -74,6 +74,7 @@ internal fun drawDependencyGraph(
 
         for (project in relevantProjects) {
             rootMap = mapProjectListToGroups(
+                currentPath = "",
                 project = project,
                 remainingPath = project.path,
                 map = rootMap,
@@ -285,14 +286,21 @@ private data class ProjectOrSubMap(
 }
 
 private fun mapProjectListToGroups(
+    currentPath: String,
     project: ModuleProject,
     remainingPath: String,
     map: MutableMap<String, ProjectOrSubMap>,
 ): MutableMap<String, ProjectOrSubMap> {
-    val segments = remainingPath.removePrefix(":").split(":")
+    val segments = remainingPath
+        .removePrefix(":")
+        .split(":")
     val nextPath = segments.take(1)
     val remaining = segments.drop(1)
-    val nowRemainingPath = remaining.joinToString(separator = ":", prefix = ":")
+    val nowRemainingPath = remaining.joinToString(
+        separator = ":",
+        prefix = ":",
+    )
+
     return if (nextPath.isEmpty()) {
         map
     } else if (remaining.isEmpty()) {
@@ -301,12 +309,18 @@ private fun mapProjectListToGroups(
         }
     } else {
         map.apply {
+            val key = if (currentPath.isBlank()) {
+                nextPath[0]
+            } else {
+                "$currentPath:${nextPath[0]}"
+            }
             val subMap = mapProjectListToGroups(
+                currentPath = key,
                 project = project,
                 remainingPath = nowRemainingPath,
-                map = get(nextPath[0])?.subMap ?: mutableMapOf(),
+                map = get(key)?.subMap ?: mutableMapOf(),
             )
-            put(nextPath[0], ProjectOrSubMap(subMap = subMap))
+            put(key, ProjectOrSubMap(subMap = subMap))
         }
     }
 }
