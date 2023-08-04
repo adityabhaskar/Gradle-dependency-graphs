@@ -29,10 +29,6 @@ internal fun drawDependencyGraph(
     val projects: LinkedHashSet<ModuleProject> = parsedGraph.projects
     val dependencies: LinkedHashMap<DependencyPair, List<String>> =
         parsedGraph.dependencies
-    val multiplatformProjects = parsedGraph.multiplatformProjects
-    val androidProjects = parsedGraph.androidProjects
-    val javaProjects = parsedGraph.javaProjects
-    val rootProjects = parsedGraph.rootProjects
 
     val currentProjectDependencies =
         gatherDependencies(mutableListOf(currentProject), dependencies)
@@ -142,13 +138,13 @@ internal fun drawDependencyGraph(
     println("Project module dependency graph created at ${graphFile.absolutePath}")
 }
 
-
 private fun printProjects(
     projects: List<ModuleProject>,
     currentProject: ModuleProject,
     parsedGraph: ParsedGraph,
     isRootGraph: Boolean,
     config: DrawConfig,
+    level: Int = 0,
 ): String {
     val multiplatformProjects = parsedGraph.multiplatformProjects
     val androidProjects = parsedGraph.androidProjects
@@ -195,7 +191,102 @@ private fun printProjects(
             project.path
         }
 
-        "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;"
+        val indent = "  ".repeat(level) + "  "
+        "$indent${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;"
+    }
+}
+
+private fun printProjectsGrouped(
+    projectMap: MutableMap<String, ProjectOrSubMap>,
+    currentProject: ModuleProject,
+    parsedGraph: ParsedGraph,
+    isRootGraph: Boolean,
+    config: DrawConfig,
+    groupName: String = currentProject.path,
+    level: Int = 0,
+): String {
+    val currentLevelProjects = projectMap.mapNotNull { (_, value) ->
+        value.project
+    }
+
+    val indent = "  ".repeat(level)
+    var p = if (currentLevelProjects.isEmpty()) {
+        ""
+    } else {
+        "${indent}subgraph $groupName\n${indent}  direction LR;\n"
+    }
+
+    p += printProjects(
+        currentLevelProjects,
+        currentProject,
+        parsedGraph,
+        isRootGraph,
+        config,
+        level,
+    )
+
+    p += projectMap
+        .mapNotNull { (name, value) ->
+            value.subMap?.let { Pair(name, it) }
+        }
+        .joinToString("\n") {
+            printProjectsGrouped(
+                projectMap = it.second,
+                currentProject = currentProject,
+                parsedGraph = parsedGraph,
+                isRootGraph = isRootGraph,
+                config = config,
+                groupName = it.first,
+                level = level + 1,
+            )
+        }
+
+    val end = if (currentLevelProjects.isEmpty()) {
+        ""
+    } else {
+        "${indent}end\n"
+    }
+    return p + end
+}
+
+private data class ProjectOrSubMap(
+    val project: ModuleProject? = null,
+    val subMap: MutableMap<String, ProjectOrSubMap>? = null,
+) {
+    override fun toString(): String {
+        return when {
+            project != null && subMap != null -> "ProjectAndSubMap(project=$project, submap=$subMap)"
+            project != null -> project.path
+            subMap != null -> "$subMap"
+            else -> ""
+        }
+    }
+}
+
+private fun splitProject(
+    project: ModuleProject,
+    remainingPath: String,
+    map: MutableMap<String, ProjectOrSubMap>,
+): MutableMap<String, ProjectOrSubMap> {
+    val segments = remainingPath.removePrefix(":").split(":")
+    val nextPath = segments.take(1)
+    val remaining = segments.drop(1)
+    val nowRemainingPath = remaining.joinToString(separator = ":", prefix = ":")
+    return if (nextPath.isEmpty()) {// || nowRemainingPath in knownPathsList) {
+        map
+    } else if (remaining.isEmpty()) {
+        map.apply {
+            putIfAbsent(nextPath[0].ifBlank { ":" }, ProjectOrSubMap(project = project))
+        }
+    } else {
+        map.apply {
+            val subMap = splitProject(
+                project = project,
+                remainingPath = nowRemainingPath,
+                map = get(nextPath[0])?.subMap ?: mutableMapOf(),
+            )
+            put(nextPath[0], ProjectOrSubMap(subMap = subMap))
+        }
     }
 }
 
