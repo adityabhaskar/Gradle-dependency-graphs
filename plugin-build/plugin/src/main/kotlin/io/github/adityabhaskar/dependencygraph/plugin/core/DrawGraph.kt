@@ -173,6 +173,61 @@ internal fun drawDependencyGraph(
     println("Project module dependency graph created at ${graphFile.absolutePath}")
 }
 
+
+private fun printProjects(
+    projects: List<ModuleProject>,
+    isRootGraph: Boolean,
+    config: DrawConfig,
+    rootProjects: List<ModuleProject>,
+    currentProject: ModuleProject,
+    multiplatformProjects: List<ModuleProject>,
+    androidProjects: List<ModuleProject>,
+    javaProjects: List<ModuleProject>,
+): String {
+    return projects.joinToString(separator = "\n", postfix = "\n") { project ->
+        val isRoot = if (isRootGraph) {
+            rootProjects.contains(project) || project == currentProject
+        } else {
+            project == currentProject
+        }
+
+        var nodeStart = if (isRoot) {
+            NodeEnds.RootStart
+        } else {
+            NodeEnds.NormalStart
+        }
+        var nodeEnd = if (isRoot) {
+            NodeEnds.RootEnd
+        } else {
+            NodeEnds.NormalEnd
+        }
+
+        val nodeClass = if (multiplatformProjects.contains(project)) {
+            NodeClass.Mpp
+        } else if (androidProjects.contains(project)) {
+            NodeClass.Android
+        } else if (javaProjects.contains(project)) {
+            if (!isRoot) {
+                nodeStart = NodeEnds.JavaStart
+                nodeEnd = NodeEnds.JavaEnd
+            }
+            NodeClass.Java
+        } else {
+            ""
+        }
+
+        val relativePath = project.projectDir.relativeTo(config.rootDir)
+        val nodeText = if (config.shouldLinkModuleText && config.moduleBaseUrl != null) {
+            val link = "${config.moduleBaseUrl}/$relativePath/${config.fileName}"
+            "<a href='$link' style='text-decoration:auto'>${project.path}</a>"
+        } else {
+            project.path
+        }
+
+        "  ${project.path}${nodeStart}${nodeText}${nodeEnd}$nodeClass;"
+    }
+}
+
 /**
  * Returns a list of all modules that are direct or indirect dependencies of the provided module.
  * @param currentProjectAndDependencies the module(s) whose dependencies we need
