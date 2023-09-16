@@ -10,6 +10,7 @@ internal data class ParsedGraph(
     val androidProjects: List<ModuleProject>,
     val javaProjects: List<ModuleProject>,
     val rootProjects: List<ModuleProject>,
+    val rootProject: ModuleProject,
 )
 
 internal data class DependencyPair(

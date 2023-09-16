@@ -120,5 +120,6 @@ internal fun parseDependencyGraph(
         androidProjects = androidProjects.map { it.asModuleProject() },
         javaProjects = javaProjects.map { it.asModuleProject() },
         rootProjects = rootProjects.map { it.asModuleProject() },
+        rootProject = rootProject.asModuleProject(),
     )
 }
