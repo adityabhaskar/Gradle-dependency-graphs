@@ -186,7 +186,7 @@ abstract class DependencyGraphTask : DefaultTask() {
                 parsedGraph = graph,
                 isRootGraph = false,
                 config = DrawConfig(
-                    rootDir = project.rootDir,
+                    rootDir = graph.rootProject.projectDir,
                     moduleBaseUrl = moduleBaseUrl,
                     showLegend = showLegend,
                     graphDirection = directionString,
@@ -199,11 +199,11 @@ abstract class DependencyGraphTask : DefaultTask() {
 
         // Draw the full graph of all modules
         drawDependencyGraph(
-            currentProject = project.rootProject.asModuleProject(),
+            currentProject = graph.rootProject,
             parsedGraph = graph,
             isRootGraph = true,
             config = DrawConfig(
-                rootDir = project.rootDir,
+                rootDir = graph.rootProject.projectDir,
                 moduleBaseUrl = moduleBaseUrl,
                 showLegend = showLegend,
                 graphDirection = directionString,
