@@ -1,9 +1,11 @@
 [versions]
-detekt = "1.23.3"
-kotlin = "1.9.20"
+detekt = "1.23.5"
+kotlin = "1.9.23"
 ktlintGradle = "11.6.1"
 pluginPublish = "1.2.1"
-versionCheck = "0.49.0"
+versionCheck = "0.51.0"
+android-lint = "8.3.0"
+android-lint-gradle = "1.0.0-alpha01"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
@@ -11,6 +13,8 @@ kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin"}
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle"}
 pluginPublish = { id = "com.gradle.plugin-publish", version.ref = "pluginPublish"}
 versionCheck = { id = "com.github.ben-manes.versions", version.ref = "versionCheck"}
+lint = { id = "com.android.lint", version.ref = "android-lint"}
 
 [libraries]
 junit = "junit:junit:4.13.2"
+android-lint-gradle = { module = "androidx.lint:lint-gradle", version.ref = "android-lint-gradle" }
