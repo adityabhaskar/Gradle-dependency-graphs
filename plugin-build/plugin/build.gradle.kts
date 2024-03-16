@@ -1,15 +1,17 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     kotlin("jvm")
     `java-gradle-plugin`
     alias(libs.plugins.pluginPublish)
+    alias(libs.plugins.lint)
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(gradleApi())
+
+    lintChecks(libs.android.lint.gradle)
 
     testImplementation(libs.junit)
 }
