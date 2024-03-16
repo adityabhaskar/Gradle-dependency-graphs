@@ -65,9 +65,9 @@ internal fun parseDependencyGraph(
             javaProjects.add(project)
         }
 
-        project.configurations.all { config ->
+        project.configurations.configureEach { config ->
             config.dependencies
-                .filterIsInstance(ProjectDependency::class.java)
+                .filterIsInstance<ProjectDependency>()
                 .map { it.dependencyProject }
                 .filter { it.path !in ignoredModules }
                 .forEach { dependency ->
@@ -100,7 +100,7 @@ internal fun parseDependencyGraph(
         val allDependencies = it.configurations
             .map { config ->
                 config.dependencies
-                    .filterIsInstance(ProjectDependency::class.java)
+                    .filterIsInstance<ProjectDependency>()
                     .filter { dependency ->
                         dependency.dependencyProject.path != it.path
                     }
