@@ -16,7 +16,12 @@ internal data class DrawConfig(
     val shouldGroupModules: Boolean,
 )
 
-@Suppress("LongMethod", "CyclomaticComplexMethod", "CognitiveComplexMethod", "ktlint:indent")
+@Suppress(
+    "LongMethod",
+    "CyclomaticComplexMethod",
+    "CognitiveComplexMethod",
+    "ktlint:standard:indent",
+)
 /**
  * Creates a graph of dependencies for the given project and writes it to a file in the project's
  * directory.

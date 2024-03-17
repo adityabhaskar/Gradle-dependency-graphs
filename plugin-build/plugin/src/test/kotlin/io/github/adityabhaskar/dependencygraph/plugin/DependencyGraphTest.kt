@@ -6,7 +6,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class DependencyGraphTest {
-
     @Test
     fun `plugin is applied correctly to the project`() {
         val project = ProjectBuilder.builder().build()
