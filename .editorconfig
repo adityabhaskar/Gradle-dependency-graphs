@@ -778,13 +778,12 @@ ij_groovy_wrap_chain_calls_after_dot = false
 ij_groovy_wrap_long_lines = false
 
 [{*.kt,*.kts}]
-# Ktlint specific rules and other overrides from standard rules
-ktlint_disabled_rules = no-wildcard-imports
-continuation_indent_size = 4
 ij_kotlin_indent_size = 4
 ij_kotlin_continuation_indent_size = 4
 
-twitter_compose_allowed_composition_locals = LocalIsDarkModeActive
+ktlint_code_style = intellij_idea # or android_studio or ktlint_official (default)
+ktlint_standard_property-naming = disabled
+ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 2
 
 # Kotlin/IJ rules
 ij_smart_tabs = false

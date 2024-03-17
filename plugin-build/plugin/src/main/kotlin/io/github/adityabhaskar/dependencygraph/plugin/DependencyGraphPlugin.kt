@@ -9,9 +9,12 @@ abstract class DependencyGraphPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         // Add the extension object
         val extension = project.extensions.create(
-            /* name = */ EXTENSION_NAME,
-            /* type = */ DependencyGraphExtension::class.java,
-            /* ...constructionArguments = */ project,
+            // name =
+            EXTENSION_NAME,
+            // type =
+            DependencyGraphExtension::class.java,
+            // ...constructionArguments =
+            project,
         )
 
         // Add a task that uses configuration from the extension object
