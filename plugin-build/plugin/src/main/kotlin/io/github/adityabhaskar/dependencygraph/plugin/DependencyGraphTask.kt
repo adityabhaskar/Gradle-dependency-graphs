@@ -1,6 +1,5 @@
 package io.github.adityabhaskar.dependencygraph.plugin
 
-import io.github.adityabhaskar.dependencygraph.plugin.ShowLegend.*
 import io.github.adityabhaskar.dependencygraph.plugin.core.DrawConfig
 import io.github.adityabhaskar.dependencygraph.plugin.core.drawDependencyGraph
 import org.gradle.api.DefaultTask
@@ -30,7 +29,9 @@ enum class Direction(internal val directionString: String) {
  * * [Never] will not add a legend to any graph
  */
 enum class ShowLegend {
-    Always, OnlyInRootGraph, Never
+    Always,
+    OnlyInRootGraph,
+    Never,
 }
 
 /**
@@ -57,7 +58,6 @@ enum class ShowLegend {
  *    * Module nodes are clickable, clicking through to the graph of the respective module
  */
 abstract class DependencyGraphTask : DefaultTask() {
-
     init {
         group = BasePlugin.BUILD_GROUP
         description = "Generates dependency graph files for all local modules in the project."
@@ -167,7 +167,7 @@ abstract class DependencyGraphTask : DefaultTask() {
         // Create graph of all dependencies
         val graph = parsedGraph.get()
 
-        val showLegend = showLegend.getOrElse(OnlyInRootGraph)
+        val showLegend = showLegend.getOrElse(ShowLegend.OnlyInRootGraph)
         val directionString = graphDirection.getOrElse(Direction.LeftToRight).directionString
         val fileName = appendMarkDownIfNeeded(
             providedFileName = graphFileName.getOrElse(DEFAULT_GRAPH_FILE_NAME),
@@ -214,7 +214,10 @@ abstract class DependencyGraphTask : DefaultTask() {
         )
     }
 
-    private fun createGraphUrl(repoUrl: String?, mainBranchName: String?): String? {
+    private fun createGraphUrl(
+        repoUrl: String?,
+        mainBranchName: String?,
+    ): String? {
         if (repoUrl == null) {
             return null
         }

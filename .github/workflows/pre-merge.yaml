@@ -20,7 +20,7 @@ jobs:
       - name: Checkout latest code
         uses: actions/checkout@v4
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
 
   gradle:
     name: Run checks and build graphs
@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Cache Gradle Caches
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
 
       - name: Run Gradle tasks
         run: ./gradlew preMerge --continue
