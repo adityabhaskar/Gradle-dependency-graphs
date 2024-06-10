@@ -4,7 +4,7 @@ kotlin = "2.0.0"
 ktlintGradle = "12.1.1"
 pluginPublish = "1.2.1"
 versionCheck = "0.51.0"
-android-lint = "8.4.1"
+android-lint = "8.4.2"
 android-lint-gradle = "1.0.0-alpha01"
 
 [plugins]
