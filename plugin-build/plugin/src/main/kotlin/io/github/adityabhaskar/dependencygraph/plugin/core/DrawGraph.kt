@@ -48,14 +48,24 @@ internal fun drawDependencyGraph(
 
     var fileText = """
     ```mermaid
-    %%{ init: { 'theme': 'base' } }%%
+    %%{
+      init: {
+        "theme": "base",
+        "themeVariables": {
+          "nodeTextColor": "#333333",
+          "clusterBorder": "#a0a0a0",
+          "nodeBorder": "#767676"
+        }
+      }
+    }%%
+
     graph LR;
 
     %% Styling for module nodes by type
     classDef rootNode stroke-width:4px;
-    classDef mppNode fill:#ffd2b3,color:#333333;
-    classDef andNode fill:#baffc9,color:#333333;
-    classDef javaNode fill:#ffb3ba,color:#333333;
+    classDef mppNode fill:#ffd2b3;
+    classDef andNode fill:#baffc9;
+    classDef javaNode fill:#ffb3ba;
     $legendText
     %% Modules
 
@@ -78,7 +88,7 @@ internal fun drawDependencyGraph(
         var rootMap = mutableMapOf<String, ProjectOrSubMap>()
 
         for (project in relevantProjects) {
-            rootMap = mapProjectListToGroups(
+            rootMap = groupSubModules(
                 currentPath = "",
                 project = project,
                 remainingPath = project.path,
@@ -122,10 +132,10 @@ internal fun drawDependencyGraph(
             val isDirectDependency = origin == currentProject
 
             val arrow = when {
-                isApi && isDirectDependency -> ConnecterType.DirectApi
-                isApi -> ConnecterType.IndirectApi
-                isDirectDependency -> ConnecterType.Direct
-                else -> ConnecterType.Indirect
+                isApi && isDirectDependency -> ConnectorType.DirectApi
+                isApi -> ConnectorType.IndirectApi
+                isDirectDependency -> ConnectorType.Direct
+                else -> ConnectorType.Indirect
             }
             fileText += "${origin.path}${arrow}${target.path}\n"
         }
@@ -290,7 +300,7 @@ private data class ProjectOrSubMap(
     }
 }
 
-private fun mapProjectListToGroups(
+private fun groupSubModules(
     currentPath: String,
     project: ModuleProject,
     remainingPath: String,
@@ -319,7 +329,7 @@ private fun mapProjectListToGroups(
             } else {
                 "$currentPath:${nextPath[0]}"
             }
-            val subMap = mapProjectListToGroups(
+            val subMap = groupSubModules(
                 currentPath = key,
                 project = project,
                 remainingPath = nowRemainingPath,
@@ -328,6 +338,13 @@ private fun mapProjectListToGroups(
             put(key, ProjectOrSubMap(subMap = subMap))
         }
     }
+}
+
+@Suppress("UnusedPrivateMember")
+private fun mapProjectListToGroups() {
+    // TODO: 04/08/2023 When encountering a sub project, add it to a list but only record parent
+    //  folder name Then when drawing dependencies, check the list and draw it to parent folder
+    //  when sub project falls under it
 }
 
 /**
@@ -403,7 +420,7 @@ private object NodeClass {
     const val Java = ":::javaNode"
 }
 
-private object ConnecterType {
+private object ConnectorType {
     const val DirectApi = "==API===>"
     const val IndirectApi = "--API--->"
     const val Direct = "===>"
