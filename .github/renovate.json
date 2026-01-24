@@ -10,6 +10,32 @@
       "matchUpdateTypes": ["major"],
       "dependencyDashboardApproval": true,
       "addLabels": ["MAJOR"]
+    },
+    {
+      "matchUpdateTypes": ["major", "minor"],
+      "minimumReleaseAge": "15 days",
+      "internalChecksFilter": "strict"
+    },
+    {
+      "groupName": "Kotlin, KSP and Compose Multiplatform",
+      "groupSlug": "kotlin",
+      "matchPackageNames": [
+        "org.jetbrains.kotlin",
+        "org.jetbrains.compose"
+      ]
+    },
+    {
+      "description": "Automatically merge minor and patch-level updates",
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true,
+      "internalChecksFilter": "strict"
+    },
+    {
+      "description": "Disable updates to SNAPSHOTS",
+      "matchDatasources": ["maven"],
+      "allowedVersions": "!/SNAPSHOT$/"
     }
   ],
   "assignees": ["adityabhaskar"],
@@ -18,5 +44,6 @@
   "osvVulnerabilityAlerts": true,
   "enabledManagers": ["github-actions", "gradle", "gradle-wrapper"],
   "prBodyNotes": ["{{#if isMajor}}:warning: MAJOR MAJOR MAJOR :warning:{{/if}}"],
-  "prConcurrentLimit": 4
+  "prConcurrentLimit": 4,
+  "separateMultipleMajor": true
 }
