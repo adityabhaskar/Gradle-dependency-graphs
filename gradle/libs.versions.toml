@@ -2,7 +2,7 @@
 detekt = "1.23.6"
 kotlin = "2.0.20"
 ktlintGradle = "12.1.1"
-pluginPublish = "1.2.1"
+pluginPublish = "1.3.1"
 versionCheck = "0.53.0"
 android-lint = "8.6.0"
 android-lint-gradle = "1.0.0-alpha05"
