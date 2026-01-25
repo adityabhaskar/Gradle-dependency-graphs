@@ -237,9 +237,9 @@ abstract class DependencyGraphTask : DefaultTask() {
         else -> providedFileName
     }
 
-    companion object {
-        private const val DEFAULT_BRANCH_NAME = "main"
+    private companion object {
+        const val DEFAULT_BRANCH_NAME = "main"
 
-        private const val DEFAULT_GRAPH_FILE_NAME = "dependencyGraph.md"
+        const val DEFAULT_GRAPH_FILE_NAME = "dependencyGraph.md"
     }
 }
