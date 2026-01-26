@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>UndocumentedPublicProperty:DependencyGraphTask.kt$Direction$BottomToTop : Direction</ID>
+    <ID>UndocumentedPublicProperty:DependencyGraphTask.kt$Direction$LeftToRight : Direction</ID>
+    <ID>UndocumentedPublicProperty:DependencyGraphTask.kt$Direction$RightToLeft : Direction</ID>
+    <ID>UndocumentedPublicProperty:DependencyGraphTask.kt$Direction$TopToBottom : Direction</ID>
+    <ID>UndocumentedPublicProperty:DependencyGraphTask.kt$ShowLegend$Always</ID>
+    <ID>UndocumentedPublicProperty:DependencyGraphTask.kt$ShowLegend$Never</ID>
+    <ID>UndocumentedPublicProperty:DependencyGraphTask.kt$ShowLegend$OnlyInRootGraph</ID>
+  </CurrentIssues>
+</SmellBaseline>
