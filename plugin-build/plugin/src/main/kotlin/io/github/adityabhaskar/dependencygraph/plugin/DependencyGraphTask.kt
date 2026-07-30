@@ -9,6 +9,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.work.DisableCachingByDefault
 
 /**
  * Enum to provide the direction in which the graph should flow.
@@ -57,6 +58,10 @@ enum class ShowLegend {
  * 9. Provided but unsupported on Github - click navigation
  *    * Module nodes are clickable, clicking through to the graph of the respective module
  */
+@DisableCachingByDefault(
+    because = "Generates markdown files into each module directory; declared and inputs " +
+        "contain absolute paths, so caching provides no benefit",
+)
 abstract class DependencyGraphTask : DefaultTask() {
     init {
         group = BasePlugin.BUILD_GROUP
