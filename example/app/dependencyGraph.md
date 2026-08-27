@@ -11,7 +11,9 @@ classDef javaNode fill:#ffb3ba,color:#333333;
 %% Modules
 subgraph  
   direction LR;
-
+subgraph :example:app
+  direction LR;
+  :([<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main//dependencyGraph.md' style='text-decoration:auto'>:</a>]);
   subgraph example
     direction LR;
     :example:app[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/app/dependencyGraph.md' style='text-decoration:auto'>:example:app</a>]:::javaNode;
@@ -38,6 +40,7 @@ subgraph
       :example:thePremiumThing:ui{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/thePremiumThing/ui/dependencyGraph.md' style='text-decoration:auto'>:example:thePremiumThing:ui</a>}}:::javaNode;
     end
   end
+end
 end
 
 %% Dependencies
@@ -71,4 +74,5 @@ end
 :example:thePremiumThing:domain--->:example:thePremiumThing:data
 
 %% Dependents
+:-.->:example:app
 ```

@@ -11,7 +11,9 @@ classDef javaNode fill:#ffb3ba,color:#333333;
 %% Modules
 subgraph  
   direction LR;
-
+subgraph :example:theNewThing:data
+  direction LR;
+  :([<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main//dependencyGraph.md' style='text-decoration:auto'>:</a>]);
   subgraph example
     direction LR;
     :example:models{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md' style='text-decoration:auto'>:example:models</a>}}:::javaNode;
@@ -23,11 +25,13 @@ subgraph
     end
   end
 end
+end
 
 %% Dependencies
 :example:theNewThing:data===>:example:models
 :example:theNewThing:data===>:example:theNewThing:models
 
 %% Dependents
+:-.->:example:theNewThing:data
 :example:theNewThing:domain-.->:example:theNewThing:data
 ```
