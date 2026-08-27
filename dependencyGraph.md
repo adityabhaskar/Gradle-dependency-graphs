@@ -32,14 +32,18 @@ end
 %% Modules
 subgraph  
   direction LR;
-
+subgraph :
+  direction LR;
+  :[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main//dependencyGraph.md' style='text-decoration:auto'>:</a>];
   subgraph example
     direction LR;
-    :example:app[<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/app/dependencyGraph.md' style='text-decoration:auto'>:example:app</a>]:::javaNode;
+    :example:app{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/app/dependencyGraph.md' style='text-decoration:auto'>:example:app</a>}}:::javaNode;
     :example:data{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/data/dependencyGraph.md' style='text-decoration:auto'>:example:data</a>}}:::javaNode;
     :example:domain{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/domain/dependencyGraph.md' style='text-decoration:auto'>:example:domain</a>}}:::javaNode;
     :example:models{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/models/dependencyGraph.md' style='text-decoration:auto'>:example:models</a>}}:::javaNode;
     :example:shared-ui{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/shared-ui/dependencyGraph.md' style='text-decoration:auto'>:example:shared-ui</a>}}:::javaNode;
+    :example:theNewThing([<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/theNewThing/dependencyGraph.md' style='text-decoration:auto'>:example:theNewThing</a>]);
+    :example:thePremiumThing([<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/thePremiumThing/dependencyGraph.md' style='text-decoration:auto'>:example:thePremiumThing</a>]);
     :example:ui{{<a href='https://github.com/adityabhaskar/Gradle-dependency-graphs/blob/main/example/ui/dependencyGraph.md' style='text-decoration:auto'>:example:ui</a>}}:::javaNode;
     subgraph example:theNewThing
       direction LR;
@@ -60,8 +64,28 @@ subgraph
     end
   end
 end
+end
 
 %% Dependencies
+:===>:example
+:===>:example:app
+:===>:example:data
+:===>:example:domain
+:===>:example:models
+:===>:example:shared-ui
+:===>:example:theNewThing
+:===>:example:thePremiumThing
+:===>:example:ui
+:===>:example:theNewThing:data
+:===>:example:theNewThing:domain
+:===>:example:theNewThing:feature
+:===>:example:theNewThing:models
+:===>:example:theNewThing:ui
+:===>:example:thePremiumThing:data
+:===>:example:thePremiumThing:domain
+:===>:example:thePremiumThing:feature
+:===>:example:thePremiumThing:models
+:===>:example:thePremiumThing:ui
 :example:app--->:example:ui
 :example:app--->:example:domain
 :example:app--->:example:theNewThing:feature
