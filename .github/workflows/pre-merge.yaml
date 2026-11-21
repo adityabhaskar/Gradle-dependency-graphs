@@ -33,7 +33,7 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17.0.21+9'
+          java-version: '17.0.21+100000002'
           distribution: 'temurin'
 
       - name: Cache Gradle Caches
